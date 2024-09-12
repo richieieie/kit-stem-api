@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/kit-stem-api.props" />
+</Project>
