@@ -10,6 +10,7 @@ using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace kit_stem_api.Services
 {
@@ -25,31 +26,32 @@ namespace kit_stem_api.Services
             _tokenRepository = tokenRepository;
         }
 
-        public async Task<(bool, string)> LoginAsync(UserLoginDTO requestBody)
+        public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
             var user = await _userManager.FindByNameAsync(requestBody.Username);
-            if (user == null)
+            if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password))
             {
-                return (false, "Incorrect username or password!");
+                return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .AddDetail("invalidCredentials", "Incorrect username or password!");
             }
 
-            var passwordCorrect = await _userManager.CheckPasswordAsync(user, requestBody.Password);
-            if (!passwordCorrect)
-            {
-                return (false, "Incorrect username or password!");
-            }
             var role = (await _userManager.GetRolesAsync(user))[0];
             var token = _tokenRepository.GenerateJwtToken(user, role);
 
-            return (true, token);
+            return new ServiceResponse()
+                        .SetSucceeded(true)
+                        .AddDetail("at", token);
         }
 
-        public async Task<(bool, string)> RegisterAsync(UserRegisterDTO requestBody)
+        public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody)
         {
             var user = await _userManager.FindByNameAsync(requestBody.Username);
             if (user != null)
             {
-                return (false, "Username exists!");
+                return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .AddDetail("unavailableUsername", "Username exists!");
             }
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
@@ -63,23 +65,31 @@ namespace kit_stem_api.Services
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
-                    return (false, "Cannot create any new users right now!");
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .AddDetail("outOfService", "Cannot create new user at this time!");
                 }
 
                 identityResult = await _userManager.AddToRoleAsync(user, requestBody.Role);
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
-                    return (false, $"{requestBody.Role} does not exist!");
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .AddDetail("invalidCredentials", $"{requestBody.Role} does not exists");
                 }
 
                 await transaction.CommitAsync();
-                return (true, "New user was created");
+                return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("message", "New user was created!");
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                return (false, ex.Message);
+                return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("unhandledException", ex.Message);
             }
         }
     }

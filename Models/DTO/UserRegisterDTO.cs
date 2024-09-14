@@ -4,7 +4,7 @@ namespace kit_stem_api.Models.DTO
 {
     public class UserRegisterDTO
     {
-        [EmailAddress(ErrorMessage = "Username must be in email format!")]
+        [EmailAddress(ErrorMessage = "Username must be an email!")]
         public string? Username { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required!")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$",

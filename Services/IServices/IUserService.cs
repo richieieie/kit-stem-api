@@ -4,7 +4,7 @@ namespace kit_stem_api.Services.IServices
 {
     public interface IUserService
     {
-        Task<(bool, string)> RegisterAsync(UserRegisterDTO requestBody);
-        Task<(bool, string)> LoginAsync(UserLoginDTO requestBody);
+        Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody);
+        Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody);
     }
 }

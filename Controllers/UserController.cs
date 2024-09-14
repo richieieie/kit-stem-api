@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Claims;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -19,34 +20,33 @@ namespace kit_stem_api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody)
         {
-            var (succeed, message) = await _userService.RegisterAsync(requestBody);
-            if (!succeed)
+            var serviceResponse = await _userService.RegisterAsync(requestBody);
+            if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = "fail", message });
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            return Ok(new { status = "success", message });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO requestBody)
         {
-            var (succeed, message) = await _userService.LoginAsync(requestBody);
-            if (!succeed)
+            var serviceResponse = await _userService.LoginAsync(requestBody);
+            if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = "fail", message });
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var cookieOptions = new CookieOptions()
-            {
-                Expires = DateTime.Now.AddMinutes(30),
-                HttpOnly = true,
-                SameSite = SameSiteMode.None,
-                Secure = true
-            };
-            Response.Cookies.Append("accessToken", message, cookieOptions);
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
 
-            return Ok(new { status = "success" });
+        [HttpGet("Test")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Test()
+        {
+            var user = User.Claims;
+            return Ok(new { username = User.FindFirst(ClaimTypes.Email)?.Value });
         }
     }
 }
