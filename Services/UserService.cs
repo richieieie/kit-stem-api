@@ -67,7 +67,7 @@ namespace kit_stem_api.Services
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
                                 .SetSucceeded(false)
-                                .AddDetail("outOfService", "Cannot create new user at this time!");
+                                .AddDetail("outOfService", identityResult.Errors);
                 }
 
                 identityResult = await _userManager.AddToRoleAsync(user, requestBody.Role);
@@ -76,7 +76,7 @@ namespace kit_stem_api.Services
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
                                 .SetSucceeded(false)
-                                .AddDetail("invalidCredentials", $"{requestBody.Role} does not exists");
+                                .AddDetail("invalidCredentials", identityResult.Errors);
                 }
 
                 await transaction.CommitAsync();
@@ -88,8 +88,8 @@ namespace kit_stem_api.Services
             {
                 await transaction.RollbackAsync();
                 return new ServiceResponse()
-                            .SetSucceeded(true)
-                            .AddDetail("unhandledException", ex.Message);
+                            .SetSucceeded(false)
+                            .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
             }
         }
     }

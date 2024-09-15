@@ -42,11 +42,11 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet("Test")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "customer")]
         public async Task<IActionResult> Test()
         {
             var user = User.Claims;
-            return Ok(new { username = User.FindFirst(ClaimTypes.Email)?.Value });
+            return Ok(new { username = User.FindFirst(ClaimTypes.Email)?.Value, role = User.FindFirst(ClaimTypes.Role)?.Value });
         }
     }
 }
