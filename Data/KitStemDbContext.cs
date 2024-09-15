@@ -11,6 +11,38 @@ namespace kit_stem_api.Data
 {
     public class KitStemDbContext : IdentityDbContext<ApplicationUser>
     {
+
+        public DbSet<Component> Components { get; set; }
+
+        public DbSet<ComponentsType> ComponentsTypes { get; set; }
+
+        public DbSet<Kit> Kits { get; set; }
+
+        public DbSet<KitComponent> KitComponents { get; set; }
+
+        public DbSet<KitImage> KitImages { get; set; }
+
+        public DbSet<KitsCategory> KitsCategories { get; set; }
+
+        public DbSet<Lab> Labs { get; set; }
+
+        public DbSet<LabSupport> LabSupports { get; set; }
+
+        public DbSet<Level> Levels { get; set; }
+
+        public DbSet<Method> Methods { get; set; }
+
+        public DbSet<Package> Packages { get; set; }
+
+        public DbSet<PackageLab> PackageLabs { get; set; }
+
+        public DbSet<PackageOrder> PackageOrders { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<ShippingStatus> ShippingStatuses { get; set; }
+
+        public DbSet<UserOrders> UserOrders { get; set; }
         public KitStemDbContext(DbContextOptions<KitStemDbContext> options) : base(options)
         {
 

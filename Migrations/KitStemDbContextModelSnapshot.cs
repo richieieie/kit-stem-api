@@ -391,7 +391,7 @@ namespace kit_stem_api.Migrations
 
                     b.HasIndex("KitId");
 
-                    b.ToTable("KitImage");
+                    b.ToTable("KitImages");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.KitsCategory", b =>

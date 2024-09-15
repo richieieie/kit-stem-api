@@ -12,7 +12,7 @@ using kit_stem_api.Data;
 namespace kit_stem_api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    [Migration("20240915174538_ADD_DATABASE")]
+    [Migration("20240915175516_ADD_DATABASE")]
     partial class ADD_DATABASE
     {
         /// <inheritdoc />
@@ -394,7 +394,7 @@ namespace kit_stem_api.Migrations
 
                     b.HasIndex("KitId");
 
-                    b.ToTable("KitImage");
+                    b.ToTable("KitImages");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.KitsCategory", b =>
