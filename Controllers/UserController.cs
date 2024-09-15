@@ -1,5 +1,7 @@
 using System.Net;
 using System.Security.Claims;
+using kit_stem_api.Data;
+using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -12,9 +14,11 @@ namespace kit_stem_api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly KitStemDbContext _dbContext;
+        public UserController(IUserService userService, KitStemDbContext dbContext)
         {
             _userService = userService;
+            _dbContext = dbContext;
         }
 
         [HttpPost("Register")]
@@ -39,14 +43,6 @@ namespace kit_stem_api.Controllers
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
-
-        [HttpGet("Test")]
-        [Authorize(Roles = "customer")]
-        public async Task<IActionResult> Test()
-        {
-            var user = User.Claims;
-            return Ok(new { username = User.FindFirst(ClaimTypes.Email)?.Value, role = User.FindFirst(ClaimTypes.Role)?.Value });
         }
     }
 }

@@ -319,7 +319,7 @@ namespace kit_stem_api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "KitImage",
+                name: "KitImages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -556,8 +556,8 @@ namespace kit_stem_api.Migrations
                 column: "ComponentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_KitImage_KitId",
-                table: "KitImage",
+                name: "IX_KitImages_KitId",
+                table: "KitImages",
                 column: "KitId");
 
             migrationBuilder.CreateIndex(
@@ -650,7 +650,7 @@ namespace kit_stem_api.Migrations
                 name: "KitComponent");
 
             migrationBuilder.DropTable(
-                name: "KitImage");
+                name: "KitImages");
 
             migrationBuilder.DropTable(
                 name: "LabSupport");
