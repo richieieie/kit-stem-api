@@ -3,6 +3,7 @@ using System.Security.Claims;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,20 @@ namespace kit_stem_api.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginDTO requestBody)
         {
             var serviceResponse = await _userService.LoginAsync(requestBody);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet("UserProfile")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> UserProfile()
+        {
+            var userName = User.FindFirst(ClaimTypes.Email)?.Value;
+            var serviceResponse = await _userService.GetProfileAsync(userName);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

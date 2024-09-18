@@ -6,5 +6,8 @@ namespace kit_stem_api.Services.IServices
     {
         Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody);
         Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody);
+
+        Task<ServiceResponse> GetProfileAsync(string userName);
+
     }
 }

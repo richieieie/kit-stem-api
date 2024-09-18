@@ -4445,24 +4445,27 @@
     ]
   },
   "packageFolders": {
-    "/Users/trung/.nuget/packages/": {}
+    "C:\\Users\\khanhhoang\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/trung/Code/csharp/kit-stem-api/kit-stem-api.csproj",
+      "projectUniqueName": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\kit-stem-api.csproj",
       "projectName": "kit-stem-api",
-      "projectPath": "/Users/trung/Code/csharp/kit-stem-api/kit-stem-api.csproj",
-      "packagesPath": "/Users/trung/.nuget/packages/",
-      "outputPath": "/Users/trung/Code/csharp/kit-stem-api/obj/",
+      "projectPath": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\kit-stem-api.csproj",
+      "packagesPath": "C:\\Users\\khanhhoang\\.nuget\\packages\\",
+      "outputPath": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/trung/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\khanhhoang\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4540,7 +4543,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

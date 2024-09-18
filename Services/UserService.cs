@@ -26,6 +26,42 @@ namespace kit_stem_api.Services
             _tokenRepository = tokenRepository;
         }
 
+        public async Task<ServiceResponse> GetProfileAsync(string userName)
+        {
+            try
+            {
+                Console.WriteLine(userName);
+                var user = await _userManager.FindByNameAsync(userName);
+
+                if (user == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("notFound", "User not found!");
+                }
+
+                var userProfileDTO = new UserProfileDTO()
+                {
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Address = user.Address,
+                    Points = user.Points
+                };
+
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("profile", userProfileDTO);
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
             var user = await _userManager.FindByNameAsync(requestBody.Username);
