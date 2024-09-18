@@ -59,5 +59,22 @@ namespace kit_stem_api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+        [HttpPut("UpdateProfile")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> UpdateUserProfile(UserUpdateDTO userUpdateDTO)
+        {
+            var userName = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            var serviceResponse = await _userService.UpdateProfileAsync(userName, userUpdateDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+
+
+
+        }
     }
 }

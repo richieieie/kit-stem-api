@@ -8,6 +8,7 @@ namespace kit_stem_api.Services.IServices
         Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody);
 
         Task<ServiceResponse> GetProfileAsync(string userName);
+        Task<ServiceResponse> UpdateProfileAsync(string userName, UserUpdateDTO userUpdateDTO);
 
     }
 }

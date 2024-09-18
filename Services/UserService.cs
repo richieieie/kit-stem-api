@@ -30,7 +30,6 @@ namespace kit_stem_api.Services
         {
             try
             {
-                Console.WriteLine(userName);
                 var user = await _userManager.FindByNameAsync(userName);
 
                 if (user == null)
@@ -126,6 +125,37 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                             .SetSucceeded(false)
                             .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        public async Task<ServiceResponse> UpdateProfileAsync(string userName, UserUpdateDTO userUpdateDTO)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+
+                if (user == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("notFound", "User not found!");
+                }
+                user.FirstName = userUpdateDTO.FirstName;
+                user.LastName = userUpdateDTO.LastName;
+                user.Address = userUpdateDTO.Address;
+
+                await _userManager.UpdateAsync(user);
+                //_dbContext.SaveChanges();
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("update", user);
+
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
             }
         }
     }
