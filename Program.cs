@@ -125,7 +125,8 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
+        var hasher = new PasswordHasher<ApplicationUser>();
+        Console.WriteLine(hasher.HashPassword(null, "12345aA@"));
         app.Run();
     }
 }
