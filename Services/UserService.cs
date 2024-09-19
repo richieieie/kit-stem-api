@@ -145,7 +145,6 @@ namespace kit_stem_api.Services
                 user.Address = userUpdateDTO.Address;
 
                 await _userManager.UpdateAsync(user);
-                //_dbContext.SaveChanges();
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("update", user);

@@ -21,7 +21,6 @@ namespace kit_stem_api.Models.Domain
         [StringLength(255)]
         public string? Brief { get; set; }
 
-        [StringLength(1)]
         public string? Description { get; set; }
 
         public int PurchaseCost { get; set; }
