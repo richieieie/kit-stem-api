@@ -21,7 +21,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleStorage.json");
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
 
         // Add repositories
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
@@ -65,10 +65,7 @@ public class Program
                 }
             });
         });
-        builder.Services.AddControllers().AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-        });
+        builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
         builder.Services.AddDbContext<KitStemDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("KitStemHubDb"));

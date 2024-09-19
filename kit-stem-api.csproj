@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">

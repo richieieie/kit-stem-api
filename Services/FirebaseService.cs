@@ -25,7 +25,7 @@ namespace kit_stem_api.Services
 
                 return new ServiceResponse()
                         .SetSucceeded(true)
-                        .AddDetail("data", obj.SelfLink);
+                        .AddDetail("url", fullFileName);
             }
             catch (Exception ex)
             {
