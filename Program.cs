@@ -21,10 +21,10 @@ public class Program
 
         // Add repositories
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
-
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
         // Add services to the container.
         builder.Services.AddAuthorization();
 
