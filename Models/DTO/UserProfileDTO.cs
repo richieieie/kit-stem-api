@@ -4,7 +4,8 @@ namespace kit_stem_api.Models.DTO
 {
     public class UserProfileDTO
     {
-        public string UserName { get; set; }
+        [Required]
+        public string? UserName { get; set; }
         [MaxLength(45)]
         public string? FirstName { get; set; }
         [MaxLength(45)]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
@@ -21,7 +22,8 @@ namespace kit_stem_api.Models.Domain
         [InverseProperty("Packages")]
         public virtual Kit Kit { get; set; } = null!;
 
+        [JsonIgnore]
         [InverseProperty("Package")]
-        public virtual ICollection<PackageLab> PackageLabs { get; set; } = new List<PackageLab>();
+        public virtual ICollection<PackageLab>? PackageLabs { get; set; }
     }
 }

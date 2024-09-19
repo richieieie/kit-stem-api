@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
@@ -18,7 +19,8 @@ namespace kit_stem_api.Models.Domain
 
         public string? Description { get; set; }
 
+        [JsonIgnore]
         [InverseProperty("Category")]
-        public virtual ICollection<Kit> Kits { get; set; } = new List<Kit>();
+        public virtual ICollection<Kit>? Kits { get; set; }
     }
 }
