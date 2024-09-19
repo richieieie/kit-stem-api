@@ -39,12 +39,21 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+<<<<<<< Updated upstream
               "Title": "UserController.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "Controllers\\UserController.cs",
               "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\UserController.cs",
               "RelativeToolTip": "Controllers\\UserController.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAgwDAAAAAUAAAAAAAAAA==",
+=======
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBQAAAAsAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-18T11:55:11.949Z",
               "EditorCaption": ""
