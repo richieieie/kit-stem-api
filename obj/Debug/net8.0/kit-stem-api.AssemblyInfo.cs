@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("kit-stem-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32bf50c42801efbd54a870245ec2c16bcdb26185")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dfafb8e88221e66125160c2b549d780c1dc1d9ac")]
 [assembly: System.Reflection.AssemblyProductAttribute("kit-stem-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("kit-stem-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
