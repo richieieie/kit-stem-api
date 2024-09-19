@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("kit-stem-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30fd43af987ba810416b91ebc6e9d8a6425ff0bf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6f36683c5a19a0977446bf14e789ef776094c7b")]
 [assembly: System.Reflection.AssemblyProductAttribute("kit-stem-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("kit-stem-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

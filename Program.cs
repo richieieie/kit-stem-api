@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Google.Cloud.Storage.V1;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
@@ -24,9 +25,11 @@ public class Program
 
         // Add repositories
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+        builder.Services.AddScoped<ILabRepository, LabRepository>();
 
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<ILabService, LabService>();
         builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         // Add services to the container.
@@ -62,7 +65,10 @@ public class Program
                 }
             });
         });
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        });
         builder.Services.AddDbContext<KitStemDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("KitStemHubDb"));
