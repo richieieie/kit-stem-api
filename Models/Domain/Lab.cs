@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
@@ -36,14 +37,16 @@ namespace kit_stem_api.Models.Domain
         [InverseProperty("Labs")]
         public virtual Kit Kit { get; set; } = null!;
 
+        [JsonIgnore]
         [InverseProperty("Lab")]
-        public virtual ICollection<LabSupport> LabSupports { get; set; } = new List<LabSupport>();
+        public virtual ICollection<LabSupport>? LabSupports { get; set; }
 
         [ForeignKey("LevelId")]
         [InverseProperty("Labs")]
         public virtual Level Level { get; set; } = null!;
 
+        [JsonIgnore]
         [InverseProperty("Lab")]
-        public virtual ICollection<PackageLab> PackageLabs { get; set; } = new List<PackageLab>();
+        public virtual ICollection<PackageLab>? PackageLabs { get; set; }
     }
 }

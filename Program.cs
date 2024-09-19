@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json.Serialization;
+using Google.Cloud.Storage.V1;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Repositories;
@@ -19,11 +21,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
+
         // Add repositories
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+        builder.Services.AddScoped<ILabRepository, LabRepository>();
 
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<ILabService, LabService>();
+        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         // Add services to the container.
         builder.Services.AddAuthorization();
@@ -58,7 +65,7 @@ public class Program
                 }
             });
         });
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
         builder.Services.AddDbContext<KitStemDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("KitStemHubDb"));
@@ -125,8 +132,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-        var hasher = new PasswordHasher<ApplicationUser>();
-        Console.WriteLine(hasher.HashPassword(null, "12345aA@"));
+
         app.Run();
     }
 }

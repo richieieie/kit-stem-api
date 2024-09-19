@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
@@ -35,8 +36,9 @@ namespace kit_stem_api.Models.Domain
         [StringLength(1)]
         public string? Note { get; set; }
 
+        [JsonIgnore]
         [InverseProperty("Order")]
-        public virtual ICollection<LabSupport> LabSupports { get; set; } = new List<LabSupport>();
+        public virtual ICollection<LabSupport>? LabSupports { get; set; }
 
         [ForeignKey("PaymentId")]
         [InverseProperty("UserOrders")]

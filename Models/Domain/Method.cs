@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
@@ -19,7 +20,8 @@ namespace kit_stem_api.Models.Domain
         [StringLength(100)]
         public string NormalizedName { get; set; } = null!;
 
+        [JsonIgnore]
         [InverseProperty("Method")]
-        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public virtual ICollection<Payment>? Payments { get; set; }
     }
 }
