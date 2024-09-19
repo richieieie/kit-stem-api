@@ -26,6 +26,41 @@ namespace kit_stem_api.Services
             _tokenRepository = tokenRepository;
         }
 
+        public async Task<ServiceResponse> GetProfileAsync(string userName)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+
+                if (user == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("notFound", "User not found!");
+                }
+
+                var userProfileDTO = new UserProfileDTO()
+                {
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Address = user.Address,
+                    Points = user.Points
+                };
+
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("profile", userProfileDTO);
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+            }
+
+        }
+
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
             var user = await _userManager.FindByNameAsync(requestBody.Username);
@@ -91,6 +126,37 @@ namespace kit_stem_api.Services
                             .SetSucceeded(false)
                             .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
             }
+        }
+
+        public async Task<ServiceResponse> UpdateProfileAsync(string userName, UserUpdateDTO userUpdateDTO)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+
+                if (user == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("notFound", "User not found!");
+                }
+                user.FirstName = userUpdateDTO.FirstName;
+                user.LastName = userUpdateDTO.LastName;
+                user.Address = userUpdateDTO.Address;
+
+                await _userManager.UpdateAsync(user);
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("update", user);
+
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+            }
+
         }
     }
 }
