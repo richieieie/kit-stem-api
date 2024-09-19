@@ -18,28 +18,28 @@ namespace kit_stem_api.Services
         }
         public async Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, string url)
         {
-            // try
-            // {
-            var lab = new Lab()
+            try
             {
-                Id = Guid.NewGuid(),
-                LevelId = labUploadDTO.LevelId,
-                KitId = labUploadDTO.KitId,
-                Name = labUploadDTO.Name,
-                Url = url,
-                Status = labUploadDTO.Status,
-                Author = labUploadDTO.Author,
-                Price = labUploadDTO.Price,
-                MaxSupportTimes = labUploadDTO.MaxSupportTimes
-            };
-            lab = await _labRepository.CreateAsync(lab);
+                var lab = new Lab()
+                {
+                    Id = Guid.NewGuid(),
+                    LevelId = labUploadDTO.LevelId,
+                    KitId = labUploadDTO.KitId,
+                    Name = labUploadDTO.Name,
+                    Url = url,
+                    Status = labUploadDTO.Status,
+                    Author = labUploadDTO.Author,
+                    Price = labUploadDTO.Price,
+                    MaxSupportTimes = labUploadDTO.MaxSupportTimes
+                };
+                lab = await _labRepository.CreateAsync(lab);
 
-            return new ServiceResponse().SetSucceeded(true).AddDetail("lab", lab);
+                return new ServiceResponse().SetSucceeded(true).AddDetail("lab", lab);
+            }
+            catch
+            {
+                return new ServiceResponse().SetSucceeded(false).AddDetail("unhandledException", "Không thể tạo mới một bài Lab ngay lúc này!");
+            }
         }
-        // catch
-        // {
-        //     return new ServiceResponse().SetSucceeded(false).AddDetail("unhandledException", "Không thể tạo mới một bài Lab ngay lúc này!");
-        // }
-        // }
     }
 }
