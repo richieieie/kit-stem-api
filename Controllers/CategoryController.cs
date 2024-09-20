@@ -29,5 +29,41 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(CategoryCreateDTO categoryDTO)
+        {
+            var serviceResponse = await _categoryService.AddCategoriesAsync(categoryDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory(int Id, CategoryUpdateDTO categoryUpdateDTO)
+        {
+            var serviceResponse = await _categoryService.UpdateCategoriesAsync(Id, categoryUpdateDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCategory(int Id)
+        {
+            var serviceResponse = await _categoryService.DeleteCategoriesAsync(Id);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
     }
 }

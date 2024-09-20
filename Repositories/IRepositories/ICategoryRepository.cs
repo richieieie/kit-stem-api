@@ -1,4 +1,5 @@
-﻿using kit_stem_api.Models.DTO;
+﻿using kit_stem_api.Models.Domain;
+using kit_stem_api.Models.DTO;
 
 namespace kit_stem_api.Repositories.IRepositories
 {
@@ -6,10 +7,10 @@ namespace kit_stem_api.Repositories.IRepositories
     {
         Task<List<CategoryDTO>> GetCategoriesAsync();
 
-        Task<bool> AddCategoryAsync(CategoryDTO categoryDTO);
+        Task<KitsCategory> AddCategoryAsync(KitsCategory kitsCategory);
 
-        Task<bool> UpdateCategoryAsync(int Id, CategoryDTO categoryDTO);
-        Task<bool> DeleteCategoryAsync(int Id);
+        Task<KitsCategory> UpdateCategoryAsync(int Id, CategoryUpdateDTO categoryUpdateDTO);
+        Task<KitsCategory> DeleteCategoryAsync(int Id);
 
     }
 }
