@@ -105,7 +105,7 @@ namespace kit_stem_api.Services
                                 .AddDetail("outOfService", identityResult.Errors);
                 }
 
-                identityResult = await _userManager.AddToRoleAsync(user, requestBody.Role);
+                identityResult = await _userManager.AddToRoleAsync(user, "customer");
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
