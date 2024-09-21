@@ -21,6 +21,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
+
         // Add repositories
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
         builder.Services.AddScoped<ILabRepository, LabRepository>();
@@ -74,7 +76,7 @@ public class Program
         });
         builder.Services.AddCors(options =>
             {
-                options.AddPolicy("testCorsApp", policy =>
+                options.AddPolicy("ClientCors", policy =>
                 {
                     policy.WithOrigins("*")
                             .AllowAnyHeader()
@@ -125,7 +127,7 @@ public class Program
         app.UseSwagger();
         app.UseSwaggerUI();
 
-        app.UseCors("testCorsApp");
+        app.UseCors("ClientCors");
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();

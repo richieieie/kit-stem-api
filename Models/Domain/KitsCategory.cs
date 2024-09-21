@@ -17,7 +17,7 @@ namespace kit_stem_api.Models.Domain
         [StringLength(100)]
         public string Name { get; set; } = null!;
 
-        public string? Description { get; set; }
+        public string Description { get; set; } = null!;
 
         [JsonIgnore]
         [InverseProperty("Category")]

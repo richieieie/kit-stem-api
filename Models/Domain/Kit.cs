@@ -14,21 +14,19 @@ namespace kit_stem_api.Models.Domain
         [Key]
         public int Id { get; set; }
 
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         [StringLength(100)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [StringLength(255)]
-        public string? Brief { get; set; }
+        public string Brief { get; set; } = null!;
 
-        public string? Description { get; set; }
+        public string Description { get; set; } = null!;
 
         public int PurchaseCost { get; set; }
 
-        public int Price { get; set; }
-
-        public bool? Status { get; set; }
+        public bool Status { get; set; }
 
         [ForeignKey("CategoryId")]
         [InverseProperty("Kits")]

@@ -3,20 +3,108 @@
   "WorkspaceRootPath": "D:\\Code\\SWP391\\kit-stem-api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\controllers\\labcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:controllers\\labcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\services\\labservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:services\\labservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\services\\iservices\\ilabservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:services\\iservices\\ilabservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\services\\iservices\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:services\\iservices\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\repositories\\tokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:repositories\\tokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\lab.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\lab.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\kitscategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\kitscategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\kit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\kit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\package.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\userorders.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\userorders.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\kitimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\kitimage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\kitcomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\kitcomponent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\data\\kitstemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:data\\kitstemdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\component.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\component.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\repositories\\irepositories\\itokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:repositories\\irepositories\\itokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\googlecloudstorage.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:googlecloudstorage.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\repositories\\labrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:repositories\\labrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\services\\iservices\\ifirebaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:services\\iservices\\ifirebaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\services\\firebaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:services\\firebaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\code\\swp391\\kit-stem-api\\models\\domain\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +114,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -47,54 +135,321 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "appsettings.Development.json",
-              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\appsettings.Development.json",
-              "RelativeToolTip": "appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-09-21T05:21:14.315Z",
+              "Title": "ILabService.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Services\\IServices\\ILabService.cs",
+              "RelativeDocumentMoniker": "Services\\IServices\\ILabService.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Services\\IServices\\ILabService.cs",
+              "RelativeToolTip": "Services\\IServices\\ILabService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T13:02:08.412Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UserOrders.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\UserOrders.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\UserOrders.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\UserOrders.cs",
+              "RelativeToolTip": "Models\\Domain\\UserOrders.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAA1wA8AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T09:56:10.268Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Package.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Package.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Package.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Package.cs",
+              "RelativeToolTip": "Models\\Domain\\Package.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T09:49:48.25Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": ".gitignore",
-              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAAN4BAAAAAAAAAAAAAOYBAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-09-21T05:16:22.282Z",
+              "Title": "UserService.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Services\\UserService.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Services\\UserService.cs",
+              "RelativeToolTip": "Services\\UserService.cs",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAAAEAAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:29:38.566Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Payment.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Payment.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Payment.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Payment.cs",
+              "RelativeToolTip": "Models\\Domain\\Payment.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T09:48:41.433Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Kit.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Kit.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Kit.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Kit.cs",
+              "RelativeToolTip": "Models\\Domain\\Kit.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T09:47:43.84Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UserController.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Controllers\\UserController.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAowEwAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:14:39.214Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABUAAAA5AAAAAAAAAA==",
+              "Title": "LabController.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Controllers\\LabController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LabController.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Controllers\\LabController.cs",
+              "RelativeToolTip": "Controllers\\LabController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwB0AAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T05:03:11.324Z",
+              "WhenOpened": "2024-09-21T08:20:14.142Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "LabService.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Services\\LabService.cs",
+              "RelativeDocumentMoniker": "Services\\LabService.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Services\\LabService.cs",
+              "RelativeToolTip": "Services\\LabService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCoAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:23:02.598Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "KitImage.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\KitImage.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\KitImage.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\KitImage.cs",
+              "RelativeToolTip": "Models\\Domain\\KitImage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T10:15:25.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "KitsCategory.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\KitsCategory.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\KitsCategory.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\KitsCategory.cs",
+              "RelativeToolTip": "Models\\Domain\\KitsCategory.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABMAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T10:15:27.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Lab.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Lab.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Lab.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Lab.cs",
+              "RelativeToolTip": "Models\\Domain\\Lab.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBUAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T10:15:32.76Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TokenRepository.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Repositories\\TokenRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\TokenRepository.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Repositories\\TokenRepository.cs",
+              "RelativeToolTip": "Repositories\\TokenRepository.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAqwD0AAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:40:20.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-09-21T05:03:07.193Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Services\\IServices\\IUserService.cs",
+              "RelativeDocumentMoniker": "Services\\IServices\\IUserService.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Services\\IServices\\IUserService.cs",
+              "RelativeToolTip": "Services\\IServices\\IUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T12:52:27.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "KitComponent.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\KitComponent.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\KitComponent.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\KitComponent.cs",
+              "RelativeToolTip": "Models\\Domain\\KitComponent.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T09:47:22.737Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\ApplicationUser.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\ApplicationUser.cs",
+              "RelativeToolTip": "Models\\Domain\\ApplicationUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T10:15:59.421Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Component.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Component.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Component.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\Component.cs",
+              "RelativeToolTip": "Models\\Domain\\Component.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T09:46:50.902Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "KitStemDbContext.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Data\\KitStemDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\KitStemDbContext.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Data\\KitStemDbContext.cs",
+              "RelativeToolTip": "Data\\KitStemDbContext.cs",
+              "ViewState": "AgIAAJ0AAAAAAAAAAAAAAKsAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:43:21.07Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ITokenRepository.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Repositories\\IRepositories\\ITokenRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\IRepositories\\ITokenRepository.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Repositories\\IRepositories\\ITokenRepository.cs",
+              "RelativeToolTip": "Repositories\\IRepositories\\ITokenRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:56:42.363Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAQwFAAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T05:03:11.324Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "LabRepository.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Repositories\\LabRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\LabRepository.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Repositories\\LabRepository.cs",
+              "RelativeToolTip": "Repositories\\LabRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:22:52.236Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "IFirebaseService.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Services\\IServices\\IFirebaseService.cs",
+              "RelativeDocumentMoniker": "Services\\IServices\\IFirebaseService.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Services\\IServices\\IFirebaseService.cs",
+              "RelativeToolTip": "Services\\IServices\\IFirebaseService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:22:04.553Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "FirebaseService.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Services\\FirebaseService.cs",
+              "RelativeDocumentMoniker": "Services\\FirebaseService.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Services\\FirebaseService.cs",
+              "RelativeToolTip": "Services\\FirebaseService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:21:47.368Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "googleCloudStorage.json",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\googleCloudStorage.json",
+              "RelativeDocumentMoniker": "googleCloudStorage.json",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\googleCloudStorage.json",
+              "RelativeToolTip": "googleCloudStorage.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-09-21T08:10:31.181Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "RefreshToken.cs",
+              "DocumentMoniker": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\RefreshToken.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\RefreshToken.cs",
+              "ToolTip": "D:\\Code\\SWP391\\kit-stem-api\\Models\\Domain\\RefreshToken.cs",
+              "RelativeToolTip": "Models\\Domain\\RefreshToken.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-21T08:08:49.125Z"
             }
           ]
         }

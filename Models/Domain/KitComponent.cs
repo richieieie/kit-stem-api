@@ -17,8 +17,6 @@ namespace kit_stem_api.Models.Domain
         [Key]
         public int ComponentId { get; set; }
 
-        public bool IsComponentStored { get; set; }
-
         public int ComponentQuantity { get; set; }
 
         [ForeignKey("ComponentId")]
