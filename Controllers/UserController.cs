@@ -39,7 +39,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _userService.LoginAsync(requestBody);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -70,6 +70,19 @@ namespace kit_stem_api.Controllers
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
+        [Route("/RefreshToken/{refreshToken:guid}")]
+        public async Task<IActionResult> RefreshToken(Guid refreshToken)
+        {
+            var serviceResponse = await _userService.RefreshTokenAsync(refreshToken);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
     }

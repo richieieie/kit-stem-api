@@ -38,7 +38,9 @@ namespace kit_stem_api.Services
             }
             catch
             {
-                return new ServiceResponse().SetSucceeded(false).AddDetail("unhandledException", "Không thể tạo mới một bài Lab ngay lúc này!");
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Không thể tạo mới một bài Lab ngay lúc này!");
             }
         }
     }

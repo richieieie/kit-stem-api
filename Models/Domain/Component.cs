@@ -18,13 +18,11 @@ namespace kit_stem_api.Models.Domain
         [StringLength(100)]
         public string Name { get; set; } = null!;
 
-        public int QuantityInStore { get; set; }
-
         [InverseProperty("Component")]
-        public virtual ICollection<KitComponent> KitComponents { get; set; } = new List<KitComponent>();
+        public virtual ICollection<KitComponent>? KitComponents { get; set; }
 
         [ForeignKey("TypeId")]
         [InverseProperty("Components")]
-        public virtual ComponentsType Type { get; set; } = null!;
+        public virtual ComponentsType? Type { get; set; }
     }
 }

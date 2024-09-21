@@ -11,38 +11,22 @@ namespace kit_stem_api.Data
 {
     public class KitStemDbContext : IdentityDbContext<ApplicationUser>
     {
-
         public DbSet<Component> Components { get; set; }
-
         public DbSet<ComponentsType> ComponentsTypes { get; set; }
-
         public DbSet<Kit> Kits { get; set; }
-
         public DbSet<KitComponent> KitComponents { get; set; }
-
         public DbSet<KitImage> KitImages { get; set; }
-
         public DbSet<KitsCategory> KitsCategories { get; set; }
-
         public DbSet<Lab> Labs { get; set; }
-
         public DbSet<LabSupport> LabSupports { get; set; }
-
         public DbSet<Level> Levels { get; set; }
-
         public DbSet<Method> Methods { get; set; }
-
         public DbSet<Package> Packages { get; set; }
-
         public DbSet<PackageLab> PackageLabs { get; set; }
-
         public DbSet<PackageOrder> PackageOrders { get; set; }
-
         public DbSet<Payment> Payments { get; set; }
-
-        public DbSet<ShippingStatus> ShippingStatuses { get; set; }
-
         public DbSet<UserOrders> UserOrders { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public KitStemDbContext(DbContextOptions<KitStemDbContext> options) : base(options)
         {
 
@@ -177,11 +161,6 @@ namespace kit_stem_api.Data
                 entity.HasOne(d => d.Method).WithMany(p => p.Payments).HasConstraintName("FK__Payment__MethodI__0F624AF8");
             });
 
-            modelBuilder.Entity<ShippingStatus>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PK__Shipping__3214EC0740CF1637");
-            });
-
             modelBuilder.Entity<UserOrders>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK__UserOrde__3214EC07B653418C");
@@ -192,10 +171,6 @@ namespace kit_stem_api.Data
                 entity.HasOne(d => d.Payment).WithMany(p => p.UserOrders)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserOrders__Payme__160F4887");
-
-                entity.HasOne(d => d.ShippingStatus).WithMany(p => p.UserOrders)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserOrders__Shipp__17F790F9");
 
                 entity.HasOne(d => d.User).WithMany(p => p.UserOrders)
                     .OnDelete(DeleteBehavior.ClientSetNull)

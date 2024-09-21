@@ -21,9 +21,7 @@ namespace kit_stem_api.Models.Domain
 
         public DateTimeOffset? DeliveredAt { get; set; }
 
-        public int ShippingStatusId { get; set; }
-
-        public bool IsKitDelivered { get; set; }
+        public string ShippingStatus { get; set; } = null!;
 
         public bool IsLabDownloaded { get; set; }
 
@@ -33,7 +31,6 @@ namespace kit_stem_api.Models.Domain
 
         public int TotalPrice { get; set; }
 
-        [StringLength(1)]
         public string? Note { get; set; }
 
         [JsonIgnore]
@@ -43,10 +40,6 @@ namespace kit_stem_api.Models.Domain
         [ForeignKey("PaymentId")]
         [InverseProperty("UserOrders")]
         public virtual Payment Payment { get; set; } = null!;
-
-        [ForeignKey("ShippingStatusId")]
-        [InverseProperty("UserOrders")]
-        public virtual ShippingStatus ShippingStatus { get; set; } = null!;
 
         [ForeignKey("UserId")]
         [InverseProperty("UserOrders")]

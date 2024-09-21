@@ -77,12 +77,11 @@ public class Program
         });
         builder.Services.AddCors(options =>
             {
-                options.AddPolicy("testCorsApp", policy =>
+                options.AddPolicy("ClientCors", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins("*")
                             .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowAnyMethod();
                 });
             });
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -125,13 +124,11 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-        app.UseCors("testCorsApp");
+        app.UseCors("ClientCors");
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();

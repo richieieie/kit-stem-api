@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
 {
@@ -16,11 +13,17 @@ namespace kit_stem_api.Models.Domain
 
         public int KitId { get; set; }
 
+        public int LevelId { get; set; }
+
+        [Required]
         public int Price { get; set; }
+
+        [ForeignKey("LevelId")]
+        public virtual Level? Level { get; set; }
 
         [ForeignKey("KitId")]
         [InverseProperty("Packages")]
-        public virtual Kit Kit { get; set; } = null!;
+        public virtual Kit? Kit { get; set; }
 
         [JsonIgnore]
         [InverseProperty("Package")]
