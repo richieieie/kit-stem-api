@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,7 +36,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("notFound", "User not found!");
+                        .AddDetail("notFound", "Không tìm thấy user ngay lúc này!");
                 }
 
                 var userProfileDTO = new UserProfileDTO()
@@ -56,7 +56,7 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+                    .AddDetail("unhandledException", "Không thể lấy profile của user ngay lúc này!");
             }
 
         }
@@ -138,7 +138,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("notFound", "User not found!");
+                        .AddDetail("notFound", "Không tìm thấy user ngay lúc này");
                 }
                 user.FirstName = userUpdateDTO.FirstName;
                 user.LastName = userUpdateDTO.LastName;
@@ -154,7 +154,7 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+                    .AddDetail("unhandledException", "Không thể update user ngay lúc này!");
             }
 
         }
