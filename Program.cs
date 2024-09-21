@@ -26,8 +26,8 @@ public class Program
         // Add repositories
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
         builder.Services.AddScoped<ILabRepository, LabRepository>();
-
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        builder.Services.AddScoped<IComponentTypeRepository, ComponentTypeRepository>();
 
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
@@ -35,6 +35,7 @@ public class Program
         builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
 
         // Add services to the container.
         builder.Services.AddAuthorization();
