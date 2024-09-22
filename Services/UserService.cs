@@ -57,7 +57,7 @@ namespace kit_stem_api.Services
 
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Username);
+            var user = await _userManager.FindByNameAsync(requestBody.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password))
             {
                 return new ServiceResponse()
@@ -79,7 +79,7 @@ namespace kit_stem_api.Services
 
         public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Username);
+            var user = await _userManager.FindByNameAsync(requestBody.Email);
             if (user != null)
             {
                 return new ServiceResponse()
@@ -91,8 +91,8 @@ namespace kit_stem_api.Services
             {
                 user = new ApplicationUser()
                 {
-                    UserName = requestBody.Username,
-                    Email = requestBody.Username
+                    UserName = requestBody.Email,
+                    Email = requestBody.Email
                 };
                 var identityResult = await _userManager.CreateAsync(user, requestBody.Password);
                 if (!identityResult.Succeeded)
