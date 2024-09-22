@@ -79,7 +79,7 @@ public class Program
             {
                 options.AddPolicy("ClientCors", policy =>
                 {
-                    policy.WithOrigins("*")
+                    policy.AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                 });
@@ -124,7 +124,7 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        
+
         app.UseSwagger();
         app.UseSwaggerUI();
 
