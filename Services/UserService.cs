@@ -1,4 +1,6 @@
-﻿using kit_stem_api.Data;
+﻿using Google.Apis.Auth;
+using kit_stem_api.Constants;
+using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories;
@@ -63,7 +65,7 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
-                            .AddDetail("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
+                            .AddError("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
             var role = (await _userManager.GetRolesAsync(user))[0];
@@ -77,7 +79,49 @@ namespace kit_stem_api.Services
                         .AddDetail("refreshToken", refreshToken);
         }
 
-        public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody)
+        public async Task<ServiceResponse> LoginWithGoogleAsync(GoogleJsonWebSignature.Payload payload)
+        {
+            var email = payload.Email;
+            var user = await _userManager.FindByNameAsync(email);
+            if (user == null)
+            {
+                user = new ApplicationUser()
+                {
+                    UserName = email,
+                    Email = email,
+                };
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                var identityResult = await _userManager.CreateAsync(user);
+                if (!identityResult.Succeeded)
+                {
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .AddDetail("message", "Đăng nhập thất bại!")
+                                .AddError("outOfService", "Không thể đăng nhập bằng gmail ngay lúc này!");
+                }
+
+                identityResult = await _userManager.AddToRoleAsync(user, UserConstants.CustomerRole);
+                if (!identityResult.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .AddDetail("message", "Tạo tài khoản thất bại!")
+                                .AddError("invalidCredentials", "Vai trò yêu cầu không tồn tại!");
+                }
+                await transaction.CommitAsync();
+            }
+
+            var refreshToken = (await _tokenRepository.CreateOrUpdateRefreshTokenAsync(user)).Id;
+            var accessToken = _tokenRepository.GenerateJwtToken(user, UserConstants.CustomerRole);
+            return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Đăng nhập thành công!")
+                    .AddDetail("accessToken", accessToken)
+                    .AddDetail("refreshToken", refreshToken);
+        }
+
+        public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody, string role)
         {
             var user = await _userManager.FindByNameAsync(requestBody.Email!);
             if (user != null)
@@ -105,7 +149,7 @@ namespace kit_stem_api.Services
                             .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
                 }
 
-                identityResult = await _userManager.AddToRoleAsync(user, "customer");
+                identityResult = await _userManager.AddToRoleAsync(user, role);
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();

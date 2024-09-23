@@ -33,6 +33,7 @@ public class Program
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<ILabService, LabService>();
+        builder.Services.AddSingleton<IGoogleService>(s => new GoogleService());
         builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         builder.Services.AddScoped<ICategoryService, CategoryService>();
