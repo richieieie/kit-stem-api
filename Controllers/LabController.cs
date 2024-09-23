@@ -19,14 +19,14 @@ namespace kit_stem_api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromForm] LabUploadDTO labUploadDTO)
         {
-            var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, Guid.NewGuid().ToString(), labUploadDTO.File);
+            var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, Guid.NewGuid().ToString(), labUploadDTO.File!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var url = serviceResponse.Details["url"].ToString();
-            serviceResponse = await _labService.CreateAsync(labUploadDTO, url);
+            var url = serviceResponse.Details!["url"].ToString();
+            serviceResponse = await _labService.CreateAsync(labUploadDTO, url!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });

@@ -9,6 +9,7 @@ using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -39,7 +40,33 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddAuthorization();
+        builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                // Extract validation errors and customize response structure
+                var errors = context.ModelState
+                    .Where(m => m.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key.ToLower(),  // Convert key (property name) to lowercase
+                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()  // Get the first error message
+                    );
 
+                // Define the custom error response structure
+                var errorResponse = new
+                {
+                    status = "fail",
+                    details = new
+                    {
+                        message = "Thông tin yêu cầu không chính xác!",
+                        errors
+                    }
+                };
+
+                // Return a BadRequest with the custom response
+                return new BadRequestObjectResult(errorResponse);
+            };
+        });
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(opt =>

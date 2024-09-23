@@ -3,6 +3,7 @@ using System.Security.Claims;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

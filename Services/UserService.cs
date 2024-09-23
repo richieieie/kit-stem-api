@@ -46,7 +46,7 @@ namespace kit_stem_api.Services
                     .SetSucceeded(true)
                     .AddDetail("profile", userProfileDTO);
             }
-            catch (Exception ex)
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -57,8 +57,8 @@ namespace kit_stem_api.Services
 
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password))
+            var user = await _userManager.FindByNameAsync(requestBody.Email!);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password!))
             {
                 return new ServiceResponse()
                             .SetSucceeded(false)
@@ -79,12 +79,13 @@ namespace kit_stem_api.Services
 
         public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Email);
+            var user = await _userManager.FindByNameAsync(requestBody.Email!);
             if (user != null)
             {
                 return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("unavailableUsername", "Tên tài khoản đã tồn tại!");
+                            .AddDetail("message", "Tạo tài khoản thất bại")
+                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
             }
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
@@ -94,14 +95,14 @@ namespace kit_stem_api.Services
                     UserName = requestBody.Email,
                     Email = requestBody.Email
                 };
-                var identityResult = await _userManager.CreateAsync(user, requestBody.Password);
+                var identityResult = await _userManager.CreateAsync(user, requestBody.Password!);
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
-                                .SetSucceeded(false)
-                                .AddDetail("message", "Thông tin tài khoản không hợp lệ!")
-                                .AddDetail("errors", identityResult.Errors);
+                            .SetSucceeded(false)
+                            .AddDetail("message", "Tạo tài khoản thất bại")
+                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
                 }
 
                 identityResult = await _userManager.AddToRoleAsync(user, "customer");
@@ -110,8 +111,8 @@ namespace kit_stem_api.Services
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
                                 .SetSucceeded(false)
-                                .AddDetail("message", "Vai trò không tồn tại!")
-                                .AddDetail("errors", identityResult.Errors);
+                                .AddDetail("message", "Tạo tài khoản thất bại!")
+                                .AddError("invalidCredentials", "Vai trò yêu cầu không tồn tại!");
                 }
 
                 await transaction.CommitAsync();
@@ -119,12 +120,13 @@ namespace kit_stem_api.Services
                             .SetSucceeded(true)
                             .AddDetail("message", "Tạo mới tài khoản thành công!");
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("message", "Không thể tạo tài khoản ngay lúc này!");
+                            .AddDetail("message", "Tạo tài khoản thất bại!")
+                            .AddError("outOfService", "Không thể tạo tài khoản ngay lúc này!");
             }
         }
 
@@ -150,7 +152,7 @@ namespace kit_stem_api.Services
                     .AddDetail("update", user);
 
             }
-            catch (Exception ex)
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -165,7 +167,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Refresh token hết hạn hoặc không hợp lệ!");
+                        .AddDetail("message", "Làm mới phiên đăng nhập không thành công!")
+                        .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ!");
             }
 
             var user = await _userManager.FindByIdAsync(userId);
@@ -173,12 +176,13 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Refresh token hết hạn hoặc không hợp lệ!");
+                        .AddDetail("message", "Làm mới phiên đăng nhập không thành công!")
+                        .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ!");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
             var refreshToken = (await _tokenRepository.CreateOrUpdateRefreshTokenAsync(user)).Id;
-            var accessToken = _tokenRepository.GenerateJwtToken(user, roles.FirstOrDefault());
+            var accessToken = _tokenRepository.GenerateJwtToken(user, roles.FirstOrDefault()!);
             return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Làm mới phiên đăng nhập thành công!")
