@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Azure;
-using kit_stem_api.Data;
+﻿using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Repositories;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace kit_stem_api.Services
 {
@@ -52,7 +46,7 @@ namespace kit_stem_api.Services
                     .SetSucceeded(true)
                     .AddDetail("profile", userProfileDTO);
             }
-            catch (Exception ex)
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -63,46 +57,52 @@ namespace kit_stem_api.Services
 
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Username);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password))
+            var user = await _userManager.FindByNameAsync(requestBody.Email!);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password!))
             {
                 return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("invalidCredentials", "Incorrect username or password!");
+                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
             var role = (await _userManager.GetRolesAsync(user))[0];
-            var token = _tokenRepository.GenerateJwtToken(user, role);
+            var refreshToken = (await _tokenRepository.CreateOrUpdateRefreshTokenAsync(user)).Id;
+            var accessToken = _tokenRepository.GenerateJwtToken(user, role);
 
             return new ServiceResponse()
                         .SetSucceeded(true)
-                        .AddDetail("at", token);
+                        .AddDetail("message", "Đăng nhập thành công!")
+                        .AddDetail("accessToken", accessToken)
+                        .AddDetail("refreshToken", refreshToken);
         }
 
         public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Username);
+            var user = await _userManager.FindByNameAsync(requestBody.Email!);
             if (user != null)
             {
                 return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("unavailableUsername", "Username exists!");
+                            .AddDetail("message", "Tạo tài khoản thất bại")
+                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
             }
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
                 user = new ApplicationUser()
                 {
-                    UserName = requestBody.Username,
-                    Email = requestBody.Username
+                    UserName = requestBody.Email,
+                    Email = requestBody.Email
                 };
-                var identityResult = await _userManager.CreateAsync(user, requestBody.Password);
+                var identityResult = await _userManager.CreateAsync(user, requestBody.Password!);
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
-                                .SetSucceeded(false)
-                                .AddDetail("outOfService", identityResult.Errors);
+                            .SetSucceeded(false)
+                            .AddDetail("message", "Tạo tài khoản thất bại")
+                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
                 }
 
                 identityResult = await _userManager.AddToRoleAsync(user, "customer");
@@ -111,20 +111,22 @@ namespace kit_stem_api.Services
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
                                 .SetSucceeded(false)
-                                .AddDetail("invalidCredentials", identityResult.Errors);
+                                .AddDetail("message", "Tạo tài khoản thất bại!")
+                                .AddError("invalidCredentials", "Vai trò yêu cầu không tồn tại!");
                 }
 
                 await transaction.CommitAsync();
                 return new ServiceResponse()
                             .SetSucceeded(true)
-                            .AddDetail("message", "New user was created!");
+                            .AddDetail("message", "Tạo mới tài khoản thành công!");
             }
-            catch (Exception ex)
+            catch
             {
                 await transaction.RollbackAsync();
                 return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("unhandledException", ex.InnerException?.Message ?? ex.Message);
+                            .AddDetail("message", "Tạo tài khoản thất bại!")
+                            .AddError("outOfService", "Không thể tạo tài khoản ngay lúc này!");
             }
         }
 
@@ -150,13 +152,42 @@ namespace kit_stem_api.Services
                     .AddDetail("update", user);
 
             }
-            catch (Exception ex)
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
                     .AddDetail("unhandledException", "Không thể update user ngay lúc này!");
             }
+        }
 
+        public async Task<ServiceResponse> RefreshTokenAsync(Guid refreshTokenReq)
+        {
+            var userId = await _tokenRepository.GetUserIdByRefreshTokenAsync(refreshTokenReq);
+            if (userId == null)
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Làm mới phiên đăng nhập không thành công!")
+                        .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ!");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Làm mới phiên đăng nhập không thành công!")
+                        .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ!");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var refreshToken = (await _tokenRepository.CreateOrUpdateRefreshTokenAsync(user)).Id;
+            var accessToken = _tokenRepository.GenerateJwtToken(user, roles.FirstOrDefault()!);
+            return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Làm mới phiên đăng nhập thành công!")
+                    .AddDetail("accessToken", accessToken)
+                    .AddDetail("refreshToken", refreshToken);
         }
     }
 }

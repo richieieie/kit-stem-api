@@ -19,7 +19,7 @@ namespace kit_stem_api.Models.Domain
         public int KitId { get; set; }
 
         [StringLength(100)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Unicode(false)]
         public string Url { get; set; } = null!;
