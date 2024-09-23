@@ -34,12 +34,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -60,7 +56,7 @@
               "RelativeDocumentMoniker": "Services\\UserService.cs",
               "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Services\\UserService.cs",
               "RelativeToolTip": "Services\\UserService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-21T09:58:29.359Z",
               "EditorCaption": ""
@@ -75,8 +71,7 @@
               "RelativeToolTip": "Controllers\\CategoryController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T09:56:11.975Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T09:56:11.975Z"
             },
             {
               "$type": "Document",
@@ -88,8 +83,7 @@
               "RelativeToolTip": "Controllers\\UserController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T09:53:23.874Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T09:53:23.874Z"
             },
             {
               "$type": "Document",
@@ -101,8 +95,7 @@
               "RelativeToolTip": "Controllers\\ComponentTypeController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T09:35:18.817Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T09:35:18.817Z"
             },
             {
               "$type": "Document",
@@ -114,8 +107,7 @@
               "RelativeToolTip": "Services\\ComponentTypeService.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAAkwC4AAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T09:26:59.449Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T09:26:59.449Z"
             },
             {
               "$type": "Document",
@@ -127,8 +119,7 @@
               "RelativeToolTip": "Services\\CategoryService.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAuwCkAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-21T09:26:58.359Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-21T09:26:58.359Z"
             }
           ]
         }
