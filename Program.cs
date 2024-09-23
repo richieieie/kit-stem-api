@@ -29,6 +29,7 @@ public class Program
         builder.Services.AddScoped<ILabRepository, LabRepository>();
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
         builder.Services.AddScoped<IComponentTypeRepository, ComponentTypeRepository>();
+        builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
 
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
@@ -37,6 +38,7 @@ public class Program
 
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
+        builder.Services.AddScoped<IComponentService, ComponentService>();
 
         // Add services to the container.
         builder.Services.AddAuthorization();

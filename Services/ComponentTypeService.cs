@@ -32,7 +32,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể tạo một component type ngay lúc này!");
+                    .AddDetail("message", "Tạo loại thành phần thất bại!")
+                    .AddError("unhandledExeption", "Không thể tạo loại thành phần ngay lúc này!");
             }
             
         }
@@ -50,7 +51,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể xóa component type ngay lúc này!");
+                    .AddDetail("message", "Xóa loại thành phần thất bại!")
+                    .AddError("unhandledException", "Không thể xóa loại thành phần ngay lúc này!");
             }
         }
 
@@ -67,7 +69,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể lấy danh sách component type ngay lúc này!");
+                    .AddDetail("message", "Lấy danh sách các loại thành phần thất bại!")
+                    .AddError("unhandledException", "Không thể lấy danh sách loại thành phần ngày lúc này!");
             }
         }
 
@@ -83,7 +86,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể update component type ngay lúc này!"); 
+                    .AddDetail("message", "Chỉnh sửa loại thành phần thất bại!")
+                    .AddError("unhandledException", "Không thể chỉnh sửa loại thành phần ngay lúc này!"); 
             }
         }
     }

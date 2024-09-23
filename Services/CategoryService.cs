@@ -17,15 +17,26 @@ namespace kit_stem_api.Services
 
         public async Task<ServiceResponse> AddCategoriesAsync(CategoryCreateDTO categoryCreateDTO)
         {
-            var newCategory = new KitsCategory()
+            try
             {
-                Name = categoryCreateDTO.Name,
-                Description = categoryCreateDTO.Description,
-            };
-            newCategory = await _categoryRepository.AddCategoryAsync(newCategory);
-            return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("NewCategory", newCategory);
+                var newCategory = new KitsCategory()
+                {
+                    Name = categoryCreateDTO.Name,
+                    Description = categoryCreateDTO.Description,
+                };
+                newCategory = await _categoryRepository.AddCategoryAsync(newCategory);
+                return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("NewCategory", newCategory);
+            }
+            catch
+            {
+                return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .AddDetail("message", "Tạo loại kit thất bại!")
+                            .AddError("unhandledException", "Không thể tạo mới loại kit ngay lúc ngày!");
+            }
+            
         }
 
         public async Task<ServiceResponse> DeleteCategoriesAsync(int Id)
@@ -36,13 +47,13 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("deleteCategory", category);
-
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể tìm thấy category ngay lúc này!");
+                    .AddDetail("message", "Xóa loại kit thất bại!")
+                    .AddError("unhandledException", "Không thể xóa loại kit ngay lúc này!");
             }
 
         }
@@ -60,7 +71,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể tạo mới một category ngay lúc này!");
+                    .AddDetail("message", "Lấy danh sách loại kit thất bại!")
+                    .AddError("unhandledException", "Không thể tạo mới một loại kit ngay lúc này!");
             }
 
         }
@@ -78,7 +90,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không tìm thấy category!");
+                    .AddDetail("message", "Chỉnh sửa loại kit thất bại")
+                    .AddError("unhandledException", "Không thể chỉnh sửa một loại kit ngay lúc này!");
             }
         }
     }

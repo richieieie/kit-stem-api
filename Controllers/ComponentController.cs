@@ -1,7 +1,6 @@
 ﻿using kit_stem_api.Models.DTO;
 using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,19 +8,19 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class ComponentController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly IComponentService _componentService;
+
+        public ComponentController(IComponentService componentService)
         {
-            _categoryService = categoryService;
+            _componentService = componentService;
         }
 
-
-        [HttpGet("GetCategories")]
-        public async Task<IActionResult> GetCategories()
+        [HttpGet("GetComponents")]
+        public async Task<IActionResult> GetComponents()
         {
-            var serviceResponse = await _categoryService.GetCategoriesAsync();
+            var serviceResponse = await _componentService.GetComponentsAsync();
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -30,10 +29,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("AddCategory")]
-        public async Task<IActionResult> AddCategory(CategoryCreateDTO categoryDTO)
+        [HttpPost("CreateComponent")]
+        public async Task<IActionResult> CreateComponent(ComponentCreateDTO component)
         {
-            var serviceResponse = await _categoryService.AddCategoriesAsync(categoryDTO);
+            var serviceResponse = await _componentService.CreateComponentAsync(component);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -42,10 +41,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory(int Id, CategoryUpdateDTO categoryUpdateDTO)
+        [HttpPut("UpdateComponent")]
+        public async Task<IActionResult> UpdateComponent(int Id, ComponentUpdateDTO component)
         {
-            var serviceResponse = await _categoryService.UpdateCategoriesAsync(Id, categoryUpdateDTO);
+            var serviceResponse = await _componentService.UpdateComponentAsync(Id, component);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -54,10 +53,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpDelete("DeleteCategory")]
-        public async Task<IActionResult> DeleteCategory(int Id)
+        [HttpDelete("DeleteComponent")]
+        public async Task<IActionResult> DeleteComponent(int Id)
         {
-            var serviceResponse = await _categoryService.DeleteCategoriesAsync(Id);
+            var serviceResponse = await _componentService.DeleteComponentAsync(Id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -65,8 +64,5 @@ namespace kit_stem_api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
-
     }
 }
-
-
