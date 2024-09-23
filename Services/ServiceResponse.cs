@@ -33,5 +33,23 @@ namespace kit_stem_api.Services
             Details.Add(key, value);
             return this;
         }
+
+        // Dùng để add errors
+        public ServiceResponse AddError(string key, string value)
+        {
+            if (Details == null)
+            {
+                Details = new Dictionary<string, object>();
+            }
+            if (!Details.ContainsKey("errors"))
+            {
+                Details.Add("errors", new Dictionary<string, string>());
+            }
+
+            var errors = (Dictionary<string, string>)Details["errors"];
+            errors.Add(key, value);
+
+            return this;
+        }
     }
 }
