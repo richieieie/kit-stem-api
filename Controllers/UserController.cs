@@ -60,7 +60,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdateProfile")]
+        [HttpPut("UpdatevProfile")]
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> UpdateUserProfile(UserUpdateDTO userUpdateDTO)
         {

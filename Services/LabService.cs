@@ -25,22 +25,25 @@ namespace kit_stem_api.Services
                     Id = Guid.NewGuid(),
                     LevelId = labUploadDTO.LevelId,
                     KitId = labUploadDTO.KitId,
-                    Name = labUploadDTO.Name,
+                    Name = labUploadDTO.Name!,
                     Url = url,
                     Status = labUploadDTO.Status,
                     Author = labUploadDTO.Author,
                     Price = labUploadDTO.Price,
                     MaxSupportTimes = labUploadDTO.MaxSupportTimes
                 };
-                lab = await _labRepository.CreateAsync(lab);
+                await _labRepository.CreateAsync(lab);
 
-                return new ServiceResponse().SetSucceeded(true).AddDetail("lab", lab);
+                return new ServiceResponse()
+                        .SetSucceeded(true)
+                        .AddDetail("message", "Thêm mới bài lab thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Không thể tạo mới một bài Lab ngay lúc này!");
+                        .AddDetail("message", "Thêm mới bài lab thất bại!")
+                        .AddError("outOfService", "Không thể tạo mới bài lab ngay lúc này");
             }
         }
     }

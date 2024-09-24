@@ -11,19 +11,10 @@ namespace kit_stem_api.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<Lab> CreateAsync(Lab lab)
+        public async Task<bool> CreateAsync(Lab lab)
         {
             await _dbContext.Labs.AddAsync(lab);
-            await _dbContext.SaveChangesAsync();
-
-            await _dbContext.Entry(lab).Reference(l => l.Kit).LoadAsync();
-            await _dbContext.Entry(lab).Reference(l => l.Level).LoadAsync();
-            if (lab.Kit != null)
-            {
-                await _dbContext.Entry(lab.Kit).Reference(k => k.Category).LoadAsync();  // Load Category for Kit
-            }
-
-            return lab;
+            return await _dbContext.SaveChangesAsync() > 0;
         }
     }
 }

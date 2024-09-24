@@ -8,6 +8,6 @@ namespace kit_stem_api.Repositories.IRepositories
 {
     public interface ILabRepository
     {
-        Task<Lab> CreateAsync(Lab lab);
+        Task<bool> CreateAsync(Lab lab);
     }
 }
