@@ -1,5 +1,6 @@
 using System.Net;
 using System.Security.Claims;
+using Google.Apis.Auth;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
@@ -15,29 +16,58 @@ namespace kit_stem_api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IGoogleService _googleService;
+        private readonly IEmailService _emailService;
         private readonly KitStemDbContext _dbContext;
-        public UserController(IUserService userService, KitStemDbContext dbContext)
+        public UserController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
         {
             _userService = userService;
+            _googleService = googleService;
             _dbContext = dbContext;
+            _emailService = emailService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody)
         {
-            var serviceResponse = await _userService.RegisterAsync(requestBody);
+            var serviceResponse = await _userService.RegisterAsync(requestBody, "customer");
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
+            var subject = "Welcome to our shop!";
+            var body = "Thank you for registering, We're excited to have you visit our shop. Explore our latest products and enjoy exclusive offers just for you!";
+            await _emailService.SendEmail(requestBody.Email!, subject, body);
+
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("Login")]
+        [HttpPost]
+        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO requestBody)
         {
             var serviceResponse = await _userService.LoginAsync(requestBody);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
+        [Route("LoginWithGoogle")]
+        public async Task<IActionResult> LoginWithGoogle(GoogleCredentialsDTO googleCredentialsDTO)
+        {
+            var serviceResponse = await _googleService.VerifyGoogleTokenAsync(googleCredentialsDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            serviceResponse = await _userService.LoginWithGoogleAsync((GoogleJsonWebSignature.Payload)serviceResponse.Details!["payload"]);
             if (!serviceResponse.Succeeded)
             {
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -60,7 +90,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdateProfile")]
+        [HttpPut("UpdatevProfile")]
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> UpdateUserProfile(UserUpdateDTO userUpdateDTO)
         {
@@ -75,7 +105,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        [Route("/RefreshToken/{refreshToken:guid}")]
+        [Route("RefreshToken/{refreshToken:guid}")]
         public async Task<IActionResult> RefreshToken(Guid refreshToken)
         {
             var serviceResponse = await _userService.RefreshTokenAsync(refreshToken);

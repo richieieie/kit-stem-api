@@ -6,15 +6,16 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
+using PMS.Repository;
 
 namespace kit_stem_api.Services
 {
     public class LabService : ILabService
     {
-        private readonly ILabRepository _labRepository;
-        public LabService(ILabRepository labRepository)
+        private readonly UnitOfWork _unitOfWork;
+        public LabService(UnitOfWork unitOfWork)
         {
-            _labRepository = labRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, string url)
         {
@@ -25,22 +26,25 @@ namespace kit_stem_api.Services
                     Id = Guid.NewGuid(),
                     LevelId = labUploadDTO.LevelId,
                     KitId = labUploadDTO.KitId,
-                    Name = labUploadDTO.Name,
+                    Name = labUploadDTO.Name!,
                     Url = url,
                     Status = labUploadDTO.Status,
                     Author = labUploadDTO.Author,
                     Price = labUploadDTO.Price,
                     MaxSupportTimes = labUploadDTO.MaxSupportTimes
                 };
-                lab = await _labRepository.CreateAsync(lab);
+                await _unitOfWork.LabRepository.CreateAsync(lab);
 
-                return new ServiceResponse().SetSucceeded(true).AddDetail("lab", lab);
+                return new ServiceResponse()
+                        .SetSucceeded(true)
+                        .AddDetail("message", "Thêm mới bài lab thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Không thể tạo mới một bài Lab ngay lúc này!");
+                        .AddDetail("message", "Thêm mới bài lab thất bại!")
+                        .AddError("outOfService", "Không thể tạo mới bài lab ngay lúc này");
             }
         }
     }
