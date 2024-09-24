@@ -13,13 +13,13 @@ namespace kit_stem_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IGoogleService _googleService;
         private readonly IEmailService _emailService;
         private readonly KitStemDbContext _dbContext;
-        public UserController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
+        public UsersController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
         {
             _userService = userService;
             _googleService = googleService;
@@ -57,31 +57,13 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost]
-        [Route("LoginWithGoogle")]
-        public async Task<IActionResult> LoginWithGoogle(GoogleCredentialsDTO googleCredentialsDTO)
-        {
-            var serviceResponse = await _googleService.VerifyGoogleTokenAsync(googleCredentialsDTO);
-            if (!serviceResponse.Succeeded)
-            {
-                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-
-            serviceResponse = await _userService.LoginWithGoogleAsync((GoogleJsonWebSignature.Payload)serviceResponse.Details!["payload"]);
-            if (!serviceResponse.Succeeded)
-            {
-                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
-
-        [HttpGet("UserProfile")]
+        [HttpGet]
+        [Route("Profile")]
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> UserProfile()
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;
-            var serviceResponse = await _userService.GetProfileAsync(userName);
+            var serviceResponse = await _userService.GetProfileAsync(userName!);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -90,13 +72,14 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdatevProfile")]
+        [HttpPut]
+        [Route("Profile")]
         [Authorize(Roles = "customer")]
         public async Task<IActionResult> UpdateUserProfile(UserUpdateDTO userUpdateDTO)
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;
 
-            var serviceResponse = await _userService.UpdateProfileAsync(userName, userUpdateDTO);
+            var serviceResponse = await _userService.UpdateProfileAsync(userName!, userUpdateDTO);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PMS.Repository.Base
+namespace kit_stem_api.Repositories
 {
     public class GenericRepository<T> where T : class
     {

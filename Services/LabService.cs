@@ -6,7 +6,7 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
-using PMS.Repository;
+using kit_stem_api.Repositories;
 
 namespace kit_stem_api.Services
 {

@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PMS.Repository;
 
 namespace kit_stem_api;
 
@@ -28,8 +27,6 @@ public class Program
         // Add repositories
         builder.Services.AddScoped<UnitOfWork>();
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-        builder.Services.AddScoped<IComponentTypeRepository, ComponentTypeRepository>();
 
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
@@ -37,9 +34,9 @@ public class Program
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
         builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
-
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
+        builder.Services.AddScoped<IComponentService, ComponentService>();
 
         // Add services to the container.
         builder.Services.AddAuthorization();

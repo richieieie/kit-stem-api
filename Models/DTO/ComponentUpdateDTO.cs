@@ -1,16 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
 
 namespace kit_stem_api.Models.DTO
 {
-    public class CategoryUpdateDTO
+    public class ComponentUpdateDTO
     {
-        [Required(ErrorMessage = "Vui lòng nhập ID!")]
         public int Id { get; set; }
+        public int TypeId { get; set; }
 
         [StringLength(100)]
         public string Name { get; set; } = null!;
-
-        public string? Description { get; set; }
     }
 }

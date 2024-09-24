@@ -52,7 +52,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể lấy profile của user ngay lúc này!");
+                    .AddDetail("message", "Không thể lấy hồ sơ của tài khoản ngay lúc này!")
+                    .AddError("invalidCredentials", "invalidCredentials");
             }
 
         }
@@ -200,7 +201,8 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("unhandledException", "Không thể update user ngay lúc này!");
+                    .AddDetail("message", "Không thể update user ngay lúc này!")
+                    .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ");
             }
         }
 

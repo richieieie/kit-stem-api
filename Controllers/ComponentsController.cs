@@ -8,19 +8,19 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComponentTypeController : ControllerBase
+    public class ComponentsController : ControllerBase
     {
-        private readonly IComponentTypeService _componentTypeService;
+        private readonly IComponentService _componentService;
 
-        public ComponentTypeController(IComponentTypeService componentTypeService)
+        public ComponentsController(IComponentService componentService)
         {
-            _componentTypeService = componentTypeService;
+            _componentService = componentService;
         }
 
-        [HttpGet("GetComponentTypes")]
-        public async Task<IActionResult> GetComponentTypes()
+        [HttpGet]
+        public async Task<IActionResult> GetComponents()
         {
-            var serviceResponse = await _componentTypeService.GetComponentTypes();
+            var serviceResponse = await _componentService.GetAllAsync();
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -29,10 +29,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("CreateComponentType")]
-        public async Task<IActionResult> CreateComponentType(ComponentTypeCreateDTO componentTypeCreateDTO)
+        [HttpPost]
+        public async Task<IActionResult> CreateComponent(ComponentCreateDTO component)
         {
-            var serviceResponse = await _componentTypeService.CreateComponentTypeAsync(componentTypeCreateDTO);
+            var serviceResponse = await _componentService.CreateAsync(component);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -41,10 +41,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdateComponentType")]
-        public async Task<IActionResult> UpdateComponentType(int Id, ComponentTypeUpdateDTO componentTypeUpdateDTO)
+        [HttpPut]
+        public async Task<IActionResult> UpdateComponent(ComponentUpdateDTO component)
         {
-            var serviceResponse = await _componentTypeService.UpdateComponentTypeAsync(Id, componentTypeUpdateDTO);
+            var serviceResponse = await _componentService.UpdateAsync(component);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -53,10 +53,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpDelete("DeleteComponentType")]
-        public async Task<IActionResult> DeleteComponentType(int Id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteComponent(int id)
         {
-            var serviceResponse = await _componentTypeService.DeleteComponentTypeAsync(Id);
+            var serviceResponse = await _componentService.RemoveAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
