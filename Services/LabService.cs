@@ -6,15 +6,16 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
+using PMS.Repository;
 
 namespace kit_stem_api.Services
 {
     public class LabService : ILabService
     {
-        private readonly ILabRepository _labRepository;
-        public LabService(ILabRepository labRepository)
+        private readonly UnitOfWork _unitOfWork;
+        public LabService(UnitOfWork unitOfWork)
         {
-            _labRepository = labRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, string url)
         {
@@ -32,7 +33,7 @@ namespace kit_stem_api.Services
                     Price = labUploadDTO.Price,
                     MaxSupportTimes = labUploadDTO.MaxSupportTimes
                 };
-                await _labRepository.CreateAsync(lab);
+                await _unitOfWork.LabRepository.CreateAsync(lab);
 
                 return new ServiceResponse()
                         .SetSucceeded(true)

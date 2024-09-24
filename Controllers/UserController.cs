@@ -17,15 +17,18 @@ namespace kit_stem_api.Controllers
     {
         private readonly IUserService _userService;
         private readonly IGoogleService _googleService;
+        private readonly IEmailService _emailService;
         private readonly KitStemDbContext _dbContext;
-        public UserController(IUserService userService, IGoogleService googleService, KitStemDbContext dbContext)
+        public UserController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
         {
             _userService = userService;
             _googleService = googleService;
             _dbContext = dbContext;
+            _emailService = emailService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody)
         {
             var serviceResponse = await _userService.RegisterAsync(requestBody, "customer");
@@ -34,10 +37,15 @@ namespace kit_stem_api.Controllers
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
+            var subject = "Welcome to our shop!";
+            var body = "Thank you for registering, We're excited to have you visit our shop. Explore our latest products and enjoy exclusive offers just for you!";
+            await _emailService.SendEmail(requestBody.Email!, subject, body);
+
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("Login")]
+        [HttpPost]
+        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO requestBody)
         {
             var serviceResponse = await _userService.LoginAsync(requestBody);
@@ -49,7 +57,8 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("LoginWithGoogle")]
+        [HttpPost]
+        [Route("LoginWithGoogle")]
         public async Task<IActionResult> LoginWithGoogle(GoogleCredentialsDTO googleCredentialsDTO)
         {
             var serviceResponse = await _googleService.VerifyGoogleTokenAsync(googleCredentialsDTO);
@@ -96,7 +105,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        [Route("/RefreshToken/{refreshToken:guid}")]
+        [Route("RefreshToken/{refreshToken:guid}")]
         public async Task<IActionResult> RefreshToken(Guid refreshToken)
         {
             var serviceResponse = await _userService.RefreshTokenAsync(refreshToken);

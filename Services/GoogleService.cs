@@ -7,13 +7,18 @@ namespace kit_stem_api.Services
 {
     public class GoogleService : IGoogleService
     {
+        private readonly IConfiguration _configuration;
+        public GoogleService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public async Task<ServiceResponse> VerifyGoogleTokenAsync(GoogleCredentialsDTO googleCredentialsDTO)
         {
             try
             {
                 var settings = new GoogleJsonWebSignature.ValidationSettings
                 {
-                    Audience = new List<string> { "953447545464-a1bjt1e5tssk8vubepu1831et10jrt56.apps.googleusercontent.com" }
+                    Audience = new List<string> { _configuration["Google:ClientId"]! }
                 };
 
                 var payload = await GoogleJsonWebSignature.ValidateAsync(googleCredentialsDTO.IdToken, settings);
@@ -22,7 +27,7 @@ namespace kit_stem_api.Services
                         .AddDetail("message", "Đăng nhập thành công!")
                         .AddDetail("payload", payload);
             }
-            catch (Exception ex)
+            catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
