@@ -7,11 +7,11 @@ namespace kit_stem_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LabController : ControllerBase
+    public class LabsController : ControllerBase
     {
         private readonly IFirebaseService _firebaseService;
         private readonly ILabService _labService;
-        public LabController(IFirebaseService firebaseService, ILabService labService)
+        public LabsController(IFirebaseService firebaseService, ILabService labService)
         {
             _firebaseService = firebaseService;
             _labService = labService;

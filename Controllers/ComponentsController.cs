@@ -8,11 +8,11 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComponentController : ControllerBase
+    public class ComponentsController : ControllerBase
     {
         private readonly IComponentService _componentService;
 
-        public ComponentController(IComponentService componentService)
+        public ComponentsController(IComponentService componentService)
         {
             _componentService = componentService;
         }
@@ -20,7 +20,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetComponents()
         {
-            var serviceResponse = await _componentService.GetComponentsAsync();
+            var serviceResponse = await _componentService.GetAllAsync();
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -32,7 +32,7 @@ namespace kit_stem_api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateComponent(ComponentCreateDTO component)
         {
-            var serviceResponse = await _componentService.CreateComponentAsync(component);
+            var serviceResponse = await _componentService.CreateAsync(component);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -42,9 +42,9 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateComponent(int Id, ComponentUpdateDTO component)
+        public async Task<IActionResult> UpdateComponent(ComponentUpdateDTO component)
         {
-            var serviceResponse = await _componentService.UpdateComponentAsync(Id, component);
+            var serviceResponse = await _componentService.UpdateAsync(component);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -54,9 +54,9 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteComponent(int Id)
+        public async Task<IActionResult> DeleteComponent(int id)
         {
-            var serviceResponse = await _componentService.DeleteComponentAsync(Id);
+            var serviceResponse = await _componentService.RemoveAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

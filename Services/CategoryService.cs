@@ -3,16 +3,16 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
+using kit_stem_api.Repositories;
 
 namespace kit_stem_api.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly ICategoryRepository _categoryRepository;
-
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly UnitOfWork _unitOfWork;
+        public CategoryService(UnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ServiceResponse> CreateAsync(CategoryCreateDTO categoryCreateDTO)
@@ -24,7 +24,7 @@ namespace kit_stem_api.Services
                     Name = categoryCreateDTO.Name,
                     Description = categoryCreateDTO.Description!,
                 };
-                await _categoryRepository.AddAsync(newCategory);
+                await _unitOfWork.CategoryRepository.CreateAsync(newCategory);
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Tạo mới loại kit mới thành công!");
@@ -47,7 +47,7 @@ namespace kit_stem_api.Services
                 {
                     Id = id,
                 };
-                await _categoryRepository.DeleteAsync(category);
+                await _unitOfWork.CategoryRepository.RemoveAsync(category);
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Xóa một loại kit thành công!");
@@ -66,9 +66,10 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var categories = await _categoryRepository.GetAsync();
+                var categories = await _unitOfWork.CategoryRepository.GetAllAsync();
                 return new ServiceResponse()
                             .SetSucceeded(true)
+                            .AddDetail("message", "Lấy danh sách loại kit thành công!")
                             .AddDetail("data", new {categories});
             }
             catch
@@ -91,17 +92,17 @@ namespace kit_stem_api.Services
                     Name = categoryUpdateDTO.Name,
                     Description = categoryUpdateDTO.Description!
                 };
-                bool updateCategory = await _categoryRepository.UpdateAsync(category);
+                await _unitOfWork.CategoryRepository.UpdateAsync(category);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("data", "Chỉnh sửa một loại kit thành công!");
+                    .AddDetail("message", "Chỉnh sửa một loại kit thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
                     .AddDetail("message", "Chỉnh sửa loại kit thất bại!")
-                    .AddError("unhandledException", "Không thể chỉnh sửa một loại kit ngay lúc này!");
+                    .AddError("outOfService", "Không thể chỉnh sửa một loại kit ngay lúc này!");
             }
         }
     }

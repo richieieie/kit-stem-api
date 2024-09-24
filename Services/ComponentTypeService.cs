@@ -4,18 +4,19 @@ using kit_stem_api.Repositories;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
 
+
 namespace kit_stem_api.Services
 {
     public class ComponentTypeService : IComponentTypeService
     {
-        private readonly IComponentTypeRepository _componentTypeRepository;
+        private readonly UnitOfWork _unitOfWork;
 
-        public ComponentTypeService(IComponentTypeRepository componentTypeRepository)
+        public ComponentTypeService(UnitOfWork unitOfWork)
         {
-            _componentTypeRepository = componentTypeRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResponse> CreateComponentTypeAsync(ComponentTypeCreateDTO componentTypeCreateDTO)
+        public async Task<ServiceResponse> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO)
         {
             try
             {
@@ -23,10 +24,10 @@ namespace kit_stem_api.Services
                 {
                     Name = componentTypeCreateDTO.Name
                 };
-                newComponentType = await _componentTypeRepository.CreateComponentTypeAsync(newComponentType);
+                await _unitOfWork.ComponentTypeRepository.CreateAsync(newComponentType);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("newComponentType", newComponentType);
+                    .AddDetail("message", "Tạo mới một linh kiện thành công!");
             } 
             catch
             {
@@ -38,56 +39,65 @@ namespace kit_stem_api.Services
             
         }
 
-        public async Task<ServiceResponse> DeleteComponentTypeAsync(int Id)
+        public async Task<ServiceResponse> RemoveAsync(int id)
         {
             try
             {
-                var deleteComponentType = await _componentTypeRepository.DeleteComponentTypeAsync(Id);
+                var type = new ComponentsType()
+                {
+                    Id = id
+                };
+                await _unitOfWork.ComponentTypeRepository.RemoveAsync(type);
                 return new ServiceResponse()
                             .SetSucceeded(true)
-                            .AddDetail("deleteComponentType", deleteComponentType);
+                            .AddDetail("message", "Xóa một loại linh kiện thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Xóa loại thành phần thất bại!")
-                    .AddError("unhandledException", "Không thể xóa loại thành phần ngay lúc này!");
+                    .AddDetail("message", "Xóa loại linh kiện thất bại!")
+                    .AddError("outOfService", "Không thể xóa loại linh kiện ngay lúc này!");
             }
         }
 
-        public async Task<ServiceResponse> GetComponentTypes()
+        public async Task<ServiceResponse> GetAllAsync()
         {
             try
             {
-                var componentTypes = await _componentTypeRepository.GetComponentTypesAsync();
+                var componentTypes = await _unitOfWork.ComponentTypeRepository.GetAllAsync();
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("componentTypes", componentTypes);
+                    .AddDetail("data", new {componentTypes});
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Lấy danh sách các loại thành phần thất bại!")
-                    .AddError("unhandledException", "Không thể lấy danh sách loại thành phần ngày lúc này!");
+                    .AddDetail("message", "Lấy danh sách các loại linh kiện thất bại!")
+                    .AddError("outOfService", "Không thể lấy danh sách loại linh kiện ngày lúc này!");
             }
         }
 
-        public async Task<ServiceResponse> UpdateComponentTypeAsync(int Id, ComponentTypeUpdateDTO componentTypeUpdateDTO)
+        public async Task<ServiceResponse> UpdateAsync(ComponentTypeUpdateDTO componentTypeUpdateDTO)
         {
             try
             {
-                var updateComponentType = await _componentTypeRepository.UpdateComponentTypeAsync(Id, componentTypeUpdateDTO);
+                var type = new ComponentsType()
+                {
+                    Id = componentTypeUpdateDTO.Id,
+                    Name = componentTypeUpdateDTO.Name,
+                };
+                await _unitOfWork.ComponentTypeRepository.UpdateAsync(type);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("updateComponentType", updateComponentType);
+                    .AddDetail("message", "Chỉnh sửa một loại linh kiện thành công!");
             } catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Chỉnh sửa loại thành phần thất bại!")
-                    .AddError("unhandledException", "Không thể chỉnh sửa loại thành phần ngay lúc này!"); 
+                    .AddDetail("message", "Chỉnh sửa loại linh kiện thất bại!")
+                    .AddError("outOfService", "Không thể chỉnh sửa loại linh kiện ngay lúc này!"); 
             }
         }
     }

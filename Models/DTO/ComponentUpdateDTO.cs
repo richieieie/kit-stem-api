@@ -4,6 +4,7 @@ namespace kit_stem_api.Models.DTO
 {
     public class ComponentUpdateDTO
     {
+        public int Id { get; set; }
         public int TypeId { get; set; }
 
         [StringLength(100)]

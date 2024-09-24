@@ -1,7 +1,7 @@
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Repositories.IRepositories;
-using PMS.Repository.Base;
+using kit_stem_api.Repositories;
 
 namespace kit_stem_api.Repositories
 {

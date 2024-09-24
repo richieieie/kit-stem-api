@@ -13,13 +13,13 @@ namespace kit_stem_api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IGoogleService _googleService;
         private readonly IEmailService _emailService;
         private readonly KitStemDbContext _dbContext;
-        public UserController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
+        public UsersController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
         {
             _userService = userService;
             _googleService = googleService;

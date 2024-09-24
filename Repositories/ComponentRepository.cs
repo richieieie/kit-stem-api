@@ -2,54 +2,18 @@
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using kit_stem_api.Repositories;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
+using kit_stem_api.Models.Domain;
 
 namespace kit_stem_api.Repositories
 {
-    public class ComponentRepository : IComponentRepository
+    public class ComponentRepository : GenericRepository<Models.Domain.Component>
     {
-        private readonly KitStemDbContext _dbContext;
+        
 
-        public ComponentRepository(KitStemDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
-        public async Task<Models.Domain.Component> CreateComponentAsync(Models.Domain.Component component)
-        {
-            await _dbContext.Components.AddAsync(component);
-            await _dbContext.SaveChangesAsync();
-            return component;
-        }
-
-        public async Task<Models.Domain.Component> DeleteComponentAsync(int Id)
-        {
-            var component = await _dbContext.Components.FindAsync(Id);
-            _dbContext.Components.Remove(component);
-            await _dbContext.SaveChangesAsync();
-            return component;
-        }
-
-        public async Task<List<ComponentDTO>> GetComponentsAsync()
-        {
-            var components = await _dbContext.Components.ToListAsync();
-            return components.Select(c => new ComponentDTO 
-            {
-                Id = c.Id, 
-                TypeId = c.TypeId, 
-                Name = c.Name 
-            }).ToList();
-        }
-
-        public async Task<Models.Domain.Component> UpdateComponentAsync(int Id, ComponentUpdateDTO component)
-        {
-            var updateComponent = await _dbContext.Components.FindAsync(Id);
-
-            updateComponent.TypeId = component.TypeId;
-            updateComponent.Name = component.Name;
-
-            await _dbContext.SaveChangesAsync();
-            return updateComponent;
-        }
+        public ComponentRepository(KitStemDbContext dbContext) : base(dbContext) { }
+        
     }
 }

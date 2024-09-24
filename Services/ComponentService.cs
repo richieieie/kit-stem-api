@@ -9,106 +9,98 @@ namespace kit_stem_api.Services
 {
     public class ComponentService : IComponentService
     {
-        private readonly IComponentRepository _componentRepository;
-        private readonly KitStemDbContext _dbContext;
 
-        public ComponentService(IComponentRepository componentRepository, KitStemDbContext dbContext)
+        private readonly UnitOfWork _unitOfWork;
+        public ComponentService(UnitOfWork unitOfWork)
         {
-            _componentRepository = componentRepository;
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResponse> CreateComponentAsync(ComponentCreateDTO component)
+        public async Task<ServiceResponse> CreateAsync(ComponentCreateDTO component)
         {
             try
             {
-                var alreadyType = await _dbContext.ComponentsTypes.FindAsync(component.TypeId);
-                if (alreadyType == null)
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddDetail("message", "Tạo mới thành phần thất bại!")
-                        .AddError("notFoundTypeId", "Không tìm thấy TypeId ngay lúc ngày!");
-                }
-
                 var newComponent = new Component()
                 {
-                    TypeId = alreadyType.Id,
-                    Name = component.Name,
+                    TypeId = component.TypeId,
+                    Name = component.Name
                 };
-                newComponent = await _componentRepository.CreateComponentAsync(newComponent);
+                await _unitOfWork.ComponentRepository.CreateAsync(newComponent);
                 return new ServiceResponse()
                             .SetSucceeded(true)
-                            .AddDetail("NewComponent", newComponent);
+                            .AddDetail("message", "Tạo mới linh kiện thành công!");
             } 
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Tạo mới thành phần thất bại!")
-                    .AddError("unhandledExeption", "Không thể tạo mới thành phần ngay lúc này!");
+                    .AddDetail("message", "Tạo mới linh kiện thất bại!")
+                    .AddError("outOfService", "Không thể tạo mới linh kiện ngay lúc này!");
             }
         }
 
-        public async Task<ServiceResponse> DeleteComponentAsync(int Id)
+        public async Task<ServiceResponse> RemoveAsync(int id)
         {
             try
             {
-                var component = await _componentRepository.DeleteComponentAsync(Id);
+                var component = new Component()
+                {
+                    Id = id,
+                };
+                await _unitOfWork.ComponentRepository.RemoveAsync(component);
                 return new ServiceResponse()
                             .SetSucceeded(true)
-                            .AddDetail("deleteComponent", component);
+                            .AddDetail("message", "Xóa linh kiện thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Xóa thành phần thất bại!")
-                    .AddError("unhandledException", "Không thể xóa thành phần ngay lúc này!");
+                    .AddDetail("message", "Xóa linh kiện thất bại!")
+                    .AddError("outOfService", "Không thể xóa linh kiện ngay lúc này!");
             }
         }
 
-        public async Task<ServiceResponse> GetComponentsAsync()
+        public async Task<ServiceResponse> GetAllAsync()
         {
             try
             {
-                var components = await _componentRepository.GetComponentsAsync();
+                var components = await _unitOfWork.ComponentRepository.GetAllAsync();
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("components", components);
+                    .AddDetail("message", "Lấy danh sách linh kiện thành công!")
+                    .AddDetail("data", new { components });
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
                     .AddDetail("message", "Lấy danh sách thành phần thất bại!")
-                    .AddError("unhandledExeption", "Không thể lấy danh sách thành phần ngày lúc này!");
+                    .AddError("outOfService", "Không thể lấy danh sách thành phần ngày lúc này!");
             }
         }
 
-        public async Task<ServiceResponse> UpdateComponentAsync(int Id, ComponentUpdateDTO component)
+        public async Task<ServiceResponse> UpdateAsync(ComponentUpdateDTO component)
         {
             try
             {
-                var alreadyType = await _dbContext.ComponentsTypes.FindAsync(component.TypeId);
-                if (alreadyType == null)
+                var updateComponent = new Component()
                 {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddDetail("message", "Chỉnh sửa thành phần thất bại!")
-                        .AddError("notFoundTypeId", "Không tìm thấy TypeId ngay lúc ngày!");
-                }
-                var updateComponent = await _componentRepository.UpdateComponentAsync(Id, component);
+                    Id = component.Id,
+                    TypeId = component.TypeId,
+                    Name = component.Name
+                };
+                await _unitOfWork.ComponentRepository.UpdateAsync(updateComponent);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("updateComponent", updateComponent);
+                    .AddDetail("message", "Chỉnh sửa linh kiện thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Chỉnh sửa thành phần thất bại!")
-                        .AddError("unhandledExeption", "Không thể chỉnh sửa thành phần ngay lúc này!");
+                        .AddDetail("message", "Chỉnh sửa linh kiện thất bại!")
+                        .AddError("outOfSercive", "Không thể chỉnh sửa linh kiện ngay lúc này!");
             }
         }
     }
