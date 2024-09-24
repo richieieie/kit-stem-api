@@ -26,7 +26,6 @@ namespace kit_stem_api.Models.DTO
         public string? Author { get; set; }
         [Required]
         public bool Status { get; set; }
-        [Required]
         public IFormFile? File { get; set; }
     }
 }
