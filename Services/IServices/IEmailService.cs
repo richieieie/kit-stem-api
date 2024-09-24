@@ -7,6 +7,6 @@ namespace kit_stem_api.Services.IServices
 {
     public interface IEmailService
     {
-        
+        Task SendEmail(string toMail, string subject, string body);
     }
 }
