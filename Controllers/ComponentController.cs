@@ -17,7 +17,7 @@ namespace kit_stem_api.Controllers
             _componentService = componentService;
         }
 
-        [HttpGet("GetComponents")]
+        [HttpGet]
         public async Task<IActionResult> GetComponents()
         {
             var serviceResponse = await _componentService.GetComponentsAsync();
@@ -29,7 +29,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("CreateComponent")]
+        [HttpPost]
         public async Task<IActionResult> CreateComponent(ComponentCreateDTO component)
         {
             var serviceResponse = await _componentService.CreateComponentAsync(component);
@@ -41,7 +41,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdateComponent")]
+        [HttpPut]
         public async Task<IActionResult> UpdateComponent(int Id, ComponentUpdateDTO component)
         {
             var serviceResponse = await _componentService.UpdateComponentAsync(Id, component);
@@ -53,7 +53,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpDelete("DeleteComponent")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteComponent(int Id)
         {
             var serviceResponse = await _componentService.DeleteComponentAsync(Id);

@@ -18,10 +18,10 @@ namespace kit_stem_api.Controllers
         }
 
 
-        [HttpGet("GetCategories")]
+        [HttpGet]
         public async Task<IActionResult> GetCategories()
         {
-            var serviceResponse = await _categoryService.GetCategoriesAsync();
+            var serviceResponse = await _categoryService.GetAsync();
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -30,10 +30,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPost("AddCategory")]
-        public async Task<IActionResult> AddCategory(CategoryCreateDTO categoryDTO)
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory(CategoryCreateDTO categoryDTO)
         {
-            var serviceResponse = await _categoryService.AddCategoriesAsync(categoryDTO);
+            var serviceResponse = await _categoryService.CreateAsync(categoryDTO);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -42,10 +42,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpPut("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory(int Id, CategoryUpdateDTO categoryUpdateDTO)
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory(CategoryUpdateDTO categoryUpdateDTO)
         {
-            var serviceResponse = await _categoryService.UpdateCategoriesAsync(Id, categoryUpdateDTO);
+            var serviceResponse = await _categoryService.UpdateAsync(categoryUpdateDTO);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -54,10 +54,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpDelete("DeleteCategory")]
-        public async Task<IActionResult> DeleteCategory(int Id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var serviceResponse = await _categoryService.DeleteCategoriesAsync(Id);
+            var serviceResponse = await _categoryService.DeleteAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

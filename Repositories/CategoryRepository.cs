@@ -15,41 +15,33 @@ namespace kit_stem_api.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<KitsCategory> AddCategoryAsync(KitsCategory kitsCategory)
+        public async Task<bool> AddAsync(KitsCategory kitsCategory)
         {
             await _dbContext.KitsCategories.AddAsync(kitsCategory);
-            await _dbContext.SaveChangesAsync();
-            return kitsCategory;
+            return await _dbContext.SaveChangesAsync() > 0;
+
         }
 
-        public async Task<KitsCategory> DeleteCategoryAsync(int Id)
+        public async Task<bool> DeleteAsync(KitsCategory kitsCategory)
         {
-            var category = await _dbContext.KitsCategories.FindAsync(Id);
-            _dbContext.KitsCategories.Remove(category);
-            await _dbContext.SaveChangesAsync();
-            return category;
+            _dbContext.KitsCategories.Remove(kitsCategory);
+            return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<CategoryDTO>> GetCategoriesAsync()
+        public async Task<List<KitsCategory>> GetAsync()
         {
             var categories = await _dbContext.KitsCategories.ToListAsync();
-            return categories.Select(c => new CategoryDTO
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Description = c.Description
-            }).ToList();
+            return categories;
         }
 
-        public async Task<KitsCategory> UpdateCategoryAsync(int Id, CategoryUpdateDTO categoryUpdateDTO)
+        public async Task<bool> UpdateAsync(KitsCategory kitsCategory)
         {
-            var category = await _dbContext.KitsCategories.FindAsync(Id);
-            
-            category.Name = categoryUpdateDTO.Name;
-            category.Description = categoryUpdateDTO.Description;
+            var tracker = _dbContext.Attach(kitsCategory);
+            tracker.State = EntityState.Modified;
 
-            await _dbContext.SaveChangesAsync();
-            return category;
+
+            return await _dbContext.SaveChangesAsync() > 0;
+
         }
     }
 }
