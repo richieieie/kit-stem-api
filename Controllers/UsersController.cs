@@ -1,6 +1,7 @@
 using System.Net;
 using System.Security.Claims;
 using Google.Apis.Auth;
+using kit_stem_api.Constants;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
@@ -31,7 +32,7 @@ namespace kit_stem_api.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody)
         {
-            var serviceResponse = await _userService.RegisterAsync(requestBody, "customer");
+            var serviceResponse = await _userService.RegisterAsync(requestBody, UserConstants.CustomerRole);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -96,6 +97,23 @@ namespace kit_stem_api.Controllers
             {
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
+        [Route("RegisterWithRole/Only-For-Testing/{role}")]
+        public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody, string role)
+        {
+            var serviceResponse = await _userService.RegisterAsync(requestBody, role);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var subject = "Welcome to our shop!";
+            var body = "Thank you for registering, We're excited to have you visit our shop. Explore our latest products and enjoy exclusive offers just for you!";
+            await _emailService.SendEmail(requestBody.Email!, subject, body);
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }

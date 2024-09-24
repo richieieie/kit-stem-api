@@ -34,5 +34,24 @@ namespace kit_stem_api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromForm] LabUpdateDTO labUpdateDTO)
+        {
+            var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, Guid.NewGuid().ToString(), labUpdateDTO.File!);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var url = serviceResponse.Details!["url"].ToString();
+            serviceResponse = await _labService.UpdateAsync(labUpdateDTO, url!);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }
