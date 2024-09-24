@@ -19,12 +19,10 @@ namespace kit_stem_api.Controllers
         private readonly IUserService _userService;
         private readonly IGoogleService _googleService;
         private readonly IEmailService _emailService;
-        private readonly KitStemDbContext _dbContext;
-        public UsersController(IUserService userService, IGoogleService googleService, IEmailService emailService, KitStemDbContext dbContext)
+        public UsersController(IUserService userService, IGoogleService googleService, IEmailService emailService)
         {
             _userService = userService;
             _googleService = googleService;
-            _dbContext = dbContext;
             _emailService = emailService;
         }
 
@@ -50,6 +48,24 @@ namespace kit_stem_api.Controllers
         public async Task<IActionResult> Login([FromBody] UserLoginDTO requestBody)
         {
             var serviceResponse = await _userService.LoginAsync(requestBody);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost("LoginWithGoogle")]
+        public async Task<IActionResult> LoginWithGoogle(GoogleCredentialsDTO googleCredentialsDTO)
+        {
+            var serviceResponse = await _googleService.VerifyGoogleTokenAsync(googleCredentialsDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            serviceResponse = await _userService.LoginWithGoogleAsync((GoogleJsonWebSignature.Payload)serviceResponse.Details!["payload"]);
             if (!serviceResponse.Succeeded)
             {
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
