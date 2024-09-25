@@ -18,21 +18,48 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var fullFileName = $"{folder}/{fileName}{Path.GetExtension(file.FileName)}";
+                var filePrefix = $"{folder}/{fileName}";
+                var ext = Path.GetExtension(file.FileName);
+                var fullFileName = $"{filePrefix}{ext}";
+
                 using var stream = new MemoryStream();
                 await file.CopyToAsync(stream);
-                var obj = await _storageClient.UploadObjectAsync(bucket, fullFileName, file.ContentType, stream);
 
+                // Try to delete lab's file if it exists on google cloud storage
+                await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
+
+                await _storageClient.UploadObjectAsync(bucket, fullFileName, file.ContentType, stream);
                 return new ServiceResponse()
                         .SetSucceeded(true)
                         .AddDetail("url", fullFileName);
             }
-            catch (Exception ex)
+            catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("exception", ex.Message)
-                        .AddDetail("unhandledException", $"Cannot upload {file.Name} right now!");
+                        .AddDetail("message", "Tạo mới bài Lab thất bại")
+                        .AddError("outOfService", $"Không thể tạo {file.Name} ngay bây giờ!");
+            }
+        }
+
+        private async Task DeleteFileWithUnknownExtensionAsync(string bucket, string filePrefix)
+        {
+            try
+            {
+                var objects = _storageClient.ListObjectsAsync(bucket, filePrefix);
+
+                await foreach (var obj in objects)
+                {
+                    if (obj.Name.StartsWith(filePrefix))
+                    {
+                        await _storageClient.DeleteObjectAsync(bucket, obj.Name);
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+                throw;
             }
         }
     }

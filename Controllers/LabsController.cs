@@ -1,5 +1,6 @@
 using kit_stem_api.Constants;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +20,15 @@ namespace kit_stem_api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromForm] LabUploadDTO labUploadDTO)
         {
-            var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, Guid.NewGuid().ToString(), labUploadDTO.File!);
+            var labId = Guid.NewGuid();
+            var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, labId.ToString(), labUploadDTO.File!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             var url = serviceResponse.Details!["url"].ToString();
-            serviceResponse = await _labService.CreateAsync(labUploadDTO, url!);
+            serviceResponse = await _labService.CreateAsync(labUploadDTO, labId, url!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -38,14 +40,30 @@ namespace kit_stem_api.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromForm] LabUpdateDTO labUpdateDTO)
         {
-            var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, Guid.NewGuid().ToString(), labUpdateDTO.File!);
+            ServiceResponse serviceResponse;
+            string? url = null;
+            if (labUpdateDTO.File != null)
+            {
+                serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, labUpdateDTO.Id.ToString(), labUpdateDTO.File!);
+                if (!serviceResponse.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                }
+                url = serviceResponse.Details!["url"].ToString();
+            }
+
+            serviceResponse = await _labService.UpdateAsync(labUpdateDTO, url);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var url = serviceResponse.Details!["url"].ToString();
-            serviceResponse = await _labService.UpdateAsync(labUpdateDTO, url!);
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAsync([FromQuery] LabGetDTO labGetDTO)
+        {
+            var serviceResponse = await _labService.GetAsync(labGetDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });

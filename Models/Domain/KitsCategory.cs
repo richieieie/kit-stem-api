@@ -19,6 +19,8 @@ namespace kit_stem_api.Models.Domain
 
         public string Description { get; set; } = null!;
 
+        public bool Status { get; set; }
+
         [JsonIgnore]
         [InverseProperty("Category")]
         public virtual ICollection<Kit>? Kits { get; set; }

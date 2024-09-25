@@ -27,6 +27,7 @@ namespace kit_stem_api.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<UserOrders> UserOrders { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<LabSupporter> LabSupporters { get; set; }
         public KitStemDbContext(DbContextOptions<KitStemDbContext> options) : base(options)
         {
 
@@ -34,14 +35,15 @@ namespace kit_stem_api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Component>(entity =>
-       {
-           entity.HasKey(e => e.Id).HasName("PK__Componen__3214EC072B0E2FDE");
+            {
+                entity.HasKey(e => e.Id).HasName("PK__Componen__3214EC072B0E2FDE");
 
-           entity.HasOne(d => d.Type).WithMany(p => p.Components)
-               .OnDelete(DeleteBehavior.ClientSetNull)
-               .HasConstraintName("FK__Component__TypeI__6754599E");
-       });
+                entity.HasOne(d => d.Type).WithMany(p => p.Components)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Component__TypeI__6754599E");
+            });
 
             modelBuilder.Entity<ComponentsType>(entity =>
             {
@@ -102,7 +104,7 @@ namespace kit_stem_api.Data
 
             modelBuilder.Entity<LabSupport>(entity =>
             {
-                entity.HasKey(e => new { e.LabId, e.OrderId }).HasName("PK__LabSuppo__01846D66652C0B0E");
+                entity.HasKey(e => e.Id).HasName("PK__LabSuppor__01846D66652C0B0E");
 
                 entity.HasOne(d => d.Lab).WithMany(p => p.LabSupports)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -111,6 +113,9 @@ namespace kit_stem_api.Data
                 entity.HasOne(d => d.Order).WithMany(p => p.LabSupports)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__LabSuppor__Order__236943A5");
+                modelBuilder.Entity<LabSupport>()
+                    .HasIndex(l => new { l.LabId, l.PackageId, l.OrderId })
+                    .IsUnique();
             });
 
             modelBuilder.Entity<Level>(entity =>
@@ -176,9 +181,25 @@ namespace kit_stem_api.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserOrders__UserI__151B244E");
             });
-            base.OnModelCreating(modelBuilder);
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<LabSupporter>(entity =>
+            {
+                // Primary key
+                entity.HasKey(e => e.Id);
 
+                // Foreign key to LabSupport
+                entity.HasOne(e => e.LabSupport)
+                    .WithMany(l => l.LabSupporters) // Inverse Property
+                    .HasForeignKey(e => e.LabSupportId)
+                    .OnDelete(DeleteBehavior.Cascade); // Optional, set cascade behavior
+
+                // Foreign key to ApplicationUser (Staff)
+                entity.HasOne(e => e.Staff)
+                    .WithMany(u => u.LabSupporters) // Inverse Property
+                    .HasForeignKey(e => e.StaffId)
+                    .OnDelete(DeleteBehavior.Restrict); // Restrict deletion of staff if related record exists
+
+                // Additional constraints or properties can be added here as necessary
+            });
             modelBuilder.Entity<IdentityRole>().HasData(SeedingRoles());
         }
 

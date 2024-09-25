@@ -8,7 +8,8 @@ namespace kit_stem_api.Services.IServices
 {
     public interface ILabService
     {
-        Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, string url);
-        Task<ServiceResponse> UpdateAsync(LabUpdateDTO labUpdateDTO, string url);
+        Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, Guid id, string url);
+        Task<ServiceResponse> UpdateAsync(LabUpdateDTO labUpdateDTO, string? url);
+        Task<ServiceResponse> GetAsync(LabGetDTO labGetDTO);
     }
 }
