@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\controllers\\componentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:controllers\\componentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\controllers\\componenttypescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:controllers\\componenttypescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:controllers\\categoriescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\models\\domain\\kit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:models\\domain\\kit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}|kit-stem-api.csproj|d:\\fpt\\term 5\\swp391\\kitstemproject\\kit-stem-api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -86,45 +94,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CategoriesController.cs",
-              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\CategoriesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CategoriesController.cs",
-              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\CategoriesController.cs",
-              "RelativeToolTip": "Controllers\\CategoriesController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAZAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "Kit.cs",
+              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Models\\Domain\\Kit.cs",
+              "RelativeDocumentMoniker": "Models\\Domain\\Kit.cs",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Models\\Domain\\Kit.cs",
+              "RelativeToolTip": "Models\\Domain\\Kit.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:18:07.626Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ComponentTypesController.cs",
-              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentTypesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ComponentTypesController.cs",
-              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentTypesController.cs*",
-              "RelativeToolTip": "Controllers\\ComponentTypesController.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:17:58.151Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "LabsController.cs",
-              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\LabsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\LabsController.cs",
-              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\LabsController.cs*",
-              "RelativeToolTip": "Controllers\\LabsController.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:17:41.036Z",
+              "WhenOpened": "2024-09-25T08:03:15.649Z",
               "EditorCaption": ""
             },
             {
@@ -145,20 +127,58 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
-              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\UsersController.cs*",
-              "RelativeToolTip": "Controllers\\UsersController.cs*",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAbAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": ".gitignore",
+              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AgIAANUBAAAAAAAAAAAAAOcBAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-09-24T15:21:58.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CategoriesController.cs",
+              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\CategoriesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CategoriesController.cs",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\CategoriesController.cs",
+              "RelativeToolTip": "Controllers\\CategoriesController.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAYwCIAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:17:44.404Z",
+              "WhenOpened": "2024-09-24T15:18:07.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ComponentTypesController.cs",
+              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentTypesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ComponentTypesController.cs",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentTypesController.cs",
+              "RelativeToolTip": "Controllers\\ComponentTypesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADwAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-24T15:17:58.151Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsersController.cs",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "Controllers\\UsersController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-24T15:17:44.404Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "LabService.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Services\\LabService.cs",
               "RelativeDocumentMoniker": "Services\\LabService.cs",
@@ -166,12 +186,11 @@
               "RelativeToolTip": "Services\\LabService.cs",
               "ViewState": "AgIAAAEAAAAAAAAAAAAAwAoAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:16:56.874Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:16:56.874Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "LabRepository.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Repositories\\LabRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\LabRepository.cs",
@@ -179,18 +198,17 @@
               "RelativeToolTip": "Repositories\\LabRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:16:29.483Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:16:29.483Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ComponentsController.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ComponentsController.cs",
-              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentsController.cs*",
-              "RelativeToolTip": "Controllers\\ComponentsController.cs*",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAwDoAAABHAAAAAAAAAA==",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\ComponentsController.cs",
+              "RelativeToolTip": "Controllers\\ComponentsController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAA0wBUAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-24T15:06:16.329Z",
               "EditorCaption": ""
@@ -198,6 +216,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 6,
+              "Title": "LabsController.cs",
+              "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\LabsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\LabsController.cs",
+              "ToolTip": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Controllers\\LabsController.cs",
+              "RelativeToolTip": "Controllers\\LabsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-24T15:17:41.036Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "ComponentTypeService.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Services\\ComponentTypeService.cs",
               "RelativeDocumentMoniker": "Services\\ComponentTypeService.cs",
@@ -205,12 +235,11 @@
               "RelativeToolTip": "Services\\ComponentTypeService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:16:50.241Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:16:50.241Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "CategoryRepository.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Repositories\\CategoryRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\CategoryRepository.cs",
@@ -218,12 +247,11 @@
               "RelativeToolTip": "Repositories\\CategoryRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:14:41.052Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:14:41.052Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "GenericRepository.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Repositories\\GenericRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\GenericRepository.cs",
@@ -231,12 +259,11 @@
               "RelativeToolTip": "Repositories\\GenericRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:12:40.27Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:12:40.27Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "ComponentRepository.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Repositories\\ComponentRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\ComponentRepository.cs",
@@ -244,12 +271,11 @@
               "RelativeToolTip": "Repositories\\ComponentRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:47:42.989Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:47:42.989Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "ComponentTypeRepository.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Repositories\\ComponentTypeRepository.cs",
               "RelativeDocumentMoniker": "Repositories\\ComponentTypeRepository.cs",
@@ -257,12 +283,11 @@
               "RelativeToolTip": "Repositories\\ComponentTypeRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:48:15.293Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:48:15.293Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "ComponentService.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Services\\ComponentService.cs",
               "RelativeDocumentMoniker": "Services\\ComponentService.cs",
@@ -270,12 +295,11 @@
               "RelativeToolTip": "Services\\ComponentService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:51:36.606Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:51:36.606Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "CategoryService.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Services\\CategoryService.cs",
               "RelativeDocumentMoniker": "Services\\CategoryService.cs",
@@ -283,12 +307,11 @@
               "RelativeToolTip": "Services\\CategoryService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:01:58.133Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:01:58.133Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -296,12 +319,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAiwAUAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:51:19.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:51:19.678Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "Component.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Models\\Domain\\Component.cs",
               "RelativeDocumentMoniker": "Models\\Domain\\Component.cs",
@@ -309,12 +331,11 @@
               "RelativeToolTip": "Models\\Domain\\Component.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:55:06.635Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:55:06.635Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "ComponentUpdateDTO.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Models\\DTO\\ComponentUpdateDTO.cs",
               "RelativeDocumentMoniker": "Models\\DTO\\ComponentUpdateDTO.cs",
@@ -322,12 +343,11 @@
               "RelativeToolTip": "Models\\DTO\\ComponentUpdateDTO.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T15:04:38.105Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T15:04:38.105Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "UnitOfWork.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Repositories\\UnitOfWork.cs",
               "RelativeDocumentMoniker": "Repositories\\UnitOfWork.cs",
@@ -335,12 +355,11 @@
               "RelativeToolTip": "Repositories\\UnitOfWork.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:46:51.792Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:46:51.792Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "IComponentService.cs",
               "DocumentMoniker": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\Services\\IServices\\IComponentService.cs",
               "RelativeDocumentMoniker": "Services\\IServices\\IComponentService.cs",
@@ -348,8 +367,7 @@
               "RelativeToolTip": "Services\\IServices\\IComponentService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T14:50:50.718Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-24T14:50:50.718Z"
             }
           ]
         }
