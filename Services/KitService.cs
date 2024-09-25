@@ -65,6 +65,7 @@ namespace kit_stem_api.Services
             {
                 var kit = new Kit()
                 {
+                    Id = DTO.Id,
                     CategoryId = DTO.CategoryId,
                     Name = DTO.Name,
                     Brief = DTO.Brief,
