@@ -17,6 +17,7 @@ namespace kit_stem_api.Models.Domain
 
         [StringLength(100)]
         public string Name { get; set; } = null!;
+        public bool Status {get; set;}
 
         [InverseProperty("Component")]
         public virtual ICollection<KitComponent>? KitComponents { get; set; }
