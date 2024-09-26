@@ -1,12 +1,6 @@
 ﻿using kit_stem_api.Data;
-using kit_stem_api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kit_stem_api.Repositories
 {
@@ -24,13 +18,22 @@ namespace kit_stem_api.Repositories
             return _dbContext.Set<T>().ToList();
             //return _dbContext.Set<T>().AsNoTracking().ToList();
         }
-        public IEnumerable<T> GetFilter(
+        public (IEnumerable<T>, int) GetFilter(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             int? skip = null,
-            int? take = null)
+            int? take = null,
+            params Expression<Func<T, object>>[]? includes)
         {
             IQueryable<T> query = _dbSet;
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
 
             // Apply the filter if provided
             if (filter != null)
@@ -55,8 +58,34 @@ namespace kit_stem_api.Repositories
                 query = query.Take(take.Value);
             }
 
-            return [.. query];
+            return (query.ToList(), CountTotalPages(filter, take));
         }
+
+        private int CountTotalPages(Expression<Func<T, bool>>? filter, int? take)
+        {
+            IQueryable<T> query = _dbSet;
+
+            // Apply the filter if provided
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Count total number of records
+            int totalRecords = query.Count();
+
+            // Ensure 'take' has a value and is greater than 0, otherwise assume all records fit on one page
+            if (!take.HasValue || take.Value <= 0)
+            {
+                return 1; // If no 'take' value or invalid 'take', return 1 page
+            }
+
+            // Calculate total pages based on total records and take (items per page)
+            int totalPages = (int)Math.Ceiling((double)totalRecords / take.Value);
+
+            return totalPages;
+        }
+
         public bool Create(T entity)
         {
             _dbContext.Add(entity);
@@ -97,14 +126,22 @@ namespace kit_stem_api.Repositories
         {
             return await _dbContext.Set<T>().ToListAsync();
         }
-        public async Task<IEnumerable<T>> GetFilterAsync(
+        public async Task<(IEnumerable<T>, int)> GetFilterAsync(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             int? skip = null,
-            int? take = null)
+            int? take = null,
+            params Expression<Func<T, object>>[]? includes)
         {
             IQueryable<T> query = _dbSet;
 
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
             // Apply the filter if provided
             if (filter != null)
             {
@@ -128,7 +165,7 @@ namespace kit_stem_api.Repositories
                 query = query.Take(take.Value);
             }
 
-            return await query.ToListAsync();
+            return (await query.ToListAsync(), await CountTotalPagesAsync(filter, take));
         }
         public async Task<bool> CreateAsync(T entity)
         {
@@ -197,5 +234,30 @@ namespace kit_stem_api.Repositories
         }
 
         #endregion Separating assign entity and save operators
+
+        private async Task<int> CountTotalPagesAsync(Expression<Func<T, bool>>? filter = null, int? take = null)
+        {
+            IQueryable<T> query = _dbSet;
+
+            // Apply the filter if provided
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            // Count total number of records
+            int totalRecords = await query.CountAsync();
+
+            // Ensure 'take' has a value and is greater than 0, otherwise assume all records fit on one page
+            if (!take.HasValue || take.Value <= 0)
+            {
+                return 1; // If no 'take' value or invalid 'take', return 1 page
+            }
+
+            // Calculate total pages based on total records and take (items per page)
+            int totalPages = (int)Math.Ceiling((double)totalRecords / take.Value);
+
+            return totalPages;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace kit_stem_api.Models.Domain
@@ -31,7 +32,11 @@ namespace kit_stem_api.Models.Domain
                 }
             }
         }
+        [JsonIgnore]
         [InverseProperty("User")]
-        public virtual ICollection<UserOrders> UserOrders { get; set; } = new List<UserOrders>();
+        public virtual ICollection<UserOrders> UserOrders { get; set; } = null!;
+        [JsonIgnore]
+        [InverseProperty("Staff")]
+        public virtual ICollection<LabSupporter> LabSupporters { get; set; } = null!;
     }
 }
