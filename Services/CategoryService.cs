@@ -23,6 +23,7 @@ namespace kit_stem_api.Services
                 {
                     Name = categoryCreateDTO.Name,
                     Description = categoryCreateDTO.Description!,
+                    Status = true
                 };
                 await _unitOfWork.CategoryRepository.CreateAsync(newCategory);
                 return new ServiceResponse()
