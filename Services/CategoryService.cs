@@ -43,11 +43,16 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var category = new KitsCategory()
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category == null)
                 {
-                    Id = id,
-                };
-                await _unitOfWork.CategoryRepository.RemoveAsync(category);
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xóa loại kit thất bại!")
+                        .AddError("notFound", "Không tìm thấy loại kit!");
+                }
+                category.Status = false;
+                await _unitOfWork.CategoryRepository.UpdateAsync(category);
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Xóa một loại kit thành công!");
