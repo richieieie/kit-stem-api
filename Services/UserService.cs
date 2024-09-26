@@ -40,20 +40,22 @@ namespace kit_stem_api.Services
                     UserName = user.UserName,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
                     Points = user.Points
                 };
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("profile", userProfileDTO);
+                    .AddDetail("message", "Lấy thông tin tài khoản thành công!")
+                    .AddDetail("data", new { userProfileDTO });
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Không thể lấy hồ sơ của tài khoản ngay lúc này!")
-                    .AddError("invalidCredentials", "invalidCredentials");
+                    .AddDetail("message", "Lấy thông tin tài khoản thất bại!")
+                    .AddError("outOutService", "Không thể lấy hồ sơ của tài khoản ngay lúc này!");
             }
 
         }
@@ -185,7 +187,8 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("notFound", "Không tìm thấy user ngay lúc này");
+                        .AddDetail("message", "Chỉnh sửa thông tin tài khoản thất bại!")
+                        .AddError("notFound", "Không thể chỉnh sửa thông tin tài khoản ngay lúc này!");
                 }
                 user.FirstName = userUpdateDTO.FirstName;
                 user.LastName = userUpdateDTO.LastName;
@@ -194,14 +197,14 @@ namespace kit_stem_api.Services
                 await _userManager.UpdateAsync(user);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("update", user);
+                    .AddDetail("message", "Chỉnh sửa thông tin tài khoản thành công!");
 
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Không thể update user ngay lúc này!")
+                    .AddDetail("message", "Chỉnh sửa thông tin tài khoản thất bại!")
                     .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ");
             }
         }
