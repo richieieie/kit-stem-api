@@ -31,12 +31,13 @@ public class Program
         // Add services
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<ILabService, LabService>();
-        builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
-        builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
-        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
+        builder.Services.AddScoped<IPackageService, PackageService>();
+        builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
+        builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
+        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         // Add services to the container.
         builder.Services.AddAuthorization();

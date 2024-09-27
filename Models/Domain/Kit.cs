@@ -30,7 +30,7 @@ namespace kit_stem_api.Models.Domain
 
         [ForeignKey("CategoryId")]
         [InverseProperty("Kits")]
-        public virtual KitsCategory? Category { get; set; }
+        public virtual KitsCategory Category { get; set; } = null!;
 
         [JsonIgnore]
         [InverseProperty("Kit")]

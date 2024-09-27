@@ -17,15 +17,16 @@ namespace kit_stem_api.Models.Domain
 
         [Required]
         public int Price { get; set; }
+        public bool Status { get; set; }
 
         [ForeignKey("LevelId")]
-        public virtual Level? Level { get; set; }
+        public virtual Level Level { get; set; } = null!;
 
         [ForeignKey("KitId")]
         [InverseProperty("Packages")]
-        public virtual Kit? Kit { get; set; }
+        public virtual Kit Kit { get; set; } = null!;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         [InverseProperty("Package")]
         public virtual ICollection<PackageLab>? PackageLabs { get; set; }
     }

@@ -26,7 +26,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _labService.GetAsync(labGetDTO);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
