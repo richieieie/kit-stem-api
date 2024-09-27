@@ -2,6 +2,7 @@ using kit_stem_api.Constants;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kit_stem_api.Controllers
@@ -17,7 +18,38 @@ namespace kit_stem_api.Controllers
             _firebaseService = firebaseService;
             _labService = labService;
         }
+
+        [HttpGet]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> GetAsync([FromQuery] LabGetDTO labGetDTO)
+        {
+            var serviceResponse = await _labService.GetAsync(labGetDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        [ActionName(nameof(GetByIdAsync))]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            var serviceResponse = await _labService.GetByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+
         [HttpPost]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm] LabUploadDTO labUploadDTO)
         {
             var labId = Guid.NewGuid();
@@ -34,10 +66,11 @@ namespace kit_stem_api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = labId }, new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPut]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm] LabUpdateDTO labUpdateDTO)
         {
             ServiceResponse serviceResponse;
@@ -55,21 +88,24 @@ namespace kit_stem_api.Controllers
             serviceResponse = await _labService.UpdateAsync(labUpdateDTO, url);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAsync([FromQuery] LabGetDTO labGetDTO)
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            var serviceResponse = await _labService.GetAsync(labGetDTO);
+            var serviceResponse = await _labService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            return NoContent();
         }
     }
 }
