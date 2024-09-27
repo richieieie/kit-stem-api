@@ -23,7 +23,8 @@ namespace kit_stem_api.Services
                 var newComponent = new Component()
                 {
                     TypeId = component.TypeId,
-                    Name = component.Name
+                    Name = component.Name,
+                    Status = true,
                 };
                 await _unitOfWork.ComponentRepository.CreateAsync(newComponent);
                 return new ServiceResponse()
@@ -43,11 +44,16 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var component = new Component()
+                var component = await _unitOfWork.ComponentRepository.GetByIdAsync(id);
+                if (component == null)
                 {
-                    Id = id,
-                };
-                await _unitOfWork.ComponentRepository.RemoveAsync(component);
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xóa linh kiện thất bại!")
+                        .AddError("notFound", "Không tìm thấy linh kiện!");
+                }
+                component.Status = false;
+                await _unitOfWork.ComponentRepository.UpdateAsync(component);
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Xóa linh kiện thành công!");

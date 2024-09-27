@@ -11,6 +11,7 @@ namespace kit_stem_api.Models.DTO
         [MaxLength(45)]
         public string? LastName { get; set; }
         [MaxLength(100)]
+        public string? PhoneNumber { get; set; }    
         public string? Address { get; set; }
         private int points = 0;
         public int Points

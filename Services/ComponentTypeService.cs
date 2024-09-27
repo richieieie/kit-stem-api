@@ -22,7 +22,8 @@ namespace kit_stem_api.Services
             {
                 var newComponentType = new ComponentsType()
                 {
-                    Name = componentTypeCreateDTO.Name
+                    Name = componentTypeCreateDTO.Name,
+                    Status = true
                 };
                 await _unitOfWork.ComponentTypeRepository.CreateAsync(newComponentType);
                 return new ServiceResponse()
@@ -43,11 +44,16 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var type = new ComponentsType()
+                var type = await _unitOfWork.ComponentTypeRepository.GetByIdAsync(id);
+                if (type == null)
                 {
-                    Id = id
-                };
-                await _unitOfWork.ComponentTypeRepository.RemoveAsync(type);
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xóa loại linh kiện thất bại!")
+                        .AddError("notFound", "Không tìm thấy loại linh kiện!");
+                }
+                type.Status = false;
+                await _unitOfWork.ComponentTypeRepository.UpdateAsync(type);
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Xóa một loại linh kiện thành công!");
