@@ -48,7 +48,7 @@ namespace kit_stem_api.Controllers
         }
         [HttpDelete]
         [Authorize(Roles = "manager")]
-        public async Task<IActionResult> UpdateKit([FromForm] int id)
+        public async Task<IActionResult> DeleteKit([FromForm] int id)
         {
             var serviceResponse = await _kitService.DeleteAsync(id);
             if (!serviceResponse.Succeeded)
