@@ -1,6 +1,7 @@
 ﻿using kit_stem_api.Models.DTO;
 using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetComponents()
         {
             var serviceResponse = await _componentService.GetAllAsync();
@@ -30,6 +32,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateComponent(ComponentCreateDTO component)
         {
             var serviceResponse = await _componentService.CreateAsync(component);
@@ -42,6 +45,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateComponent(ComponentUpdateDTO component)
         {
             var serviceResponse = await _componentService.UpdateAsync(component);
@@ -54,6 +58,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteComponent(int id)
         {
             var serviceResponse = await _componentService.RemoveAsync(id);

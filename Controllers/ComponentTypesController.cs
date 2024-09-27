@@ -19,6 +19,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetComponentTypes()
         {
             var serviceResponse = await _componentTypeService.GetAllAsync();
@@ -31,6 +32,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateComponentType(ComponentTypeCreateDTO componentTypeCreateDTO)
         {
             var serviceResponse = await _componentTypeService.CreateAsync(componentTypeCreateDTO);
@@ -43,6 +45,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateComponentType(ComponentTypeUpdateDTO componentTypeUpdateDTO)
         {
             var serviceResponse = await _componentTypeService.UpdateAsync(componentTypeUpdateDTO);
@@ -55,6 +58,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteComponentType(int Id)
         {
             var serviceResponse = await _componentTypeService.RemoveAsync(Id);
