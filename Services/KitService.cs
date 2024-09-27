@@ -43,7 +43,7 @@ namespace kit_stem_api.Services
                     Brief = DTO.Brief,
                     Description = DTO.Description,
                     PurchaseCost = DTO.PurchaseCost,
-                    Status = DTO.Status,
+                    Status = true
                 }; 
                 await _unitOfWork.KitRepository.CreateAsync(newKit);
                 return new ServiceResponse()
@@ -70,8 +70,7 @@ namespace kit_stem_api.Services
                     Name = DTO.Name,
                     Brief = DTO.Brief,
                     Description = DTO.Description,
-                    PurchaseCost = DTO.PurchaseCost,
-                    Status = DTO.Status
+                    PurchaseCost = DTO.PurchaseCost
                 };
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
@@ -93,7 +92,8 @@ namespace kit_stem_api.Services
             {
                 var kit = new Kit()
                 {
-                    Id = id
+                    Id = id,
+                    Status = false
                 };
                 await _unitOfWork.KitRepository.RemoveAsync(kit);
                 return new ServiceResponse().SetSucceeded(true)
