@@ -12,7 +12,11 @@ namespace kit_stem_api.Repositories
 {
     public class TokenRepository : ITokenRepository
     {
+<<<<<<< HEAD
         private readonly int refreshTokenExpirationTime = 60 * 3;
+=======
+        private readonly int refreshTokenExpirationTime = 60 * 60 * 24 * 7;
+>>>>>>> b9ba44dfbe89eab8e93be5767dace89c286428db
         private readonly int accessTokenExpirationTime = 60 * 15;
         private readonly IConfiguration _configuration;
         private readonly KitStemDbContext _dbContext;
