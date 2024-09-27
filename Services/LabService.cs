@@ -4,6 +4,9 @@ using kit_stem_api.Services.IServices;
 using kit_stem_api.Repositories;
 using kit_stem_api.Constants;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using kit_stem_api.Models.DTO.Response;
 
 namespace kit_stem_api.Services
 {
@@ -11,9 +14,11 @@ namespace kit_stem_api.Services
     {
         private readonly int sizePerPage = 20;
         private readonly UnitOfWork _unitOfWork;
-        public LabService(UnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public LabService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, Guid id, string url)
         {
@@ -84,11 +89,19 @@ namespace kit_stem_api.Services
             try
             {
                 Expression<Func<Lab, bool>> filter = (l) => l.Kit.Name.Contains(labGetDTO.KitName ?? "") && l.Name.Contains(labGetDTO.LabName ?? "");
-                var (labs, totalPages) = await _unitOfWork.LabRepository.GetFilterAsync(filter, null, skip: sizePerPage * labGetDTO.Page, take: sizePerPage, l => l.Kit, l => l.Level, l => l.Kit.Category);
-
+                var (labs, totalPages) = await _unitOfWork.LabRepository.GetFilterAsync(
+                                                                                        filter,
+                                                                                        null,
+                                                                                        skip: sizePerPage * labGetDTO.Page,
+                                                                                        take: sizePerPage,
+                                                                                        query => query.Include(l => l.Kit),
+                                                                                        query => query.Include(l => l.Level),
+                                                                                        query => query.Include(l => l.Kit.Category)
+                                                                                    );
+                var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin các bài lab thành công!")
-                            .AddDetail("data", new { totalPages, currentPage = labGetDTO.Page + 1, labs });
+                            .AddDetail("data", new { totalPages, currentPage = labGetDTO.Page + 1, labs = labDTOs });
             }
             catch
             {

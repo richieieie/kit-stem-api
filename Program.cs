@@ -7,6 +7,7 @@ using kit_stem_api.Repositories;
 using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
+using kit_stem_api.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,7 @@ public class Program
         builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         // Add services to the container.
+        builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
         builder.Services.AddAuthorization();
         builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
         {

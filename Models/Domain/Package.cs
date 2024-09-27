@@ -26,7 +26,7 @@ namespace kit_stem_api.Models.Domain
         [InverseProperty("Packages")]
         public virtual Kit Kit { get; set; } = null!;
 
-        //[JsonIgnore]
+        [JsonIgnore]
         [InverseProperty("Package")]
         public virtual ICollection<PackageLab>? PackageLabs { get; set; }
     }
