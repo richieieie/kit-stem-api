@@ -11,5 +11,7 @@ namespace kit_stem_api.Services.IServices
         Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, Guid id, string url);
         Task<ServiceResponse> UpdateAsync(LabUpdateDTO labUpdateDTO, string? url);
         Task<ServiceResponse> GetAsync(LabGetDTO labGetDTO);
+        Task<ServiceResponse> GetByIdAsync(Guid id);
+        Task<ServiceResponse> RemoveByIdAsync(Guid id);
     }
 }

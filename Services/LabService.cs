@@ -93,8 +93,48 @@ namespace kit_stem_api.Services
             catch
             {
                 return new ServiceResponse()
+                        .SetSucceeded(false)
                         .AddDetail("message", "Lấy thông tin các bài lab thành công!")
                         .AddError("outOfService", "Không thể lấy được thông tin các bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
+            }
+        }
+        public async Task<ServiceResponse> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var lab = await _unitOfWork.LabRepository.GetByIdAsync(id);
+                return new ServiceResponse()
+                            .AddDetail("message", "Lấy thông tin bài lab thành công!")
+                            .AddDetail("data", new { lab });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
+            }
+        }
+
+        public async Task<ServiceResponse> RemoveByIdAsync(Guid id)
+        {
+            try
+            {
+                var lab = await _unitOfWork.LabRepository.GetByIdAsync(id) ?? throw new Exception();
+
+                lab.Status = false;
+                await _unitOfWork.LabRepository.UpdateAsync(lab);
+
+                return new ServiceResponse()
+                            .AddDetail("message", "Xoá bài lab thành công!")
+                            .AddDetail("data", new { lab });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xoá bài lab không thành công!")
+                        .AddError("outOfService", "Không thể xoá được bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
     }
