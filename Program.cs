@@ -37,6 +37,7 @@ public class Program
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
+        builder.Services.AddScoped<ILevelService, LevelService>();
 
         // Add services to the container.
         builder.Services.AddAuthorization();

@@ -9,20 +9,20 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComponentsController : ControllerBase
+    public class LevelsController : ControllerBase
     {
-        private readonly IComponentService _componentService;
+        private readonly ILevelService _levelService;
 
-        public ComponentsController(IComponentService componentService)
+        public LevelsController(ILevelService levelService)
         {
-            _componentService = componentService;
+            _levelService = levelService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var serviceResponse = await _componentService.GetAllAsync();
+            var serviceResponse = await _levelService.GetAllAsync();
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -33,10 +33,10 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var serviceResponse = await _componentService.GetByIdAsync(id);
+            var serviceResponse = await _levelService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -46,10 +46,10 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "manager")]
-        public async Task<IActionResult> CreateAsync(ComponentCreateDTO component)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateAsync(LevelCreateDTO level)
         {
-            var serviceResponse = await _componentService.CreateAsync(component);
+            var serviceResponse = await _levelService.CreateAsync(level);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -59,10 +59,10 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "manager")]
-        public async Task<IActionResult> UpdateAsync(ComponentUpdateDTO component)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateAsync(LevelUpdateDTO level)
         {
-            var serviceResponse = await _componentService.UpdateAsync(component);
+            var serviceResponse = await _levelService.UpdateAsync(level);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -73,10 +73,10 @@ namespace kit_stem_api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> RemoveByIdAsync(int id)
         {
-            var serviceResponse = await _componentService.RemoveByIdAsync(id);
+            var serviceResponse = await _levelService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
