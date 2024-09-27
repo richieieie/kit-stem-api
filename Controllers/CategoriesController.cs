@@ -19,6 +19,7 @@ namespace kit_stem_api.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetCategories()
         {
             var serviceResponse = await _categoryService.GetAsync();
@@ -31,6 +32,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateCategory(CategoryCreateDTO categoryDTO)
         {
             var serviceResponse = await _categoryService.CreateAsync(categoryDTO);
@@ -43,6 +45,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCategory(CategoryUpdateDTO categoryUpdateDTO)
         {
             var serviceResponse = await _categoryService.UpdateAsync(categoryUpdateDTO);
@@ -55,6 +58,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var serviceResponse = await _categoryService.DeleteAsync(id);
