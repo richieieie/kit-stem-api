@@ -23,7 +23,7 @@ namespace kit_stem_api.Repositories
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             int? skip = null,
             int? take = null,
-            params Expression<Func<T, object>>[]? includes)
+            params Func<IQueryable<T>, IQueryable<T>>[]? includes)
         {
             IQueryable<T> query = _dbSet;
 
@@ -31,7 +31,7 @@ namespace kit_stem_api.Repositories
             {
                 foreach (var include in includes)
                 {
-                    query = query.Include(include);
+                    query = include(query);
                 }
             }
 
@@ -99,7 +99,7 @@ namespace kit_stem_api.Repositories
             return _dbContext.SaveChanges() > 0;
         }
 
-        
+
 
         public bool Remove(T entity)
         {
@@ -133,7 +133,7 @@ namespace kit_stem_api.Repositories
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             int? skip = null,
             int? take = null,
-            params Expression<Func<T, object>>[]? includes)
+            params Func<IQueryable<T>, IQueryable<T>>[]? includes)
         {
             IQueryable<T> query = _dbSet;
 
@@ -141,7 +141,7 @@ namespace kit_stem_api.Repositories
             {
                 foreach (var include in includes)
                 {
-                    query = query.Include(include);
+                    query = include(query);
                 }
             }
             // Apply the filter if provided

@@ -11,6 +11,7 @@ namespace kit_stem_api.Repositories
         public CategoryRepository CategoryRepository { get; }
         public ComponentTypeRepository ComponentTypeRepository { get; }
         public ComponentRepository ComponentRepository { get; }
+        public PackageRepository PackageRepository { get; }
 
         public UnitOfWork(KitStemDbContext dbContext)
         {
@@ -19,6 +20,7 @@ namespace kit_stem_api.Repositories
             CategoryRepository = new CategoryRepository(_dbContext);
             ComponentTypeRepository = new ComponentTypeRepository(_dbContext);
             ComponentRepository = new ComponentRepository(_dbContext);
+            PackageRepository = new PackageRepository(_dbContext);
         }
 
 
