@@ -6,8 +6,9 @@ namespace kit_stem_api.Services.IServices
     public interface ICategoryService
     {
         Task<ServiceResponse> GetAsync();
-        Task<ServiceResponse> CreateAsync(CategoryCreateDTO categoryCreateDTO);
-        Task<ServiceResponse> UpdateAsync(CategoryUpdateDTO categoryUpdateDTO);
-        Task<ServiceResponse> DeleteAsync(int id);
+        Task<ServiceResponse> GetByIdAsync(int id);
+        Task<ServiceResponse> CreateAsync(CategoryCreateDTO category);
+        Task<ServiceResponse> UpdateAsync(CategoryUpdateDTO category);
+        Task<ServiceResponse> RemoveByIdAsync(int id);
     }
 }

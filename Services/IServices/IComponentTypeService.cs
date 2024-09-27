@@ -5,8 +5,9 @@ namespace kit_stem_api.Services.IServices
     public interface IComponentTypeService
     {
         Task<ServiceResponse> GetAllAsync();
+        Task<ServiceResponse> GetByIdAsync(int id);
         Task<ServiceResponse> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO);
         Task<ServiceResponse> UpdateAsync(ComponentTypeUpdateDTO componentTypeUpdateDTO);
-        Task<ServiceResponse> RemoveAsync(int id);
+        Task<ServiceResponse> RemoveByIdAsync(int id);
     }
 }
