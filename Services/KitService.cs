@@ -18,17 +18,49 @@ namespace kit_stem_api.Services
             try
             {
                 var kit = await _unitOfWork.KitRepository.GetAllAsync();
+
+                if (kit == null)
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "không có kit tồn tại")
+                        .AddError("notFound", "không tìm thấy kit dưới database");
+
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "lấy danh sach kit thành công")
+                    .AddDetail("message", "lấy danh sách kit thành công")
                     .AddDetail("data", new { kit });
-            } 
+            }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "lấy danh sach kit không thành công")
+                    .AddDetail("message", "lấy danh sách kit không thành công")
                     .AddError("outOfService", "Không thể lấy danh sách kit ngay lúc này!");
+            }
+        }
+
+        public async Task<ServiceResponse> GetByIdAsync(int id)
+        {
+            try
+            {
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
+                if (kit == null)
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "không có kit tồn tại")
+                        .AddError("notFound", "không tìm thấy kit dưới database");
+
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "lấy danh sách kit thành công")
+                    .AddDetail("data", new { kit });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "lấy kit không thành công")
+                    .AddError("outOfService", "Không thể lấy kit ngay lúc này!");
             }
         }
 
@@ -44,7 +76,7 @@ namespace kit_stem_api.Services
                     Description = DTO.Description,
                     PurchaseCost = DTO.PurchaseCost,
                     Status = true
-                }; 
+                };
                 await _unitOfWork.KitRepository.CreateAsync(newKit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
