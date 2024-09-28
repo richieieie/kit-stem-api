@@ -55,10 +55,10 @@ public class Program
             {
                 // Extract validation errors and customize response structure
                 var errors = context.ModelState
-                    .Where(m => m.Value.Errors.Count > 0)
+                    .Where(m => m.Value!.Errors.Count > 0)
                     .ToDictionary(
                         kvp => kvp.Key.ToLower(),  // Convert key (property name) to lowercase
-                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault()  // Get the first error message
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).FirstOrDefault()  // Get the first error message
                     );
 
                 // Define the custom error response structure

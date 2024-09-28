@@ -2,7 +2,6 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Services.IServices;
 using kit_stem_api.Repositories;
-using kit_stem_api.Constants;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
@@ -20,22 +19,14 @@ namespace kit_stem_api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        #region Service methods
         public async Task<ServiceResponse> CreateAsync(LabUploadDTO labUploadDTO, Guid id, string url)
         {
             try
             {
-                var lab = new Lab()
-                {
-                    Id = id,
-                    LevelId = labUploadDTO.LevelId,
-                    KitId = labUploadDTO.KitId,
-                    Name = labUploadDTO.Name!,
-                    Url = url,
-                    Status = labUploadDTO.Status,
-                    Author = labUploadDTO.Author,
-                    Price = labUploadDTO.Price,
-                    MaxSupportTimes = labUploadDTO.MaxSupportTimes
-                };
+                var lab = _mapper.Map<Lab>(labUploadDTO);
+                lab.Id = id;
+                lab.Url = url;
                 await _unitOfWork.LabRepository.CreateAsync(lab);
 
                 return new ServiceResponse()
@@ -88,20 +79,17 @@ namespace kit_stem_api.Services
         {
             try
             {
-                Expression<Func<Lab, bool>> filter = (l) => l.Kit.Name.Contains(labGetDTO.KitName ?? "") && l.Name.Contains(labGetDTO.LabName ?? "");
-                var (labs, totalPages) = await _unitOfWork.LabRepository.GetFilterAsync(
-                                                                                        filter,
-                                                                                        null,
-                                                                                        skip: sizePerPage * labGetDTO.Page,
-                                                                                        take: sizePerPage,
-                                                                                        query => query.Include(l => l.Kit),
-                                                                                        query => query.Include(l => l.Level),
-                                                                                        query => query.Include(l => l.Kit.Category)
-                                                                                    );
+                // Construct file
+                Expression<Func<Lab, bool>> filter = GetFilter(labGetDTO);
+
+                // Try to get an IEnumerable<Lab> and total pages 
+                var (labs, totalPages) = await _unitOfWork.LabRepository.GetFilterAsync(filter, null, skip: sizePerPage * labGetDTO.Page, take: sizePerPage);
+
+                // Map IEnumerable<Lab> to IEnumerable<LabResponseDTO> using AutoMapper
                 var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin các bài lab thành công!")
-                            .AddDetail("data", new { totalPages, currentPage = labGetDTO.Page + 1, labs = labDTOs });
+                            .AddDetail("data", new { totalPages, currentPage = labGetDTO.Page, labs = labDTOs });
             }
             catch
             {
@@ -116,6 +104,7 @@ namespace kit_stem_api.Services
             try
             {
                 var lab = await _unitOfWork.LabRepository.GetByIdAsync(id);
+                var labDTO = _mapper.Map<LabResponseDTO>(lab);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin bài lab thành công!")
                             .AddDetail("data", new { lab });
@@ -150,5 +139,14 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", "Không thể xoá được bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
+        #endregion
+
+        #region Methods that are constructing arguments for PackageRepository
+        private Expression<Func<Lab, bool>> GetFilter(LabGetDTO labGetDTO)
+        {
+            return (l) => l.Kit.Name.Contains(labGetDTO.KitName ?? "") &&
+                        l.Name.Contains(labGetDTO.LabName ?? "");
+        }
+        #endregion
     }
 }
