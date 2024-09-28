@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace kit_stem_api.Models.DTO
+namespace kit_stem_api.Models.DTO.Request
 {
     public class KitCreateDTO
     {
