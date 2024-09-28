@@ -18,6 +18,7 @@ namespace kit_stem_api.Models.Domain
         public DateTimeOffset CreatedAt { get; set; }
 
         public bool Status { get; set; }
+        public int Amount { get; set; }
 
         [ForeignKey("MethodId")]
         [InverseProperty("Payments")]

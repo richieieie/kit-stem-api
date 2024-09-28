@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace kit_stem_api.Models.Domain
 {
+    [Table("LabSupporter")]
     public class LabSupporter
     {
         [Key]

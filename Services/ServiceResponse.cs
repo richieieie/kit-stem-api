@@ -9,6 +9,7 @@ namespace kit_stem_api.Services
     {
         public bool Succeeded { get; private set; }
         public string Status { get; private set; }
+        public int StatusCode { get; private set; } = 500;
         public Dictionary<string, object>? Details { get; private set; }
 
         public ServiceResponse()
@@ -49,6 +50,12 @@ namespace kit_stem_api.Services
             var errors = (Dictionary<string, string>)Details["errors"];
             errors.Add(key, value);
 
+            return this;
+        }
+
+        public ServiceResponse SetStatusCode(int code)
+        {
+            StatusCode = code;
             return this;
         }
     }

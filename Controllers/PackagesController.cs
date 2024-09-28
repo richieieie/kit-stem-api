@@ -20,15 +20,41 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PackageGetDTO packageGetDTO)
+        public async Task<IActionResult> GetAsync([FromQuery] PackageGetFilterDTO packageGetFilterDTO)
         {
-            var serviceResponse = await _packageService.GetAsync(packageGetDTO);
+            var serviceResponse = await _packageService.GetAsync(packageGetFilterDTO);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
+        {
+            var serviceResponse = await _packageService.GetByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
+        {
+            var serviceResponse = await _packageService.GetByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return NoContent();
         }
     }
 }
