@@ -51,17 +51,26 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
-                if (kit == null)
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddDetail("message", "không có kit tồn tại")
-                        .AddError("notFound", "không tìm thấy kit dưới database");
+                Expression<Func<Kit, bool>> filter = (l) => l.Id.Equals(id);
+                var (Kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
+                    filter,
+                    null,
+                    null,
+                    null,
+                    query => query.Include(l => l.Category)
+                    );
+                var kitsDTO = _mapper.Map<IEnumerable<Kit>>(Kits);
+
+                //if (kit == null)
+                //    return new ServiceResponse()
+                //        .SetSucceeded(false)
+                //        .AddDetail("message", "không có kit tồn tại")
+                //        .AddError("notFound", "không tìm thấy kit dưới database");
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "lấy danh sách kit thành công")
-                    .AddDetail("data", new { kit });
+                    .AddDetail("data", new { kitsDTO });
             }
             catch
             {

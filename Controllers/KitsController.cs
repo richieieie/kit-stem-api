@@ -30,7 +30,7 @@ namespace kit_stem_api.Controllers
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
         //[Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
