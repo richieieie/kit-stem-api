@@ -1,4 +1,4 @@
-﻿using kit_stem_api.Models.DTO;
+﻿using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -8,19 +8,19 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KitController : ControllerBase
+    public class KitsController : ControllerBase
     {
         private readonly IKitService _kitService;
 
-        public KitController(IKitService kitService)
+        public KitsController(IKitService kitService)
         {
             _kitService = kitService;
         }
         [HttpGet]
         //[Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
         {
-            var serviceResponse = await _kitService.GetAsync();
+            var serviceResponse = await _kitService.GetAsync(kitGetDTO);
             if (!serviceResponse.Succeeded)
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
 

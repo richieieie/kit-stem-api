@@ -1,34 +1,42 @@
-﻿using kit_stem_api.Models.Domain;
-using kit_stem_api.Models.DTO;
+﻿using AutoMapper;
+using kit_stem_api.Models.Domain;
+using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace kit_stem_api.Services
 {
     public class KitService : IKitService
     {
+        private readonly int sizePerPage = 20;
         private readonly UnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public KitService(UnitOfWork unitOfWork)
+        public KitService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<ServiceResponse> GetAsync()
+        public async Task<ServiceResponse> GetAsync(KitGetDTO kitGetDTO)
         {
             try
             {
-                var kit = await _unitOfWork.KitRepository.GetAllAsync();
-
-                if (kit == null)
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddDetail("message", "không có kit tồn tại")
-                        .AddError("notFound", "không tìm thấy kit dưới database");
+                Expression<Func<Kit, bool>> filter = (l) => l.Name.Contains(kitGetDTO.KitName ?? "") && l.Category.Name.Contains(kitGetDTO.CategoryName ?? "");
+                var (Kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
+                    filter,
+                    null,
+                    skip: sizePerPage * kitGetDTO.Page,
+                    take: sizePerPage,
+                    query => query.Include(l => l.Category)
+                    );
+                var kitsDTO = _mapper.Map<IEnumerable<Kit>>(Kits);
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "lấy danh sách kit thành công")
-                    .AddDetail("data", new { kit });
+                    .AddDetail("data", new { totalPages, currcurrentPage = kitGetDTO.Page + 1, kits = kitsDTO });
             }
             catch
             {
