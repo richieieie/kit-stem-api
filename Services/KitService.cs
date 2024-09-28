@@ -86,16 +86,18 @@ namespace kit_stem_api.Services
             }
         }
 
-        public async Task<ServiceResponse> DeleteAsync(int id)
+        public async Task<ServiceResponse> RemoveAsync(int id)
         {
             try
             {
-                var kit = new Kit()
-                {
-                    Id = id,
-                    Status = false
-                };
-                await _unitOfWork.KitRepository.RemoveAsync(kit);
+                var kit = _unitOfWork.KitRepository.GetById(id);
+                if (kit == null)
+                    return new ServiceResponse().SetSucceeded(false)
+                        .AddDetail("message", "không tìm thấy kit!");
+
+                kit.Status = false;
+
+                await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse().SetSucceeded(true)
                     .SetSucceeded(true)
                     .AddDetail("message", "xóa kit thành công!");

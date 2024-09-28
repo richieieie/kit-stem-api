@@ -8,16 +8,16 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KitsController : ControllerBase
+    public class KitController : ControllerBase
     {
         private readonly IKitService _kitService;
 
-        public KitsController(IKitService kitService)
+        public KitController(IKitService kitService)
         {
             _kitService = kitService;
         }
         [HttpGet]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetKit()
         {
             var serviceResponse = await _kitService.GetAsync();
@@ -27,7 +27,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
         [HttpPost]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateKit([FromForm]KitCreateDTO DTO)
         {
             var serviceResponse = await _kitService.CreateAsync(DTO);
@@ -37,7 +37,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpPut]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateKit([FromForm]KitUpdateDTO DTO)
         {
             var serviceResponse = await _kitService.UpdateAsync(DTO);
@@ -47,10 +47,10 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpDelete]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteKit([FromForm] int id)
         {
-            var serviceResponse = await _kitService.DeleteAsync(id);
+            var serviceResponse = await _kitService.RemoveAsync(id);
             if (!serviceResponse.Succeeded)
                 return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
 
