@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace kit_stem_api.Repositories
 {
-    public class GenericRepository<T> where T : class
+    public abstract class GenericRepository<T> where T : class
     {
         protected readonly KitStemDbContext _dbContext;
         protected readonly DbSet<T> _dbSet;

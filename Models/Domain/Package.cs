@@ -28,6 +28,6 @@ namespace kit_stem_api.Models.Domain
 
         [JsonIgnore]
         [InverseProperty("Package")]
-        public virtual ICollection<PackageLab>? PackageLabs { get; set; }
+        public virtual ICollection<PackageLab> PackageLabs { get; set; } = null!;
     }
 }
