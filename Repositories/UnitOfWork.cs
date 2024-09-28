@@ -13,6 +13,8 @@ namespace kit_stem_api.Repositories
         public ComponentRepository ComponentRepository { get; }
         public KitRepository KitRepository { get; }
 
+        public LevelRepository LevelRepository { get; }
+        public PackageRepository PackageRepository { get; }
         public UnitOfWork(KitStemDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -21,6 +23,8 @@ namespace kit_stem_api.Repositories
             ComponentTypeRepository = new ComponentTypeRepository(_dbContext);
             ComponentRepository = new ComponentRepository(_dbContext);
             KitRepository = new KitRepository(_dbContext);
+            LevelRepository = new LevelRepository(_dbContext) { };
+            PackageRepository = new PackageRepository(_dbContext);
         }
 
 

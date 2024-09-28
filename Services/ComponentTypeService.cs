@@ -40,7 +40,7 @@ namespace kit_stem_api.Services
             
         }
 
-        public async Task<ServiceResponse> RemoveAsync(int id)
+        public async Task<ServiceResponse> RemoveByIdAsync(int id)
         {
             try
             {
@@ -104,6 +104,31 @@ namespace kit_stem_api.Services
                     .SetSucceeded(false)
                     .AddDetail("message", "Chỉnh sửa loại linh kiện thất bại!")
                     .AddError("outOfService", "Không thể chỉnh sửa loại linh kiện ngay lúc này!"); 
+            }
+        }
+
+        public async Task<ServiceResponse> GetByIdAsync(int id)
+        {
+            try
+            {
+                var type = await _unitOfWork.ComponentTypeRepository.GetByIdAsync(id);
+                if (type == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy thông tin loại linh kiện thất bại!")
+                        .AddError("notFound", "Không tìm thấy loại linh kiện!");
+                }
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("data", new { type });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "Lấy thông tin loại linh kiện thất bại")
+                    .AddError("outOfService", "Không thể lấy thông tin loại linh kiện ngay lúc này!");
             }
         }
     }

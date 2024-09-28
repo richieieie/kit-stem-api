@@ -20,7 +20,7 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> GetComponentTypes()
+        public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _componentTypeService.GetAllAsync();
             if (!serviceResponse.Succeeded)
@@ -31,9 +31,23 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var serviceResponse = await _componentTypeService.GetByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> CreateComponentType(ComponentTypeCreateDTO componentTypeCreateDTO)
+        public async Task<IActionResult> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO)
         {
             var serviceResponse = await _componentTypeService.CreateAsync(componentTypeCreateDTO);
             if (!serviceResponse.Succeeded)
@@ -46,7 +60,7 @@ namespace kit_stem_api.Controllers
 
         [HttpPut]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> UpdateComponentType(ComponentTypeUpdateDTO componentTypeUpdateDTO)
+        public async Task<IActionResult> UpdateAsync(ComponentTypeUpdateDTO componentTypeUpdateDTO)
         {
             var serviceResponse = await _componentTypeService.UpdateAsync(componentTypeUpdateDTO);
             if (!serviceResponse.Succeeded)
@@ -58,16 +72,17 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpDelete]
+        [Route("{id:int}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> DeleteComponentType(int Id)
+        public async Task<IActionResult> RemoveByIdAsync(int Id)
         {
-            var serviceResponse = await _componentTypeService.RemoveAsync(Id);
+            var serviceResponse = await _componentTypeService.RemoveByIdAsync(Id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            return NoContent();
         }
     }
 }

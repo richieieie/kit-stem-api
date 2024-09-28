@@ -2,12 +2,12 @@
 
 namespace kit_stem_api.Services.IServices
 {
-    public interface IComponentService
+    public interface ILevelService
     {
         Task<ServiceResponse> GetAllAsync();
         Task<ServiceResponse> GetByIdAsync(int id);
-        Task<ServiceResponse> CreateAsync(ComponentCreateDTO component);
-        Task<ServiceResponse> UpdateAsync(ComponentUpdateDTO component);
+        Task<ServiceResponse> CreateAsync(LevelCreateDTO level);
+        Task<ServiceResponse> UpdateAsync(LevelUpdateDTO level);
         Task<ServiceResponse> RemoveByIdAsync(int id);
     }
 }

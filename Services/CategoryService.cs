@@ -37,10 +37,10 @@ namespace kit_stem_api.Services
                             .AddDetail("message", "Tạo loại kit mới thất bại!")
                             .AddError("outOfService", "Không thể tạo mới loại kit ngay lúc ngày!");
             }
-            
+
         }
 
-        public async Task<ServiceResponse> DeleteAsync(int id)
+        public async Task<ServiceResponse> RemoveByIdAsync(int id)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Lấy danh sách loại kit thành công!")
-                            .AddDetail("data", new {categories});
+                            .AddDetail("data", new { categories });
             }
             catch
             {
@@ -110,6 +110,32 @@ namespace kit_stem_api.Services
                     .AddDetail("message", "Chỉnh sửa loại kit thất bại!")
                     .AddError("outOfService", "Không thể chỉnh sửa một loại kit ngay lúc này!");
             }
+        }
+
+        public async Task<ServiceResponse> GetByIdAsync(int id)
+        {
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy thông tin loại kit thất bại!")
+                        .AddError("notFound", "Không tìm thấy loại kit!");
+                }
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("data", new { category });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "Lấy thông tin loại kit thất bại")
+                    .AddError("outOfService", "Không thể lấy thông tin loại kit ngay lúc này!");
+            }
+
         }
     }
 }

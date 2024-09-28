@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kit_stem_api.Data;
 
@@ -11,9 +12,11 @@ using kit_stem_api.Data;
 namespace kit_stem_api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    partial class KitStemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240927071102_Package_Status")]
+    partial class Package_Status
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
