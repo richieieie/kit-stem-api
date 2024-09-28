@@ -77,10 +77,10 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("Profile")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult> UserProfile()
+        public async Task<IActionResult> GetAsync()
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;
-            var serviceResponse = await _userService.GetProfileAsync(userName!);
+            var serviceResponse = await _userService.GetAsync(userName!);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -92,11 +92,11 @@ namespace kit_stem_api.Controllers
         [HttpPut]
         [Route("Profile")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult> UpdateUserProfile(UserUpdateDTO userUpdateDTO)
+        public async Task<IActionResult> UpdateAsync(UserUpdateDTO userUpdateDTO)
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;
 
-            var serviceResponse = await _userService.UpdateProfileAsync(userName!, userUpdateDTO);
+            var serviceResponse = await _userService.UpdateAsync(userName!, userUpdateDTO);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
