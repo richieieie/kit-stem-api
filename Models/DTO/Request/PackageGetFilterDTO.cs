@@ -1,6 +1,6 @@
 ﻿namespace kit_stem_api.Models.DTO
 {
-    public class PackageGetDTO
+    public class PackageGetFilterDTO
     {
         public int Page { get; set; } = 0;
         public int LevelId { get; set; } = 0;
