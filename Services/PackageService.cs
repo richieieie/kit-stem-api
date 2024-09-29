@@ -24,18 +24,14 @@ namespace kit_stem_api.Services
         #region Services methods
         public async Task<(ServiceResponse, int)> CreateAsync(PackageCreateDTO packageCreateDTO)
         {
-            using var transaction = await _unitOfWork._dbContext.Database.BeginTransactionAsync();
             try
             {
                 var package = _mapper.Map<Package>(packageCreateDTO);
+                // Validate Package Labs from request
+                package = await TryCreatePackageLabsAsync(packageCreateDTO, package);
 
-                // Add package
-                await _unitOfWork.PackageRepository.CreateAsync(package);
-
-                // If the package contains Labs, then try to add those labs in PackageLab table
-                if (!await TryCreatePackageLabsAsync(packageCreateDTO, package))
+                if (package == null)
                 {
-                    await transaction.RollbackAsync();
                     return (new ServiceResponse()
                             .SetSucceeded(false)
                             .SetStatusCode(StatusCodes.Status400BadRequest)
@@ -44,15 +40,14 @@ namespace kit_stem_api.Services
                             0);
                 }
 
-                await transaction.CommitAsync();
+                await _unitOfWork.PackageRepository.CreateAsync(package);
 
                 return (new ServiceResponse()
-                        .AddDetail("message", "Thêm mới gói kit thành công!"),
-                        package.Id);
+                            .AddDetail("message", "Thêm mới gói kit thành công!"),
+                            package.Id);
             }
             catch
             {
-                await transaction.RollbackAsync();
                 return (new ServiceResponse()
                         .SetSucceeded(false)
                         .AddDetail("message", "Thêm mới gói kit thất bại!")
@@ -69,7 +64,7 @@ namespace kit_stem_api.Services
                 Expression<Func<Package, bool>> filter = GetFilter(packageGetFilterDTO);
 
                 // Try to get an IEnumerable<Package> and total pages
-                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(filter, null, skip: sizePerPage * packageGetFilterDTO.Page, take: sizePerPage);
+                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(filter, null, skip: sizePerPage * packageGetFilterDTO.Page, take: sizePerPage, packageGetFilterDTO.IncludeLabs);
 
                 // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
                 var packageDTOs = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
@@ -90,7 +85,6 @@ namespace kit_stem_api.Services
         {
             try
             {
-                // Construct filter for using in Where()
                 var package = await _unitOfWork.PackageRepository.GetByIdAsync(id);
 
                 // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
@@ -103,7 +97,7 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Lấy thông tin gói kit thành công!")
+                        .AddDetail("message", "Lấy thông tin gói kit thất bại!")
                         .AddError("outOfService", "Không thể lấy được thông tin gói kit hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
@@ -140,6 +134,38 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", "Hiện tại không thể xoá được gói kit!");
             }
         }
+
+        public async Task<ServiceResponse> UpdateAsync(PackageUpdateDTO packageUpdateDTO)
+        {
+            try
+            {
+                var package = await _unitOfWork.PackageRepository.GetByIdAsync(packageUpdateDTO.Id);
+                if (package == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Cập nhật thông tin gói kit thất bại!")
+                        .AddError("invalidCredentials", "Không thể tìm thấy gói Kit của bạn!");
+                }
+
+                package.Name = packageUpdateDTO.Name!;
+                package.LevelId = packageUpdateDTO.LevelId!;
+                package.Price = packageUpdateDTO.Price!;
+                package.Status = packageUpdateDTO.Status!;
+                await _unitOfWork.PackageRepository.UpdateAsync(package);
+
+                return new ServiceResponse()
+                                .AddDetail("message", "Cập nhật thông tin gói kit thành công!");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Cập nhật thông tin gói kit thất bại!")
+                        .AddError("outOfService", "Không thể cập nhật thông tin gói kit hiện tại hoặc vui lòng kiểm tra lại thông tin!");
+            }
+        }
         #endregion
 
         #region Methods that help service
@@ -153,25 +179,24 @@ namespace kit_stem_api.Services
                             p.Kit.Category.Name.Contains(packageGetFilterDTO.CategoryName ?? "") &&
                             p.Status == packageGetFilterDTO.Status;
         }
-        private async Task<bool> TryCreatePackageLabsAsync(PackageCreateDTO packageCreateDTO, Package package)
+        private async Task<Package?> TryCreatePackageLabsAsync(PackageCreateDTO packageCreateDTO, Package package)
         {
-            if (packageCreateDTO.LabIds == null)
+            if (packageCreateDTO.LabIds == null || packageCreateDTO.LabIds.Count == 0)
             {
-                return true;
+                return package;
             }
 
             var (labs, _) = await _unitOfWork.LabRepository.GetByKitIdAsync(packageCreateDTO.KitId);
             var validLabIds = labs.Select(l => l.Id);
-            if (packageCreateDTO.LabIds.All(id => validLabIds.Contains(id)))
+            if (!packageCreateDTO.LabIds.All(id => validLabIds.Contains(id)))
             {
-                var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
-
-                await _unitOfWork.PackageLabRepository.CreateAsync(packageLabs);
-
-                return true;
+                return null;
             }
 
-            return false;
+            var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
+            package.PackageLabs = packageLabs.ToList();
+
+            return package;
         }
         #endregion
     }

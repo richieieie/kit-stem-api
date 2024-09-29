@@ -31,6 +31,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _packageService.GetByIdAsync(id);
@@ -57,7 +58,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromBody] PackageCreateDTO packageCreateDTO)
         {
             var (serviceResponse, id) = await _packageService.CreateAsync(packageCreateDTO);
@@ -67,6 +68,19 @@ namespace kit_stem_api.Controllers
             }
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id }, new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> UpdateAsync([FromBody] PackageUpdateDTO packageUpdateDTO)
+        {
+            var serviceResponse = await _packageService.UpdateAsync(packageUpdateDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
     }
 }

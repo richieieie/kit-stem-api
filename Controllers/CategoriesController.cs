@@ -1,8 +1,6 @@
 ﻿using kit_stem_api.Models.DTO;
-using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kit_stem_api.Controllers

@@ -19,7 +19,7 @@ namespace kit_stem_api.Models.DTO
         [StringLength(100)]
         public string? Author { get; set; }
         [Required]
-        public bool Status { get; set; }
+        public bool Status { get; set; } = true;
         [Required]
         public IFormFile? File { get; set; }
     }

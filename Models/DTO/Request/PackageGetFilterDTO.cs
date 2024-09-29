@@ -10,5 +10,6 @@
         public string? KitName { get; set; }
         public string? CategoryName { get; set; }
         public bool Status { get; set; } = true;
+        public bool IncludeLabs { get; set; } = false;
     }
 }

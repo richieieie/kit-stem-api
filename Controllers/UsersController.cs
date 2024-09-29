@@ -1,11 +1,7 @@
-using System.Net;
 using System.Security.Claims;
 using Google.Apis.Auth;
 using kit_stem_api.Constants;
-using kit_stem_api.Data;
-using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
-using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
