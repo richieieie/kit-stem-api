@@ -17,7 +17,7 @@ namespace kit_stem_api.Controllers
             _kitService = kitService;
         }
         [HttpGet]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
         {
             var serviceResponse = await _kitService.GetAsync(kitGetDTO);
@@ -29,8 +29,8 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
-        //[Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetByIdAsync([FromQuery] int id)
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
@@ -40,7 +40,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm]KitCreateDTO DTO)
         {
             var serviceResponse = await _kitService.CreateAsync(DTO);
@@ -50,7 +50,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpPut]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm]KitUpdateDTO DTO)
         {
             var serviceResponse = await _kitService.UpdateAsync(DTO);
@@ -60,7 +60,7 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpDelete]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteAsync([FromForm] int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
