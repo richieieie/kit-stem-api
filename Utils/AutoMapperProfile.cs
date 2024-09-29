@@ -33,6 +33,9 @@ namespace kit_stem_api.Utils
             CreateMap<Lab, LabResponseDTO>();
 
             CreateMap<LabUploadDTO, Lab>();
+
+            // Using for getting KitComponents
+            CreateMap<KitComponent, KitComponentDTO>().ReverseMap();
         }
     }
 }

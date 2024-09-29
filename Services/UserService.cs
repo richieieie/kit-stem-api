@@ -22,7 +22,7 @@ namespace kit_stem_api.Services
             _tokenRepository = tokenRepository;
         }
 
-        public async Task<ServiceResponse> GetProfileAsync(string userName)
+        public async Task<ServiceResponse> GetAsync(string userName)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace kit_stem_api.Services
             }
         }
 
-        public async Task<ServiceResponse> UpdateProfileAsync(string userName, UserUpdateDTO userUpdateDTO)
+        public async Task<ServiceResponse> UpdateAsync(string userName, UserUpdateDTO userUpdateDTO)
         {
             try
             {
