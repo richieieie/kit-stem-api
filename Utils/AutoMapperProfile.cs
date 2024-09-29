@@ -14,7 +14,7 @@ namespace kit_stem_api.Utils
     {
         public AutoMapperProfile()
         {
-            CreateMap<Kit, KitResponseDTO>();
+            CreateMap<Kit, KitInPackageResponseDTO>();
 
             // Using for packages
             CreateMap<Package, PackageResponseDTO>();

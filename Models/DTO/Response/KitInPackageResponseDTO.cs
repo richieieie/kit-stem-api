@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +6,7 @@ using kit_stem_api.Models.Domain;
 
 namespace kit_stem_api.Models.DTO.Response
 {
-    public class KitResponseDTO
+    public class KitInPackageResponseDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
