@@ -47,7 +47,6 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-
         [HttpPost]
         // [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm] LabUploadDTO labUploadDTO)

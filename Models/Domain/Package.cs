@@ -10,11 +10,9 @@ namespace kit_stem_api.Models.Domain
     {
         [Key]
         public int Id { get; set; }
-
+        public string Name { get; set; } = null!;
         public int KitId { get; set; }
-
         public int LevelId { get; set; }
-
         [Required]
         public int Price { get; set; }
         public bool Status { get; set; }

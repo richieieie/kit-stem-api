@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace kit_stem_api.Services
@@ -18,7 +20,47 @@ namespace kit_stem_api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         #region Services methods
+        public async Task<(ServiceResponse, int)> CreateAsync(PackageCreateDTO packageCreateDTO)
+        {
+            using var transaction = await _unitOfWork._dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                var package = _mapper.Map<Package>(packageCreateDTO);
+
+                // Add package
+                await _unitOfWork.PackageRepository.CreateAsync(package);
+
+                // If the package contains Labs, then try to add those labs in PackageLab table
+                if (!await TryCreatePackageLabsAsync(packageCreateDTO, package))
+                {
+                    await transaction.RollbackAsync();
+                    return (new ServiceResponse()
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status400BadRequest)
+                            .AddDetail("message", "Thêm mới gói kit thất bại!")
+                            .AddError("invalidCredentials", "Không thể thêm mới gói kit do thông tin yêu cầu không chính xác!"),
+                            0);
+                }
+
+                await transaction.CommitAsync();
+
+                return (new ServiceResponse()
+                        .AddDetail("message", "Thêm mới gói kit thành công!"),
+                        package.Id);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return (new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Thêm mới gói kit thất bại!")
+                        .AddError("outOfService", "Không thể thêm mới gói kit vào thời điểm hiện tại hoặc do thông tin yêu cầu không chính xác!"),
+                        0);
+            }
+        }
+
         public async Task<ServiceResponse> GetAsync(PackageGetFilterDTO packageGetFilterDTO)
         {
             try
@@ -100,15 +142,36 @@ namespace kit_stem_api.Services
         }
         #endregion
 
-        #region Methods that are constructing arguments for PackageRepository
+        #region Methods that help service
         private Expression<Func<Package, bool>> GetFilter(PackageGetFilterDTO packageGetFilterDTO)
         {
             return (p) => (packageGetFilterDTO.LevelId == 0 || p.LevelId == packageGetFilterDTO.LevelId) &&
                             (p.Price >= packageGetFilterDTO.FromPrice) &&
                             (p.Price <= packageGetFilterDTO.ToPrice) &&
+                            p.Name.Contains(packageGetFilterDTO.Name ?? "") &&
                             p.Kit.Name.Contains(packageGetFilterDTO.KitName ?? "") &&
                             p.Kit.Category.Name.Contains(packageGetFilterDTO.CategoryName ?? "") &&
                             p.Status == packageGetFilterDTO.Status;
+        }
+        private async Task<bool> TryCreatePackageLabsAsync(PackageCreateDTO packageCreateDTO, Package package)
+        {
+            if (packageCreateDTO.LabIds == null)
+            {
+                return true;
+            }
+
+            var (labs, _) = await _unitOfWork.LabRepository.GetByKitIdAsync(packageCreateDTO.KitId);
+            var validLabIds = labs.Select(l => l.Id);
+            if (packageCreateDTO.LabIds.All(id => validLabIds.Contains(id)))
+            {
+                var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
+
+                await _unitOfWork.PackageLabRepository.CreateAsync(packageLabs);
+
+                return true;
+            }
+
+            return false;
         }
         #endregion
     }

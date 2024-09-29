@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace kit_stem_api.Models.Domain
 {
 
-    [Table("ComponentsType")]
+    [Table("Type")]
     public class ComponentsType
     {
         [Key]

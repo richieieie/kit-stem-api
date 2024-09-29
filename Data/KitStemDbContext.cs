@@ -6,6 +6,7 @@ using kit_stem_api.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace kit_stem_api.Data
 {
@@ -132,6 +133,8 @@ namespace kit_stem_api.Data
             {
                 entity.HasKey(e => e.Id).HasName("PK__Package__3214EC07FCAB6A0E");
 
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.HasOne(d => d.Kit).WithMany(p => p.Packages)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Package__KitId__05D8E0BE");
@@ -141,11 +144,15 @@ namespace kit_stem_api.Data
             {
                 entity.HasKey(e => new { e.PackageId, e.LabId }).HasName("PK__PackageL__8CFBE3412AEEA669");
 
-                entity.HasOne(d => d.Lab).WithMany(p => p.PackageLabs)
+                entity.HasOne(d => d.Lab)
+                    .WithMany(p => p.PackageLabs)
+                    .HasForeignKey(d => d.LabId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__PackageLa__LabId__0A9D95DB");
 
-                entity.HasOne(d => d.Package).WithMany(p => p.PackageLabs)
+                entity.HasOne(d => d.Package)
+                    .WithMany(p => p.PackageLabs)
+                    .HasForeignKey(d => d.PackageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__PackageLa__Packa__09A971A2");
             });

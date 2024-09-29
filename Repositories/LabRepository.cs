@@ -34,5 +34,11 @@ namespace kit_stem_api.Repositories
                                                         );
             return (labs, totalPages);
         }
+        public async Task<(IEnumerable<Lab>, int)> GetByKitIdAsync(int kitId)
+        {
+            var (labs, totalPages) = await GetFilterAsync(l => l.KitId == kitId);
+
+            return (labs, totalPages);
+        }
     }
 }

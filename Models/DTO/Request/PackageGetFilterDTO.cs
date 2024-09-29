@@ -3,6 +3,7 @@
     public class PackageGetFilterDTO
     {
         public int Page { get; set; } = 0;
+        public string? Name { get; set; }
         public int LevelId { get; set; } = 0;
         public int FromPrice { get; set; } = 0;
         public int? ToPrice { get; set; } = int.MaxValue;

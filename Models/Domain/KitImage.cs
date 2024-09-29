@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
 {
-    [Table("KitImage")]
+    [Table("Image")]
     public class KitImage
     {
         [Key]

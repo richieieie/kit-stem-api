@@ -13,9 +13,9 @@ namespace kit_stem_api.Repositories
         public new async Task<Package?> GetByIdAsync(int id)
         {
             return await _dbContext.Packages
+                            .Include(p => p.Level)
                             .Include(p => p.Kit)
-                            .Include(p => p.PackageLabs)
-                            .ThenInclude(pl => pl.Lab)
+                            .ThenInclude(k => k.Category)
                             .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -28,10 +28,8 @@ namespace kit_stem_api.Repositories
         {
             var (packages, totalPages) = await GetFilterAsync(
                                                                 filter, orderBy, skip, take,
-                                                                query => query.Include(p => p.Kit),
-                                                                query => query.Include(p => p.Level),
-                                                                query => query.Include(p => p.Kit.Category),
-                                                                query => query.Include(p => p.PackageLabs).ThenInclude(pl => pl.Lab)
+                                                                query => query.Include(p => p.Kit).ThenInclude(k => k.Category),
+                                                                query => query.Include(p => p.Level)
                                                             );
 
             return (packages, totalPages);
