@@ -61,15 +61,9 @@ namespace kit_stem_api.Services
                     );
                 var kitsDTO = _mapper.Map<IEnumerable<Kit>>(Kits);
 
-                //if (kit == null)
-                //    return new ServiceResponse()
-                //        .SetSucceeded(false)
-                //        .AddDetail("message", "không có kit tồn tại")
-                //        .AddError("notFound", "không tìm thấy kit dưới database");
-
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "lấy danh sách kit thành công")
+                    .AddDetail("message", "lấy kit thành công")
                     .AddDetail("data", new { kitsDTO });
             }
             catch
