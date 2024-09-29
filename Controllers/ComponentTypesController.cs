@@ -74,9 +74,9 @@ namespace kit_stem_api.Controllers
         [HttpDelete]
         [Route("{id:int}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> RemoveByIdAsync(int Id)
+        public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
-            var serviceResponse = await _componentTypeService.RemoveByIdAsync(Id);
+            var serviceResponse = await _componentTypeService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

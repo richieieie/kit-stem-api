@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using kit_stem_api.Models.Domain;
 
 namespace kit_stem_api.Models.DTO.Response
@@ -10,7 +6,6 @@ namespace kit_stem_api.Models.DTO.Response
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        public string? Url { get; set; }
         public int Price { get; set; }
         public int MaxSupportTimes { get; set; }
         public string? Author { get; set; }

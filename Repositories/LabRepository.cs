@@ -16,6 +16,7 @@ namespace kit_stem_api.Repositories
         {
             return await _dbContext.Labs
                                     .Include(l => l.Kit)
+                                    .ThenInclude(lk => lk.Category)
                                     .Include(l => l.Level)
                                     .FirstOrDefaultAsync(l => l.Id == id);
         }
@@ -32,6 +33,12 @@ namespace kit_stem_api.Repositories
                                                             query => query.Include(l => l.Level),
                                                             query => query.Include(l => l.Kit.Category)
                                                         );
+            return (labs, totalPages);
+        }
+        public async Task<(IEnumerable<Lab>, int)> GetByKitIdAsync(int kitId)
+        {
+            var (labs, totalPages) = await GetFilterAsync(l => l.KitId == kitId);
+
             return (labs, totalPages);
         }
     }

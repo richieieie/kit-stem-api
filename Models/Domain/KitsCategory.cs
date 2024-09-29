@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace kit_stem_api.Models.Domain
 {
 
-    [Table("KitsCategory")]
+    [Table("Category")]
     public class KitsCategory
     {
         [Key]

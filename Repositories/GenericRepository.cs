@@ -92,6 +92,12 @@ namespace kit_stem_api.Repositories
             return _dbContext.SaveChanges() > 0;
         }
 
+        public bool Create(IEnumerable<T> entities)
+        {
+            _dbContext.AddRange(entities);
+            return _dbContext.SaveChanges() > 0;
+        }
+
         public bool Update(T entity)
         {
             var tracker = _dbContext.Attach(entity);
@@ -174,6 +180,13 @@ namespace kit_stem_api.Repositories
             _dbContext.Add(entity);
             return await _dbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> CreateAsync(IEnumerable<T> entities)
+        {
+            await _dbContext.AddRangeAsync(entities);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
         public async Task<bool> UpdateAsync(T entity)
         {
             var tracker = _dbContext.Attach(entity);
@@ -214,10 +227,21 @@ namespace kit_stem_api.Repositories
             _dbContext.Add(entity);
         }
 
+        public void PrepareCreate(IEnumerable<T> entities)
+        {
+            _dbContext.AddRange(entities);
+        }
+
         public void PrepareUpdate(T entity)
         {
             var tracker = _dbContext.Attach(entity);
             tracker.State = EntityState.Modified;
+        }
+
+        public bool PrepareUpdate(IEnumerable<T> entities)
+        {
+            _dbContext.Attach(entities);
+            return _dbContext.SaveChanges() > 0;
         }
 
         public void PrepareRemove(T entity)
