@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
 
 namespace kit_stem_api.Utils
@@ -29,6 +30,9 @@ namespace kit_stem_api.Utils
             CreateMap<Lab, LabResponseDTO>();
 
             CreateMap<LabUploadDTO, Lab>();
+
+            // Using for getting KitComponents
+            CreateMap<KitComponent, KitComponentDTO>().ReverseMap();
         }
     }
 }
