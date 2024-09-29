@@ -45,18 +45,8 @@ public class Program
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
-        builder.Services.AddScoped<IPackageService, PackageService>();
-
-        builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
-        builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
-        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
-
-        builder.Services.AddScoped<ILevelService, LevelService>();
-        builder.Services.AddScoped<ICategoryService, CategoryService>();
-        builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
-        builder.Services.AddScoped<IComponentService, ComponentService>();
-        builder.Services.AddScoped<IKitService, KitService>();
         builder.Services.AddScoped<IKitComponentService, KitComponentService>();
+        builder.Services.AddScoped<IKitService, KitService>();
 
         // Add services to the container.
         builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
