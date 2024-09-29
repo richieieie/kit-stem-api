@@ -20,7 +20,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] LabGetDTO labGetDTO)
         {
             var serviceResponse = await _labService.GetAsync(labGetDTO);
@@ -35,7 +35,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName(nameof(GetByIdAsync))]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var serviceResponse = await _labService.GetByIdAsync(id);
@@ -48,7 +48,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm] LabUploadDTO labUploadDTO)
         {
             var labId = Guid.NewGuid();
@@ -69,7 +69,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm] LabUpdateDTO labUpdateDTO)
         {
             ServiceResponse serviceResponse;
@@ -95,7 +95,7 @@ namespace kit_stem_api.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             var serviceResponse = await _labService.RemoveByIdAsync(id);

@@ -16,6 +16,7 @@ namespace kit_stem_api.Repositories
         {
             return await _dbContext.Labs
                                     .Include(l => l.Kit)
+                                    .ThenInclude(lk => lk.Category)
                                     .Include(l => l.Level)
                                     .FirstOrDefaultAsync(l => l.Id == id);
         }

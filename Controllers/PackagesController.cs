@@ -29,7 +29,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id:int}/Labs")]
         [ActionName(nameof(GetByIdAsync))]
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
@@ -45,7 +45,7 @@ namespace kit_stem_api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _packageService.GetByIdAsync(id);
