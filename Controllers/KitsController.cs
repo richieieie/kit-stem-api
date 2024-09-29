@@ -51,7 +51,7 @@ namespace kit_stem_api.Controllers
         }
         [HttpPut]
         [Authorize(Roles = "manager")]
-        public async Task<IActionResult> UpdateAsync([FromForm]KitUpdateDTO DTO)
+        public async Task<IActionResult> UpdateAsync(KitUpdateDTO DTO)
         {
             var serviceResponse = await _kitService.UpdateAsync(DTO);
             if (!serviceResponse.Succeeded)

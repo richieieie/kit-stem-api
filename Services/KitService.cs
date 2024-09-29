@@ -113,7 +113,7 @@ namespace kit_stem_api.Services
                     Name = DTO.Name,
                     Brief = DTO.Brief,
                     Description = DTO.Description,
-                    PurchaseCost = DTO.PurchaseCost
+                    PurchaseCost = DTO.PurchaseCost,
                 };
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
