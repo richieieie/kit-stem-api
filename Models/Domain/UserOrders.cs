@@ -35,7 +35,7 @@ namespace kit_stem_api.Models.Domain
 
         [JsonIgnore]
         [InverseProperty("Order")]
-        public virtual ICollection<LabSupport>? LabSupports { get; set; }
+        public virtual ICollection<OrderSupport>? OrderSupports { get; set; }
 
         [ForeignKey("PaymentId")]
         [InverseProperty("UserOrders")]
