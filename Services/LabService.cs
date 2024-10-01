@@ -46,22 +46,28 @@ namespace kit_stem_api.Services
             try
             {
                 var lab = await _unitOfWork.LabRepository.GetByIdAsync(labUpdateDTO.Id);
-                if (lab != null)
+                if (lab == null)
                 {
-                    lab.LevelId = labUpdateDTO.LevelId;
-                    lab.KitId = labUpdateDTO.KitId;
-                    lab.Name = labUpdateDTO.Name!;
-                    lab.Status = labUpdateDTO.Status;
-                    lab.Author = labUpdateDTO.Author;
-                    lab.Price = labUpdateDTO.Price;
-                    lab.MaxSupportTimes = labUpdateDTO.MaxSupportTimes;
-                    if (url != null)
-                    {
-                        lab.Url = url;
-                    }
-
-                    await _unitOfWork.LabRepository.UpdateAsync(lab);
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Chỉnh sửa bài lab thất bại!")
+                        .AddError("invalidCredentials", "Không tìm thấy bài lab để chỉnh sửa!");
                 }
+
+                lab.LevelId = labUpdateDTO.LevelId;
+                lab.KitId = labUpdateDTO.KitId;
+                lab.Name = labUpdateDTO.Name!;
+                lab.Status = labUpdateDTO.Status;
+                lab.Author = labUpdateDTO.Author;
+                lab.Price = labUpdateDTO.Price;
+                lab.MaxSupportTimes = labUpdateDTO.MaxSupportTimes;
+                if (url != null)
+                {
+                    lab.Url = url;
+                }
+
+                await _unitOfWork.LabRepository.UpdateAsync(lab);
 
                 return new ServiceResponse()
                         .SetSucceeded(true)
