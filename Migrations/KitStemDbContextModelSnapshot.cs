@@ -471,6 +471,37 @@ namespace kit_stem_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("LabId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PackageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RemainSupportTimes")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id")
+                        .HasName("PK__LabSuppor__01846D66652C0B0E");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("LabId", "PackageId", "OrderId")
+                        .IsUnique();
+
+                    b.ToTable("LabSupport");
+                });
+
+            modelBuilder.Entity("kit_stem_api.Models.Domain.LabSupporter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -480,10 +511,7 @@ namespace kit_stem_api.Migrations
                     b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LabSupportId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("OrderSupportId")
+                    b.Property<Guid>("LabSupportId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Rating")
@@ -495,11 +523,11 @@ namespace kit_stem_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderSupportId");
+                    b.HasIndex("LabSupportId");
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("LabSupport");
+                    b.ToTable("LabSupporter");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Level", b =>
@@ -549,37 +577,6 @@ namespace kit_stem_api.Migrations
                         .HasName("PK__Method__3214EC07C4B69160");
 
                     b.ToTable("Method");
-                });
-
-            modelBuilder.Entity("kit_stem_api.Models.Domain.OrderSupport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("LabId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PackageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RemainSupportTimes")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id")
-                        .HasName("PK__LabSuppor__01846D66652C0B0E");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("PackageId");
-
-                    b.HasIndex("LabId", "PackageId", "OrderId")
-                        .IsUnique();
-
-                    b.ToTable("OrderSupport");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Package", b =>
@@ -868,33 +865,14 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.LabSupport", b =>
                 {
-                    b.HasOne("kit_stem_api.Models.Domain.OrderSupport", "OrderSupport")
-                        .WithMany("LabSupports")
-                        .HasForeignKey("OrderSupportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("kit_stem_api.Models.Domain.ApplicationUser", "Staff")
-                        .WithMany("LabSupports")
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("OrderSupport");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("kit_stem_api.Models.Domain.OrderSupport", b =>
-                {
                     b.HasOne("kit_stem_api.Models.Domain.Lab", "Lab")
-                        .WithMany("OrderSupports")
+                        .WithMany("LabSupports")
                         .HasForeignKey("LabId")
                         .IsRequired()
                         .HasConstraintName("FK__LabSuppor__LabId__22751F6C");
 
                     b.HasOne("kit_stem_api.Models.Domain.UserOrders", "Order")
-                        .WithMany("OrderSupports")
+                        .WithMany("LabSupports")
                         .HasForeignKey("OrderId")
                         .IsRequired()
                         .HasConstraintName("FK__LabSuppor__Order__236943A5");
@@ -910,6 +888,25 @@ namespace kit_stem_api.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("kit_stem_api.Models.Domain.LabSupporter", b =>
+                {
+                    b.HasOne("kit_stem_api.Models.Domain.LabSupport", "LabSupport")
+                        .WithMany("LabSupporters")
+                        .HasForeignKey("LabSupportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("kit_stem_api.Models.Domain.ApplicationUser", "Staff")
+                        .WithMany("LabSupporters")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("LabSupport");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Package", b =>
@@ -1004,7 +1001,7 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.ApplicationUser", b =>
                 {
-                    b.Navigation("LabSupports");
+                    b.Navigation("LabSupporters");
 
                     b.Navigation("UserOrders");
                 });
@@ -1037,9 +1034,14 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Lab", b =>
                 {
-                    b.Navigation("OrderSupports");
+                    b.Navigation("LabSupports");
 
                     b.Navigation("PackageLabs");
+                });
+
+            modelBuilder.Entity("kit_stem_api.Models.Domain.LabSupport", b =>
+                {
+                    b.Navigation("LabSupporters");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Level", b =>
@@ -1050,11 +1052,6 @@ namespace kit_stem_api.Migrations
             modelBuilder.Entity("kit_stem_api.Models.Domain.Method", b =>
                 {
                     b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("kit_stem_api.Models.Domain.OrderSupport", b =>
-                {
-                    b.Navigation("LabSupports");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Package", b =>
@@ -1069,7 +1066,7 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.UserOrders", b =>
                 {
-                    b.Navigation("OrderSupports");
+                    b.Navigation("LabSupports");
                 });
 #pragma warning restore 612, 618
         }

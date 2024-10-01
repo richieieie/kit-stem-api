@@ -39,7 +39,7 @@ namespace kit_stem_api.Models.Domain
 
         [JsonIgnore]
         [InverseProperty("Lab")]
-        public virtual ICollection<OrderSupport>? OrderSupports { get; set; }
+        public virtual ICollection<LabSupport>? LabSupports { get; set; }
 
         [ForeignKey("LevelId")]
         [InverseProperty("Labs")]
