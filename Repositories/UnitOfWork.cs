@@ -28,6 +28,7 @@ namespace kit_stem_api.Repositories
                         PackageLabRepository = new PackageLabRepository(_dbContext);
                         KitComponentRepository = new KitComponentRepository(_dbContext);
                         KitRepository = new KitRepository(_dbContext);
+                        PackageLabRepository = new PackageLabRepository(_dbContext);
                 }
         }
 }
