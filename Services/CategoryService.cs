@@ -68,6 +68,33 @@ namespace kit_stem_api.Services
 
         }
 
+        public async Task<ServiceResponse> RestoreByIdAsync(int id)
+        {
+            try
+            {
+                var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+                if (category == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Khôi phục loại kit thất bại!")
+                        .AddError("notFound", "Không tìm thấy loại kit!");
+                }
+                category.Status = true;
+                await _unitOfWork.CategoryRepository.UpdateAsync(category);
+                return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("message", "Khôi phục một loại kit thành công!");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "Khôi phục loại kit thất bại!")
+                    .AddError("outOfService", "Không thể Phục hồi loại kit ngay lúc này!");
+            }
+        }
+
         public async Task<ServiceResponse> GetAsync()
         {
             try
