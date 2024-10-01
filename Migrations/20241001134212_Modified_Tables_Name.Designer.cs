@@ -12,8 +12,8 @@ using kit_stem_api.Data;
 namespace kit_stem_api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    [Migration("20241001093530_Changed_Tables_Name")]
-    partial class Changed_Tables_Name
+    [Migration("20241001134212_Modified_Tables_Name")]
+    partial class Modified_Tables_Name
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -483,8 +483,8 @@ namespace kit_stem_api.Migrations
                     b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LabSupportId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("LabSupportId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OrderSupportId")
                         .HasColumnType("uniqueidentifier");
@@ -743,7 +743,7 @@ namespace kit_stem_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserOrders");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

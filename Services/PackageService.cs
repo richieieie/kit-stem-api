@@ -21,7 +21,7 @@ namespace kit_stem_api.Services
             _mapper = mapper;
         }
 
-        #region Services methods
+        #region Service methods
         public async Task<(ServiceResponse, int)> CreateAsync(PackageCreateDTO packageCreateDTO)
         {
             try

@@ -31,11 +31,13 @@ namespace kit_stem_api.Utils
 
             // Using for getting labs
             CreateMap<Lab, LabResponseDTO>();
-
             CreateMap<LabUploadDTO, Lab>();
 
             // Using for getting KitComponents
             CreateMap<KitComponent, KitComponentDTO>().ReverseMap();
+
+            // Using for Order
+            CreateMap<UserOrders, OrderResponseDTO>();
         }
     }
 }
