@@ -9,11 +9,11 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComponentTypesController : ControllerBase
+    public class TypesController : ControllerBase
     {
         private readonly IComponentTypeService _componentTypeService;
 
-        public ComponentTypesController(IComponentTypeService componentTypeService)
+        public TypesController(IComponentTypeService componentTypeService)
         {
             _componentTypeService = componentTypeService;
         }
