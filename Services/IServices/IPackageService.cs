@@ -8,6 +8,8 @@ namespace kit_stem_api.Services.IServices
         Task<(ServiceResponse, int)> CreateAsync(PackageCreateDTO packageCreateDTO);
         Task<ServiceResponse> GetAsync(PackageGetFilterDTO packageGetFilterDTO);
         Task<ServiceResponse> GetByIdAsync(int id);
+        Task<ServiceResponse> RemoveByIdAsync(int id);
+        Task<ServiceResponse> RestoreByIdAsync(int id);
         Task<ServiceResponse> UpdateAsync(PackageUpdateDTO packageUpdateDTO);
     }
 }

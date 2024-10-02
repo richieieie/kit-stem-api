@@ -25,7 +25,8 @@ namespace kit_stem_api.Repositories
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Email, user.UserName ?? throw new ArgumentException("Username cannot be null")),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.UserName!),
                 new Claim(ClaimTypes.Role, role)
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new ArgumentException("Key cannot be null")));
