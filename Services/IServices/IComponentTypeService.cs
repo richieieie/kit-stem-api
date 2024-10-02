@@ -9,5 +9,7 @@ namespace kit_stem_api.Services.IServices
         Task<ServiceResponse> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO);
         Task<ServiceResponse> UpdateAsync(ComponentTypeUpdateDTO componentTypeUpdateDTO);
         Task<ServiceResponse> RemoveByIdAsync(int id);
+        Task<ServiceResponse> RestoreByIdAsync(int id);
+
     }
 }

@@ -74,7 +74,7 @@ namespace kit_stem_api.Controllers
         [HttpDelete]
         [Route("{id:int}")]
         [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RemoveByIdAsync(int id)
+        public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
@@ -83,6 +83,20 @@ namespace kit_stem_api.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
+        {
+            var serviceResponse = await _componentService.RestoreByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
     }
 }
