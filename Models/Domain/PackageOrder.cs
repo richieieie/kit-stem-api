@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
 {
-    [Keyless]
     [Table("PackageOrder")]
     public class PackageOrder
     {

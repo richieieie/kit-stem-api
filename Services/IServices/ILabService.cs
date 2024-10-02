@@ -14,5 +14,6 @@ namespace kit_stem_api.Services.IServices
         Task<ServiceResponse> GetByIdAsync(Guid id);
         Task<ServiceResponse> GetByKitId(int kitId);
         Task<ServiceResponse> RemoveByIdAsync(Guid id);
+        Task<ServiceResponse> RestoreByIdAsync(Guid id);
     }
 }

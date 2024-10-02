@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Models.Domain
 {
+    [Table("Order")]
     public partial class UserOrders
     {
         [Key]
@@ -35,7 +33,11 @@ namespace kit_stem_api.Models.Domain
 
         [JsonIgnore]
         [InverseProperty("Order")]
-        public virtual ICollection<OrderSupport>? OrderSupports { get; set; }
+        public virtual ICollection<OrderSupport> OrderSupports { get; set; } = null!;
+
+        [JsonIgnore]
+        [InverseProperty("Order")]
+        public virtual ICollection<PackageOrder> PackageOrders { get; set; } = null!;
 
         [ForeignKey("PaymentId")]
         [InverseProperty("UserOrders")]

@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using kit_stem_api.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace kit_stem_api.Data
 {
@@ -29,6 +24,7 @@ namespace kit_stem_api.Data
         public DbSet<UserOrders> UserOrders { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<LabSupport> LabSupports { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public KitStemDbContext(DbContextOptions<KitStemDbContext> options) : base(options)
         {
 
@@ -135,9 +131,14 @@ namespace kit_stem_api.Data
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne(d => d.Kit).WithMany(p => p.Packages)
+                entity.HasOne(d => d.Kit)
+                    .WithMany(p => p.Packages)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Package__KitId__05D8E0BE");
+
+                entity.HasMany(p => p.Carts)
+                    .WithOne(c => c.Package)
+                    .HasForeignKey(c => c.PackageId);
             });
 
             modelBuilder.Entity<PackageLab>(entity =>
@@ -159,6 +160,8 @@ namespace kit_stem_api.Data
 
             modelBuilder.Entity<PackageOrder>(entity =>
             {
+                entity.HasKey(po => new { po.PackageId, po.OrderId });
+
                 entity.HasOne(d => d.Order).WithMany().HasConstraintName("FK__PackageOr__Order__1F98B2C1");
 
                 entity.HasOne(d => d.Package).WithMany().HasConstraintName("FK__PackageOr__Packa__1EA48E88");
@@ -180,13 +183,18 @@ namespace kit_stem_api.Data
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
 
-                entity.HasOne(d => d.Payment).WithMany(p => p.UserOrders)
+                entity.HasOne(d => d.Payment)
+                    .WithOne(p => p.UserOrders)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserOrders__Payme__160F4887");
 
                 entity.HasOne(d => d.User).WithMany(p => p.UserOrders)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserOrders__UserI__151B244E");
+
+                entity.HasMany(uo => uo.PackageOrders).WithOne(po => po.Order)
+                        .HasForeignKey(po => po.OrderId);
+
             });
             modelBuilder.Entity<LabSupport>(entity =>
             {
@@ -196,16 +204,29 @@ namespace kit_stem_api.Data
                 // Foreign key to OrderSupport
                 entity.HasOne(e => e.OrderSupport)
                     .WithMany(l => l.LabSupports) // Inverse Property
-                    .HasForeignKey(e => e.OrderSupportId)
-                    .OnDelete(DeleteBehavior.Cascade); // Optional, set cascade behavior
+                    .HasForeignKey(e => e.OrderSupportId);
 
                 // Foreign key to ApplicationUser (Staff)
                 entity.HasOne(e => e.Staff)
                     .WithMany(u => u.LabSupports) // Inverse Property
-                    .HasForeignKey(e => e.StaffId)
-                    .OnDelete(DeleteBehavior.Restrict); // Restrict deletion of staff if related record exists
+                    .HasForeignKey(e => e.StaffId);
+            });
 
-                // Additional constraints or properties can be added here as necessary
+            // Configuration for Cart
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                // Define the composite primary key (UserId, PackageId)
+                entity.HasKey(c => new { c.UserId, c.PackageId });
+
+                entity.HasOne(c => c.User)
+                    .WithMany(u => u.Carts) // Assuming ApplicationUser has a collection of Carts
+                    .HasForeignKey(c => c.UserId)
+                    .HasConstraintName("FK__Cart__UserId__AB35320CD");
+
+                entity.HasOne(c => c.Package)
+                    .WithMany(p => p.Carts) // Assuming Package has a collection of Carts
+                    .HasForeignKey(c => c.PackageId)
+                    .HasConstraintName("FK__Cart__PackageId__POSI3213AAL");
             });
             modelBuilder.Entity<IdentityRole>().HasData(SeedingRoles());
         }

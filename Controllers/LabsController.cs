@@ -106,5 +106,19 @@ namespace kit_stem_api.Controllers
 
             return NoContent();
         }
+
+        [HttpPut]
+        [Route("Restore/{id:guid}")]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RestoreAsync(Guid id)
+        {
+            var serviceResponse = await _labService.RestoreByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }

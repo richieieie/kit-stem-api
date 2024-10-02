@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace kit_stem_api.Models.Domain
 {
 
-    [PrimaryKey("LabId", "OrderId")]
+    [PrimaryKey("LabId")]
     [Table("OrderSupport")]
     public class OrderSupport
     {

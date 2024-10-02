@@ -46,22 +46,27 @@ namespace kit_stem_api.Services
             try
             {
                 var lab = await _unitOfWork.LabRepository.GetByIdAsync(labUpdateDTO.Id);
-                if (lab != null)
+                if (lab == null)
                 {
-                    lab.LevelId = labUpdateDTO.LevelId;
-                    lab.KitId = labUpdateDTO.KitId;
-                    lab.Name = labUpdateDTO.Name!;
-                    lab.Status = labUpdateDTO.Status;
-                    lab.Author = labUpdateDTO.Author;
-                    lab.Price = labUpdateDTO.Price;
-                    lab.MaxSupportTimes = labUpdateDTO.MaxSupportTimes;
-                    if (url != null)
-                    {
-                        lab.Url = url;
-                    }
-
-                    await _unitOfWork.LabRepository.UpdateAsync(lab);
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Chỉnh sửa bài lab thất bại!")
+                        .AddError("invalidCredentials", "Không tìm thấy bài lab để chỉnh sửa!");
                 }
+
+                lab.LevelId = labUpdateDTO.LevelId;
+                lab.KitId = labUpdateDTO.KitId;
+                lab.Name = labUpdateDTO.Name!;
+                lab.Author = labUpdateDTO.Author;
+                lab.Price = labUpdateDTO.Price;
+                lab.MaxSupportTimes = labUpdateDTO.MaxSupportTimes;
+                if (url != null)
+                {
+                    lab.Url = url;
+                }
+
+                await _unitOfWork.LabRepository.UpdateAsync(lab);
 
                 return new ServiceResponse()
                         .SetSucceeded(true)
@@ -135,25 +140,62 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
+
         public async Task<ServiceResponse> RemoveByIdAsync(Guid id)
         {
             try
             {
-                var lab = await _unitOfWork.LabRepository.GetByIdAsync(id) ?? throw new Exception();
+                var lab = await _unitOfWork.LabRepository.GetByIdAsync(id);
+                if (lab == null)
+                {
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Xoá bài lab thất bại")
+                                .AddError("notFound", "Không tìm thấy bài lab của bạn");
+                }
 
                 lab.Status = false;
                 await _unitOfWork.LabRepository.UpdateAsync(lab);
 
                 return new ServiceResponse()
-                            .AddDetail("message", "Xoá bài lab thành công!")
-                            .AddDetail("data", new { lab });
+                            .AddDetail("message", "Xoá bài lab thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
                         .AddDetail("message", "Xoá bài lab không thành công!")
-                        .AddError("outOfService", "Không thể xoá được bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
+                        .AddError("outOfService", "Không thể xoá được bài lab hiện tại!");
+            }
+        }
+
+        public async Task<ServiceResponse> RestoreByIdAsync(Guid id)
+        {
+            try
+            {
+                var lab = await _unitOfWork.LabRepository.GetByIdAsync(id);
+                if (lab == null)
+                {
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Khôi phục bài lab thất bại!")
+                                .AddError("notFound", "Không tìm thấy bài lab của bạn");
+                }
+
+                lab.Status = true;
+                await _unitOfWork.LabRepository.UpdateAsync(lab);
+
+                return new ServiceResponse()
+                            .AddDetail("message", "Khôi phục bài lab thành công!");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Khôi phục bài lab thất bại!")
+                        .AddError("outOfService", "Không thể khôi phục được bài lab hiện tại!");
             }
         }
         #endregion
