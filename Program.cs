@@ -36,6 +36,7 @@ public class Program
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
         builder.Services.AddScoped<IPackageService, PackageService>();
+        builder.Services.AddScoped<IOrderService, OrderService>();
 
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));

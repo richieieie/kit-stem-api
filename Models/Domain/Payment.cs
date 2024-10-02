@@ -26,6 +26,6 @@ namespace kit_stem_api.Models.Domain
 
         [JsonIgnore]
         [InverseProperty("Payment")]
-        public virtual ICollection<UserOrders>? UserOrders { get; set; }
+        public virtual UserOrders? UserOrders { get; set; }
     }
 }

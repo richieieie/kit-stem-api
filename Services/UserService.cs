@@ -193,6 +193,7 @@ namespace kit_stem_api.Services
                 user.FirstName = userUpdateDTO.FirstName;
                 user.LastName = userUpdateDTO.LastName;
                 user.Address = userUpdateDTO.Address;
+                user.PhoneNumber = userUpdateDTO.PhoneNumber;
 
                 await _userManager.UpdateAsync(user);
                 return new ServiceResponse()

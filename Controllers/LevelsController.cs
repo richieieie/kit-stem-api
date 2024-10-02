@@ -84,5 +84,19 @@ namespace kit_stem_api.Controllers
 
             return NoContent();
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> RestoreByIdAsync(int id)
+        {
+            var serviceResponse = await _levelService.RestoreByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }

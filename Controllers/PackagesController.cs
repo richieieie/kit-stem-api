@@ -48,13 +48,27 @@ namespace kit_stem_api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
-            var serviceResponse = await _packageService.GetByIdAsync(id);
+            var serviceResponse = await _packageService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return NoContent();
+        }
+
+        [HttpPut]
+        [Route("Restore/{id:int}")]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
+        {
+            var serviceResponse = await _packageService.RestoreByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPost]

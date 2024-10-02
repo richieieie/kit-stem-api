@@ -21,7 +21,7 @@ namespace kit_stem_api.Services
             _mapper = mapper;
         }
 
-        #region Services methods
+        #region Service methods
         public async Task<(ServiceResponse, int)> CreateAsync(PackageCreateDTO packageCreateDTO)
         {
             try
@@ -123,14 +123,43 @@ namespace kit_stem_api.Services
                 // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
                 var packageDTO = _mapper.Map<PackageResponseDTO>(package);
                 return new ServiceResponse()
-                                .AddDetail("message", "Lấy thông tin gói kit thành công!")
-                                .AddDetail("data", new { package = packageDTO });
+                                .AddDetail("message", "Xoá gói kit thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
                         .AddDetail("message", "Xoá gói kit thất bại!")
+                        .AddError("outOfService", "Hiện tại không thể xoá được gói kit!");
+            }
+        }
+
+        public async Task<ServiceResponse> RestoreByIdAsync(int id)
+        {
+            try
+            {
+                // Construct filter for using in Where()
+                var package = await _unitOfWork.PackageRepository.GetByIdAsync(id);
+                if (package == null)
+                {
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Khôi phục gói kit thất bại!")
+                                .AddError("notFound", "Không tìm gói kit này!");
+                }
+
+                package.Status = true;
+                await _unitOfWork.PackageRepository.UpdateAsync(package);
+
+                return new ServiceResponse()
+                                .AddDetail("message", "Khôi phục gói kit thành công!");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Khôi phục gói kit thất bại!")
                         .AddError("outOfService", "Hiện tại không thể xoá được gói kit!");
             }
         }
