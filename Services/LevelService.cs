@@ -106,6 +106,33 @@ namespace kit_stem_api.Services
             }
         }
 
+        public async Task<ServiceResponse> RestoreByIdAsync(int id)
+        {
+            try
+            {
+                var level = await _unitOfWork.LevelRepository.GetByIdAsync(id);
+                if (level == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Chỉnh sửa level không thành công!")
+                        .AddError("notFound", "Không thể tìm thấy level ngay lúc này!");
+                }
+                level.Status = true;
+                await _unitOfWork.LevelRepository.UpdateAsync(level);
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Xóa một level thành công!");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "Xóa một level thất bại!")
+                    .AddError("outOfService", "Không thể xóa level ngay lúc này!");
+            }
+        }
+
         public async Task<ServiceResponse> UpdateAsync(LevelUpdateDTO level)
         {
             try
