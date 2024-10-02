@@ -30,7 +30,7 @@ namespace kit_stem_api.Controllers
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
         [Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute]int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
@@ -60,10 +60,22 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpDelete]
+        [Route("{id:int}")]
         [Authorize(Roles = "manager")]
-        public async Task<IActionResult> DeleteAsync([FromForm] int id)
+        public async Task<IActionResult> RemoveByIdAsync([FromForm] int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
+            if (!serviceResponse.Succeeded)
+                return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+
+            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Route("{id:int}")]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RestoreByIdAsync([FromForm] int id)
+        {
+            var serviceResponse = await _kitService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)
                 return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
 
