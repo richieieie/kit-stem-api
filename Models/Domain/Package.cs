@@ -26,6 +26,10 @@ namespace kit_stem_api.Models.Domain
 
         [JsonIgnore]
         [InverseProperty("Package")]
+        public virtual ICollection<Cart> Carts { get; set; } = null!;
+
+        [JsonIgnore]
+        [InverseProperty("Package")]
         public virtual ICollection<PackageLab> PackageLabs { get; set; } = null!;
     }
 }

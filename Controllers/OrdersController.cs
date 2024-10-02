@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kit_stem_api.Controllers
@@ -15,6 +17,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
+        // [Authorize(Roles = "staff")]
         public async Task<IActionResult> GetAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
             var serviceResponse = await _orderService.GetAsync(orderGetDTO);
@@ -27,10 +30,12 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        [Route("Users/{userId:guid}")]
-        public async Task<IActionResult> GetByUserIdAsync(Guid userId)
+        [Route("Customers")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> GetByCurrentCustomerIdAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
-            var serviceResponse = await _orderService.GetByIdAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var serviceResponse = await _orderService.GetByCustomerIdAsync(userId!, orderGetDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -41,9 +46,12 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetByIdAsync()
+        [Authorize(Roles = "staff,customer")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
-            var serviceResponse = await _orderService.GetByIdAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            var serviceResponse = await _orderService.GetByIdAsync(id, userId!, role!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -52,43 +60,45 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpGet]
-        [Route("{id:guid}/PackageOrders")]
-        public async Task<IActionResult> GetPackageOrdersByIdAsync()
-        {
-            var serviceResponse = await _orderService.GetByIdAsync();
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
+        // [HttpGet]
+        // [Route("{id:guid}/PackageOrders")]
+        // [Authorize(Roles = "staff,customer")]
+        // public async Task<IActionResult> GetPackageOrdersByIdAsync()
+        // {
+        //     var serviceResponse = await _orderService.GetByIdAsync();
+        //     if (!serviceResponse.Succeeded)
+        //     {
+        //         return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+        //     }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
+        //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        // }
 
-        [HttpGet]
-        [Route("{id:guid}/OrderSupports")]
-        public async Task<IActionResult> GetOrderSupportsByIdAsync()
-        {
-            var serviceResponse = await _orderService.GetByIdAsync();
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
+        // [HttpGet]
+        // [Route("{id:guid}/OrderSupports")]
+        // [Authorize(Roles = "staff,customer")]
+        // public async Task<IActionResult> GetOrderSupportsByIdAsync()
+        // {
+        //     var serviceResponse = await _orderService.GetByIdAsync();
+        //     if (!serviceResponse.Succeeded)
+        //     {
+        //         return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+        //     }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
+        //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        // }
 
-        [HttpGet]
-        [Route("OrderSupports/{id:guid}/LabSupports")]
-        public async Task<IActionResult> GetLabSupportByOrderSupportIdAsync()
-        {
-            var serviceResponse = await _orderService.GetByIdAsync();
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
+        // [HttpGet]
+        // [Route("OrderSupports/{id:guid}/LabSupports")]
+        // public async Task<IActionResult> GetLabSupportByOrderSupportIdAsync()
+        // {
+        //     var serviceResponse = await _orderService.GetByIdAsync();
+        //     if (!serviceResponse.Succeeded)
+        //     {
+        //         return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+        //     }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
+        //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        // }
     }
 }

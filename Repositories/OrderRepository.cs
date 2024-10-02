@@ -19,9 +19,18 @@ namespace kit_stem_api.Repositories
             int? take = null
         )
         {
-            Func<IQueryable<UserOrders>, IQueryable<UserOrders>> query = query => query.Include(o => o.Payment);
-            var (orders, totalPages) = await GetFilterAsync(filter, orderBy, skip, take, query);
+            Func<IQueryable<UserOrders>, IQueryable<UserOrders>> includeQuery = includeQuery => includeQuery.Include(o => o.Payment)
+                                                                                        .ThenInclude(p => p.Method);
+            var (orders, totalPages) = await GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (orders, totalPages);
+        }
+
+        public new async Task<UserOrders?> GetByIdAsync(Guid id)
+        {
+            return await _dbContext.UserOrders.Include(o => o.Payment)
+                                                .ThenInclude(p => p.Method)
+                                                .Include(p => p.PackageOrders)
+                                                .FirstOrDefaultAsync(o => o.Id == id);
         }
     }
 }

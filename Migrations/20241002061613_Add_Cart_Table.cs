@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace kit_stem_api.Migrations
 {
     /// <inheritdoc />
-    public partial class Modified_Tables_Name : Migration
+    public partial class Add_Cart_Table : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,6 +26,10 @@ namespace kit_stem_api.Migrations
             migrationBuilder.DropTable(
                 name: "LabSupporter");
 
+            migrationBuilder.DropIndex(
+                name: "IX_PackageOrder_PackageId",
+                table: "PackageOrder");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK__LabSuppor__01846D66652C0B0E",
                 table: "LabSupport");
@@ -37,6 +41,10 @@ namespace kit_stem_api.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_LabSupport_PackageId",
                 table: "LabSupport");
+
+            migrationBuilder.DropIndex(
+                name: "IX_UserOrders_PaymentId",
+                table: "UserOrders");
 
             migrationBuilder.DropColumn(
                 name: "PackageId",
@@ -84,11 +92,6 @@ namespace kit_stem_api.Migrations
                 newName: "IX_Order_UserId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_UserOrders_PaymentId",
-                table: "Order",
-                newName: "IX_Order_PaymentId");
-
-            migrationBuilder.RenameIndex(
                 name: "IX_KitImage_KitId",
                 table: "Image",
                 newName: "IX_Image_KitId");
@@ -128,9 +131,39 @@ namespace kit_stem_api.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddPrimaryKey(
+                name: "PK_PackageOrder",
+                table: "PackageOrder",
+                columns: new[] { "PackageId", "OrderId" });
+
+            migrationBuilder.AddPrimaryKey(
                 name: "PK_LabSupport",
                 table: "LabSupport",
                 column: "Id");
+
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PackageId = table.Column<int>(type: "int", nullable: false),
+                    PackageQuantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => new { x.UserId, x.PackageId });
+                    table.ForeignKey(
+                        name: "FK__Cart__PackageId__POSI3213AAL",
+                        column: x => x.PackageId,
+                        principalTable: "Package",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK__Cart__UserId__AB35320CD",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "OrderSupport",
@@ -169,6 +202,17 @@ namespace kit_stem_api.Migrations
                 column: "StaffId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Order_PaymentId",
+                table: "Order",
+                column: "PaymentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_PackageId",
+                table: "Cart",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderSupport_LabId_PackageId_OrderId",
                 table: "OrderSupport",
                 columns: new[] { "LabId", "PackageId", "OrderId" },
@@ -190,7 +234,7 @@ namespace kit_stem_api.Migrations
                 column: "StaffId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_LabSupport_OrderSupport_OrderSupportId",
@@ -213,7 +257,14 @@ namespace kit_stem_api.Migrations
                 table: "LabSupport");
 
             migrationBuilder.DropTable(
+                name: "Cart");
+
+            migrationBuilder.DropTable(
                 name: "OrderSupport");
+
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_PackageOrder",
+                table: "PackageOrder");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_LabSupport",
@@ -222,6 +273,10 @@ namespace kit_stem_api.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_LabSupport_StaffId",
                 table: "LabSupport");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Order_PaymentId",
+                table: "Order");
 
             migrationBuilder.DropColumn(
                 name: "Name",
@@ -285,11 +340,6 @@ namespace kit_stem_api.Migrations
                 newName: "IX_UserOrders_UserId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_Order_PaymentId",
-                table: "UserOrders",
-                newName: "IX_UserOrders_PaymentId");
-
-            migrationBuilder.RenameIndex(
                 name: "IX_Image_KitId",
                 table: "KitImage",
                 newName: "IX_KitImage_KitId");
@@ -336,6 +386,11 @@ namespace kit_stem_api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_PackageOrder_PackageId",
+                table: "PackageOrder",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LabSupport_LabId_PackageId_OrderId",
                 table: "LabSupport",
                 columns: new[] { "LabId", "PackageId", "OrderId" },
@@ -345,6 +400,11 @@ namespace kit_stem_api.Migrations
                 name: "IX_LabSupport_PackageId",
                 table: "LabSupport",
                 column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOrders_PaymentId",
+                table: "UserOrders",
+                column: "PaymentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LabSupporter_LabSupportId",

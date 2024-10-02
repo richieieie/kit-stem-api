@@ -12,8 +12,8 @@ using kit_stem_api.Data;
 namespace kit_stem_api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    [Migration("20241001134212_Modified_Tables_Name")]
-    partial class Modified_Tables_Name
+    [Migration("20241002061613_Add_Cart_Table")]
+    partial class Add_Cart_Table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,6 +266,24 @@ namespace kit_stem_api.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("kit_stem_api.Models.Domain.Cart", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PackageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PackageQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "PackageId");
+
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("Cart");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Component", b =>
@@ -637,18 +655,18 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.PackageOrder", b =>
                 {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("PackageQuantity")
                         .HasColumnType("int");
 
-                    b.HasIndex("OrderId");
+                    b.HasKey("PackageId", "OrderId");
 
-                    b.HasIndex("PackageId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("PackageOrder");
                 });
@@ -739,7 +757,8 @@ namespace kit_stem_api.Migrations
                     b.HasKey("Id")
                         .HasName("PK__UserOrde__3214EC07B653418C");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -795,6 +814,27 @@ namespace kit_stem_api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("kit_stem_api.Models.Domain.Cart", b =>
+                {
+                    b.HasOne("kit_stem_api.Models.Domain.Package", "Package")
+                        .WithMany("Carts")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__Cart__PackageId__POSI3213AAL");
+
+                    b.HasOne("kit_stem_api.Models.Domain.ApplicationUser", "User")
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__Cart__UserId__AB35320CD");
+
+                    b.Navigation("Package");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Component", b =>
@@ -880,7 +920,7 @@ namespace kit_stem_api.Migrations
                     b.HasOne("kit_stem_api.Models.Domain.ApplicationUser", "Staff")
                         .WithMany("LabSupports")
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("OrderSupport");
@@ -956,7 +996,7 @@ namespace kit_stem_api.Migrations
             modelBuilder.Entity("kit_stem_api.Models.Domain.PackageOrder", b =>
                 {
                     b.HasOne("kit_stem_api.Models.Domain.UserOrders", "Order")
-                        .WithMany()
+                        .WithMany("PackageOrders")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -989,8 +1029,8 @@ namespace kit_stem_api.Migrations
             modelBuilder.Entity("kit_stem_api.Models.Domain.UserOrders", b =>
                 {
                     b.HasOne("kit_stem_api.Models.Domain.Payment", "Payment")
-                        .WithMany("UserOrders")
-                        .HasForeignKey("PaymentId")
+                        .WithOne("UserOrders")
+                        .HasForeignKey("kit_stem_api.Models.Domain.UserOrders", "PaymentId")
                         .IsRequired()
                         .HasConstraintName("FK__UserOrders__Payme__160F4887");
 
@@ -1007,6 +1047,8 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.ApplicationUser", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("LabSupports");
 
                     b.Navigation("UserOrders");
@@ -1062,6 +1104,8 @@ namespace kit_stem_api.Migrations
 
             modelBuilder.Entity("kit_stem_api.Models.Domain.Package", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("PackageLabs");
                 });
 
@@ -1073,6 +1117,8 @@ namespace kit_stem_api.Migrations
             modelBuilder.Entity("kit_stem_api.Models.Domain.UserOrders", b =>
                 {
                     b.Navigation("OrderSupports");
+
+                    b.Navigation("PackageOrders");
                 });
 #pragma warning restore 612, 618
         }

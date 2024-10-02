@@ -38,6 +38,7 @@ namespace kit_stem_api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<Payment, PaymentResponseDTO>();
         }
     }
 }
