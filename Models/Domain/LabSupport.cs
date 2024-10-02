@@ -1,34 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace kit_stem_api.Models.Domain
 {
-
-    [PrimaryKey("LabId", "OrderId")]
     [Table("LabSupport")]
     public class LabSupport
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid LabId { get; set; }
-        public Guid OrderId { get; set; }
-        public int PackageId { get; set; }
-
-        public int RemainSupportTimes { get; set; }
-
-        [ForeignKey("LabId")]
+        public Guid OrderSupportId { get; set; }
+        public string StaffId { get; set; } = null!;
+        public int Rating { get; set; }
+        public string? FeedBack { get; set; }
+        public bool IsFinished { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        [ForeignKey("LabSupportId")]
         [InverseProperty("LabSupports")]
-        public virtual Lab Lab { get; set; } = null!;
-
-        [ForeignKey("OrderId")]
+        public virtual OrderSupport OrderSupport { get; set; } = null!;
+        [JsonIgnore]
+        [ForeignKey("StaffId")]
         [InverseProperty("LabSupports")]
-        public virtual UserOrders Order { get; set; } = null!;
-
-        [ForeignKey("PackageId")]
-        public virtual Package Package { get; set; } = null!;
-
-        [InverseProperty("LabSupport")]
-        public virtual ICollection<LabSupporter> LabSupporters { get; set; } = null!;
+        public virtual ApplicationUser Staff { get; set; } = null!;
     }
 }

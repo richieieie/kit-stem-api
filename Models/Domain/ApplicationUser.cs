@@ -37,6 +37,6 @@ namespace kit_stem_api.Models.Domain
         public virtual ICollection<UserOrders> UserOrders { get; set; } = null!;
         [JsonIgnore]
         [InverseProperty("Staff")]
-        public virtual ICollection<LabSupporter> LabSupporters { get; set; } = null!;
+        public virtual ICollection<LabSupport> LabSupports { get; set; } = null!;
     }
 }
