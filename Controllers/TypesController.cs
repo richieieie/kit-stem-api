@@ -9,11 +9,11 @@ namespace kit_stem_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ComponentTypesController : ControllerBase
+    public class TypesController : ControllerBase
     {
         private readonly IComponentTypeService _componentTypeService;
 
-        public ComponentTypesController(IComponentTypeService componentTypeService)
+        public TypesController(IComponentTypeService componentTypeService)
         {
             _componentTypeService = componentTypeService;
         }
@@ -86,7 +86,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("Restore/{id:int}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
@@ -96,7 +96,7 @@ namespace kit_stem_api.Controllers
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            return NoContent();
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
     }
 }

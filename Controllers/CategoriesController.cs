@@ -84,7 +84,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("Restore/{id:int}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
