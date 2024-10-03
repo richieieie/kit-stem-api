@@ -50,6 +50,7 @@ public class Program
         builder.Services.AddScoped<IKitService, KitService>();
 
         // Add services to the container.
+        builder.Services.AddRouting(options => options.LowercaseUrls = true);
         builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
         builder.Services.AddAuthorization();
         builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
