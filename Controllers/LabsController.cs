@@ -26,7 +26,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _labService.GetAsync(labGetDTO);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -41,7 +41,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _labService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -55,14 +55,14 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, labId.ToString(), labUploadDTO.File!);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             var url = serviceResponse.Details!["url"].ToString();
             serviceResponse = await _labService.CreateAsync(labUploadDTO, labId, url!);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = labId }, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -79,7 +79,7 @@ namespace kit_stem_api.Controllers
                 serviceResponse = await _firebaseService.UploadFileAsync(FirebaseConstants.BucketPrivate, FirebaseConstants.LabsFolder, labUpdateDTO.Id.ToString(), labUpdateDTO.File!);
                 if (!serviceResponse.Succeeded)
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                    return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
                 }
                 url = serviceResponse.Details!["url"].ToString();
             }
@@ -87,7 +87,7 @@ namespace kit_stem_api.Controllers
             serviceResponse = await _labService.UpdateAsync(labUpdateDTO, url);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -101,7 +101,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _labService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return NoContent();
@@ -115,7 +115,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _labService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });

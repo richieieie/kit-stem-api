@@ -13,7 +13,6 @@ namespace kit_stem_api.Repositories
                 public ComponentRepository ComponentRepository { get; }
                 public LevelRepository LevelRepository { get; }
                 public PackageRepository PackageRepository { get; }
-                public KitComponentRepository KitComponentRepository { get; }
                 public KitRepository KitRepository { get; }
                 public PackageLabRepository PackageLabRepository { get; }
                 public OrderRepository OrderRepository { get; }
@@ -30,7 +29,6 @@ namespace kit_stem_api.Repositories
                         LevelRepository = new LevelRepository(_dbContext);
                         PackageRepository = new PackageRepository(_dbContext);
                         PackageLabRepository = new PackageLabRepository(_dbContext);
-                        KitComponentRepository = new KitComponentRepository(_dbContext);
                         KitRepository = new KitRepository(_dbContext);
                         OrderRepository = new OrderRepository(_dbContext);
                         CartRepository = new CartRepository(_dbContext);
