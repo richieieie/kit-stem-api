@@ -60,19 +60,21 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        // [HttpGet]
-        // [Route("{id:guid}/PackageOrders")]
-        // [Authorize(Roles = "staff,customer")]
-        // public async Task<IActionResult> GetPackageOrdersByIdAsync()
-        // {
-        //     var serviceResponse = await _orderService.GetByIdAsync();
-        //     if (!serviceResponse.Succeeded)
-        //     {
-        //         return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-        //     }
+        [HttpGet]
+        [Route("{id:guid}/PackageOrders")]
+        [Authorize(Roles = "staff,customer")]
+        public async Task<IActionResult> GetPackageOrdersByOrderIdAsync(Guid id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            var serviceResponse = await _orderService.GetPackageOrdersByOrderIdAsync(id, userId, role);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
 
-        //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        // }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
 
         // [HttpGet]
         // [Route("{id:guid}/OrderSupports")]

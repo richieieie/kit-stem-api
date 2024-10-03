@@ -32,8 +32,8 @@ namespace kit_stem_api.Controllers
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var subject = "Welcome to our shop!";
-            var body = "Thank you for registering, We're excited to have you visit our shop. Explore our latest products and enjoy exclusive offers just for you!";
+            var subject = "Chào mừng bạn đến với shop!";
+            var body = $"Xin chào, Cảm ơn bạn đã đăng ký tài khoản tại KitStemHub! Chúng tôi rất vui khi có bạn là một phần của cộng đồng mua sắm của chúng tôi. Hãy khám phá và tận hưởng những ưu đãi đặc biệt dành riêng cho thành viên mới. Chúc bạn có trải nghiệm mua sắm tuyệt vời!";
             await _emailService.SendEmail(requestBody.Email!, subject, body);
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
