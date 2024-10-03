@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using kit_stem_api.Models.Domain;
+using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
 using kit_stem_api.Repositories;
@@ -25,14 +26,15 @@ namespace kit_stem_api.Services
             try
             {
                 Expression<Func<Kit, bool>> filter = (l) => l.Name.Contains(kitGetDTO.KitName ?? "") && l.Category.Name.Contains(kitGetDTO.CategoryName ?? "");
+
                 var (Kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
                     filter,
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    query => query.Include(l => l.Category)
+                    query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
-                var kitsDTO = _mapper.Map<IEnumerable<Kit>>(Kits);
+                var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -58,9 +60,9 @@ namespace kit_stem_api.Services
                     null,
                     null,
                     null,
-                    query => query.Include(l => l.Category)
+                    query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
-                var kitsDTO = _mapper.Map<IEnumerable<Kit>>(Kits);
+                var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -76,12 +78,26 @@ namespace kit_stem_api.Services
             }
         }
 
+        public async Task<int> GetMaxIdAsync()
+        {
+            try
+            {
+                var kitId = await _unitOfWork.KitRepository.GetMaxIdAsync();
+                return kitId;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
         public async Task<ServiceResponse> CreateAsync(KitCreateDTO DTO)
         {
             try
             {
+                
                 var kit = _mapper.Map<Kit>(DTO);
-                await _unitOfWork.KitRepository.CreateAsync(kit);
+                var kitId = await _unitOfWork.KitRepository.CreateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Tạo mới kit thành công!");
@@ -99,6 +115,7 @@ namespace kit_stem_api.Services
         {
             try
             {
+
                 var kit = _mapper.Map<Kit>(DTO);
                 
                 await _unitOfWork.KitRepository.UpdateAsync(kit);

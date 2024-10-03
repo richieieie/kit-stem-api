@@ -1,8 +1,11 @@
-﻿using kit_stem_api.Models.DTO.Request;
+﻿using kit_stem_api.Constants;
+using kit_stem_api.Models.Domain;
+using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Utilities;
 
 namespace kit_stem_api.Controllers
 {
@@ -11,10 +14,14 @@ namespace kit_stem_api.Controllers
     public class KitsController : ControllerBase
     {
         private readonly IKitService _kitService;
+        private readonly IKitImageService _kitImageService;
+        private readonly IFirebaseService _firebaseService;
 
-        public KitsController(IKitService kitService)
+        public KitsController(IKitService kitService, IKitImageService kitImageService, IFirebaseService firebaseService)
         {
             _kitService = kitService;
+            _kitImageService = kitImageService;
+            _firebaseService = firebaseService;
         }
 
         [HttpGet]
@@ -58,16 +65,69 @@ namespace kit_stem_api.Controllers
         public async Task<IActionResult> CreateAsync([FromForm]KitCreateDTO DTO)
         {
             var serviceResponse = await _kitService.CreateAsync(DTO);
-            if (!serviceResponse.Succeeded)
-                return BadRequest(new {status = serviceResponse.Status, detail = serviceResponse.Details });
 
+            if (!serviceResponse.Succeeded)
+                return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+
+            // imageCount.ToString(), image
+
+            var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId mà cuối cùng
+            var kitIdString = kitId.ToString(); // đổi tử int to string
+            int imageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
+            var nameFiles = new Dictionary<string, IFormFile>();
+            foreach (var image in DTO.images)
+            {
+                nameFiles.Add(imageCount.ToString(), image);
+                imageCount++;
+            }
+            var ServiceResponse = await _firebaseService.UploadFilesAsync
+                    (FirebaseConstants.BucketPublic,
+                     FirebaseConstants.ImagesKitsFolder + $"/{kitId}",
+                     nameFiles); // image lên cloude 
+
+                if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
+            List<String> urls = ServiceResponse.Details!["urls"] as List<String>;
+            for (int i = 0; i < (imageCount - 1); i++)
+            {
+                var imageId = Guid.NewGuid();
+                var url = urls.ElementAt(i);
+                var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, kitId, url);
+                if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
+            }
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
 
         [HttpPut]
         //[Authorize(Roles = "manager")]
-        public async Task<IActionResult> UpdateAsync(KitUpdateDTO DTO)
+        public async Task<IActionResult> UpdateAsync([FromForm]KitUpdateDTO DTO)
         {
+            var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
+            if (!imageServiceResponse.Succeeded) return BadRequest(new { status = imageServiceResponse.Status, detail = imageServiceResponse.Details });
+            
+            if (DTO.images != null)
+            {
+                int imageCount = 1;
+                var nameFiles = new Dictionary<string, IFormFile>();
+                foreach (var image in DTO.images)
+                {
+                    nameFiles.Add(imageCount.ToString(), image);
+                    imageCount++;
+                }
+                var ServiceResponse = await _firebaseService.UploadFilesAsync
+                (FirebaseConstants.BucketPublic,
+                     FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}",
+                     nameFiles); // image lên cloude 
+                if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
+                List<String> urls = ServiceResponse.Details!["urls"] as List<String>;
+                for (int i = 0; i < (imageCount - 1); i++)
+                {
+                    var imageId = Guid.NewGuid();
+                    var url = urls.ElementAt(i);
+                    var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, DTO.Id, url);
+                    if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
+                }
+            }
+
             var serviceResponse = await _kitService.UpdateAsync(DTO);
             if (!serviceResponse.Succeeded)
                 return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });

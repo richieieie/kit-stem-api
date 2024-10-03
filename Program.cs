@@ -47,6 +47,7 @@ public class Program
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
         builder.Services.AddScoped<IKitService, KitService>();
+        builder.Services.AddScoped<IKitImageService, KitImageService>();
         builder.Services.AddScoped<ICartService, CartService>();
 
         // Add services to the container.

@@ -4,12 +4,14 @@ namespace kit_stem_api.Models.DTO.Request
 {
     public class KitUpdateDTO
     {
+        [Required]
         public int Id { get; set; }
-        public int CategoryId { get; set; }
-        public string? Name { get; set; } = null!;
-        public string? Brief { get; set; } = null!;
-        public string? Description { get; set; } = null!;
-        public int PurchaseCost { get; set; }
+        public int CategoryId { get; set; } = 1;
+        public string? Name { get; set; } = "";
+        public string? Brief { get; set; } = "";
+        public string? Description { get; set; } = "";
+        public int PurchaseCost { get; set; } = 1;
+        public List<IFormFile>? images { get; set; }
         public bool Status { get; set; } = true;
     }
 }
