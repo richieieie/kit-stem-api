@@ -17,7 +17,7 @@ namespace kit_stem_api.Controllers
 
 
         [HttpGet]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _categoryService.GetAsync();
