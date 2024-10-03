@@ -46,8 +46,8 @@ public class Program
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
-        builder.Services.AddScoped<IKitComponentService, KitComponentService>();
         builder.Services.AddScoped<IKitService, KitService>();
+        builder.Services.AddScoped<ICartService, CartService>();
 
         // Add services to the container.
         builder.Services.AddRouting(options => options.LowercaseUrls = true);

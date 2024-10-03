@@ -7,6 +7,7 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace kit_stem_api.Utils
 {
@@ -40,9 +41,13 @@ namespace kit_stem_api.Utils
             CreateMap<UserOrders, OrderResponseDTO>();
             CreateMap<Payment, PaymentResponseDTO>();
 
+            //Using for getting Carts
+            CreateMap<Cart, CartDTO>().ReverseMap();
+
             // Using for Kit
             CreateMap<Kit, KitUpdateDTO>().ReverseMap();
             CreateMap<Kit, KitCreateDTO>().ReverseMap();
+
         }
     }
 }
