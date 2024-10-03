@@ -17,7 +17,7 @@ namespace kit_stem_api.Controllers
 
 
         [HttpGet]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _categoryService.GetAsync();
@@ -85,7 +85,7 @@ namespace kit_stem_api.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _categoryService.RestoreByIdAsync(id);
