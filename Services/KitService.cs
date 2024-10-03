@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO.Request;
+using kit_stem_api.Models.DTO.Response;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
 using Microsoft.EntityFrameworkCore;
@@ -79,16 +80,8 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var newKit = new Kit()
-                {
-                    CategoryId = DTO.CategoryId,
-                    Name = DTO.Name,
-                    Brief = DTO.Brief,
-                    Description = DTO.Description,
-                    PurchaseCost = DTO.PurchaseCost,
-                    Status = true
-                };
-                await _unitOfWork.KitRepository.CreateAsync(newKit);
+                var kit = _mapper.Map<Kit>(DTO);
+                await _unitOfWork.KitRepository.CreateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Tạo mới kit thành công!");
@@ -106,16 +99,8 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var kit = new Kit()
-                {
-                    Id = DTO.Id,
-                    CategoryId = DTO.CategoryId,
-                    Name = DTO.Name,
-                    Brief = DTO.Brief,
-                    Description = DTO.Description,
-                    PurchaseCost = DTO.PurchaseCost,
-                    Status = true
-                };
+                var kit = _mapper.Map<Kit>(DTO);
+                
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -179,6 +164,26 @@ namespace kit_stem_api.Services
                     .SetSucceeded(false)
                     .AddError("outOfService", "Không thể khôi phục ngay lúc này")
                     .AddDetail("message", "Khôi phục kit thất bại");
+            }
+        }
+
+        public async Task<ServiceResponse> GetPackagesByKitId(int id)
+        {
+            try
+            {
+                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(l => l.KitId == id);
+                var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
+                return new ServiceResponse()
+                            .AddDetail("message", "Lấy thông tin Package thành công!")
+                            .AddDetail("data", new { totalPages, currentPage = 0, Package = packages });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddError("outOfService", "Không thể khôi phục ngay lúc này")
+                    .AddDetail("message", "không thể lấy packet lúc này");
+
             }
         }
     }

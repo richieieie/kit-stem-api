@@ -10,5 +10,6 @@ namespace kit_stem_api.Services.IServices
         Task<ServiceResponse> UpdateAsync(KitUpdateDTO DTO);
         Task<ServiceResponse> RemoveAsync(int id);
         Task<ServiceResponse> RestoreByIdAsync(int id);
+        Task<ServiceResponse> GetPackagesByKitId(int id);
     }
 }

@@ -10,5 +10,6 @@ namespace kit_stem_api.Models.DTO.Request
         public string? Brief { get; set; } = null!;
         public string? Description { get; set; } = null!;
         public int PurchaseCost { get; set; }
+        public bool Status { get; set; } = true;
     }
 }
