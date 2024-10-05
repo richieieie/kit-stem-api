@@ -44,6 +44,18 @@ namespace kit_stem_api.Utils
             //Using for getting Carts
             CreateMap<Cart, CartDTO>().ReverseMap();
 
+            // Using for Kit
+            CreateMap<Kit, KitUpdateDTO>().ReverseMap();
+            CreateMap<Kit, KitCreateDTO>().ReverseMap();
+            CreateMap<Kit, KitResponseDTO>()
+                .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
+            CreateMap<KitsCategory, CategoryDTO>();
+            CreateMap<KitImage, KitImageDTO>();
+
+            // Using for KitImage
+            CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
+
         }
     }
 }
