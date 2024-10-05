@@ -49,11 +49,23 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        [Route("packages/{kitId:int}")]
-        [ActionName(nameof(GetByKitIdAsync))]
-        public async Task<IActionResult> GetByKitIdAsync(int kitId)
+        [Route("Packages/{kitId:int}")]
+        [ActionName(nameof(GetPackagesByKitIdAsync))]
+        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId)
         {
             var serviceResponse = await _kitService.GetPackagesByKitId(kitId);
+            if (!serviceResponse.Succeeded)
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("Lab/{kitId:int}")]
+        [ActionName(nameof(GetLabByKitIdAsync))]
+        public async Task<IActionResult> GetLabByKitIdAsync(int kitId)
+        {
+            var serviceResponse = await _kitService.GetLabByKitId(kitId);
             if (!serviceResponse.Succeeded)
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
 

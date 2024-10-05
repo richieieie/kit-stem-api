@@ -202,5 +202,25 @@ namespace kit_stem_api.Services
 
             }
         }
+
+        public async Task<ServiceResponse> GetLabByKitId(int id)
+        {
+            try
+            {
+                var (labs, totalPages) = await _unitOfWork.LabRepository.GetByKitIdAsync(id);
+                var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Lấy thông tin bài lab thành công!")
+                    .AddDetail("data", new { totalPages, currentPage = 0, labs = labDTOs });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
+            }
+        }
     }
 }
