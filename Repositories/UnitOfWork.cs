@@ -18,6 +18,8 @@ namespace kit_stem_api.Repositories
                 public OrderRepository OrderRepository { get; }
                 public CartRepository CartRepository { get; }
                 public KitImageRepository KitImageRepository { get; }
+                public PaymentRepository PaymentRepository { get; }
+
                 public UnitOfWork(KitStemDbContext dbContext)
                 {
                         _dbContext = dbContext;
@@ -31,7 +33,8 @@ namespace kit_stem_api.Repositories
                         KitRepository = new KitRepository(_dbContext);
                         OrderRepository = new OrderRepository(_dbContext);
                         CartRepository = new CartRepository(_dbContext);
-                        KitImageRepository = new KitImageRepository(_dbContext);    
+                        KitImageRepository = new KitImageRepository(_dbContext);
+                        PaymentRepository = new PaymentRepository(_dbContext);
                 }
         }
 }

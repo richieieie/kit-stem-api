@@ -17,7 +17,7 @@ namespace kit_stem_api.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _categoryService.GetAsync();
@@ -31,7 +31,7 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _categoryService.GetByIdAsync(id);
@@ -44,7 +44,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateAsync(CategoryCreateDTO categoryDTO)
         {
             var serviceResponse = await _categoryService.CreateAsync(categoryDTO);
@@ -57,7 +57,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateAsync(CategoryUpdateDTO categoryUpdateDTO)
         {
             var serviceResponse = await _categoryService.UpdateAsync(categoryUpdateDTO);
@@ -71,7 +71,7 @@ namespace kit_stem_api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _categoryService.RemoveByIdAsync(id);
@@ -85,7 +85,7 @@ namespace kit_stem_api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _categoryService.RestoreByIdAsync(id);

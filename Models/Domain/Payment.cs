@@ -12,18 +12,13 @@ namespace kit_stem_api.Models.Domain
     {
         [Key]
         public Guid Id { get; set; }
-
         public int MethodId { get; set; }
-
         public DateTimeOffset CreatedAt { get; set; }
-
         public bool Status { get; set; }
-        public int Amount { get; set; }
-
+        public long Amount { get; set; }
         [ForeignKey("MethodId")]
         [InverseProperty("Payments")]
         public virtual Method Method { get; set; } = null!;
-
         [JsonIgnore]
         [InverseProperty("Payment")]
         public virtual UserOrders? UserOrders { get; set; }

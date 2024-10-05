@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using kit_stem_api.Constants;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
@@ -39,6 +40,12 @@ namespace kit_stem_api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<VNPaymentRequestDTO, Payment>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.MethodId, opt => opt.MapFrom(src => PaymentMethods.VNPay))
+                .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => false));
             CreateMap<Payment, PaymentResponseDTO>();
 
             //Using for getting Carts

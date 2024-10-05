@@ -1,8 +1,6 @@
 ﻿using kit_stem_api.Models.DTO.Request;
-using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -37,7 +35,7 @@ namespace kit_stem_api.Controllers
         public async Task<IActionResult> CreateAsync(CartDTO cartDTO)
         {
             var userId = User.FindFirst(ClaimTypes.Email)?.Value;
-            
+
             var serviceResponse = await _cartService.CreateAsync(userId!, cartDTO);
             if (!serviceResponse.Succeeded)
             {
