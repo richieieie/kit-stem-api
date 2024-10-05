@@ -95,7 +95,6 @@ namespace kit_stem_api.Services
         {
             try
             {
-                
                 var kit = _mapper.Map<Kit>(DTO);
                 var kitId = await _unitOfWork.KitRepository.CreateAsync(kit);
                 return new ServiceResponse()

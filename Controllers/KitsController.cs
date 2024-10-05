@@ -71,13 +71,16 @@ namespace kit_stem_api.Controllers
 
             // imageCount.ToString(), image
 
-            var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId mà cuối cùng
+            var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId cuối cùng
             var kitIdString = kitId.ToString(); // đổi tử int to string
             int imageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
             var nameFiles = new Dictionary<string, IFormFile>();
+            List<Guid> imageGuidList = new List<Guid>();
             foreach (var image in DTO.images)
             {
-                nameFiles.Add(imageCount.ToString(), image);
+                var imageIdTemp = Guid.NewGuid();
+                imageGuidList.Add(imageIdTemp);
+                nameFiles.Add(imageIdTemp.ToString(), image);
                 imageCount++;
             }
             var ServiceResponse = await _firebaseService.UploadFilesAsync
@@ -86,11 +89,22 @@ namespace kit_stem_api.Controllers
                      nameFiles); // image lên cloude 
 
                 if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
+                // -----------------//
             List<String> urls = ServiceResponse.Details!["urls"] as List<String>;
+            Guid imageId = Guid.Empty;
+
             for (int i = 0; i < (imageCount - 1); i++)
             {
-                var imageId = Guid.NewGuid();
+
                 var url = urls.ElementAt(i);
+                foreach (var imageGuid in imageGuidList)
+                {
+                    if (url.Contains(imageGuid.ToString()))
+                    {
+                        imageId = imageGuid;
+                    }
+                }
+
                 var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, kitId, url);
                 if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
             }
@@ -108,9 +122,12 @@ namespace kit_stem_api.Controllers
             {
                 int imageCount = 1;
                 var nameFiles = new Dictionary<string, IFormFile>();
+                var imageIdList = new List<Guid>();
                 foreach (var image in DTO.images)
                 {
-                    nameFiles.Add(imageCount.ToString(), image);
+                    Guid imageIdTemp = Guid.NewGuid();
+                    imageIdList.Add(imageIdTemp);
+                    nameFiles.Add(imageIdTemp.ToString(), image);
                     imageCount++;
                 }
                 var ServiceResponse = await _firebaseService.UploadFilesAsync
@@ -119,13 +136,22 @@ namespace kit_stem_api.Controllers
                      nameFiles); // image lên cloude 
                 if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
                 List<String> urls = ServiceResponse.Details!["urls"] as List<String>;
+                Guid imageId = Guid.Empty;
                 for (int i = 0; i < (imageCount - 1); i++)
                 {
-                    var imageId = Guid.NewGuid();
+                    
                     var url = urls.ElementAt(i);
+                    foreach (var GuidId in imageIdList)
+                    {
+                        if (url.Contains(GuidId.ToString())) imageId = GuidId; 
+                    }
                     var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, DTO.Id, url);
                     if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
                 }
+            }
+            else
+            {
+                var ServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
             }
 
             var serviceResponse = await _kitService.UpdateAsync(DTO);
