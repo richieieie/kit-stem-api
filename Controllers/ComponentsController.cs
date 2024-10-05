@@ -19,7 +19,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _componentService.GetAllAsync();
@@ -33,7 +33,7 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _componentService.GetByIdAsync(id);
@@ -46,7 +46,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync(ComponentCreateDTO component)
         {
             var serviceResponse = await _componentService.CreateAsync(component);
@@ -59,7 +59,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync(ComponentUpdateDTO component)
         {
             var serviceResponse = await _componentService.UpdateAsync(component);
@@ -73,7 +73,7 @@ namespace kit_stem_api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentService.RemoveByIdAsync(id);
@@ -87,7 +87,7 @@ namespace kit_stem_api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentService.RestoreByIdAsync(id);

@@ -31,7 +31,7 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("Customers")]
-        [Authorize(Roles = "customer")]
+        // [Authorize(Roles = "customer")]
         public async Task<IActionResult> GetByCurrentCustomerIdAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
