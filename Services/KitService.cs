@@ -191,7 +191,7 @@ namespace kit_stem_api.Services
                 var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin Package thành công!")
-                            .AddDetail("data", new { totalPages, currentPage = 0, Package = packages });
+                            .AddDetail("data", new { totalPages, currentPage = 0, Package = packagesDTO });
             }
             catch
             {
