@@ -25,7 +25,7 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
         {
             var serviceResponse = await _kitService.GetAsync(kitGetDTO);
@@ -38,7 +38,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
@@ -61,15 +61,13 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm]KitCreateDTO DTO)
         {
             var serviceResponse = await _kitService.CreateAsync(DTO);
 
             if (!serviceResponse.Succeeded)
                 return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
-
-            // imageCount.ToString(), image
 
             var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId cuối cùng
             var kitIdString = kitId.ToString(); // đổi tử int to string
@@ -110,9 +108,8 @@ namespace kit_stem_api.Controllers
             }
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
-
         [HttpPut]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm]KitUpdateDTO DTO)
         {
             var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
@@ -160,10 +157,9 @@ namespace kit_stem_api.Controllers
 
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
-
         [HttpDelete]
         [Route("{id:int}")]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync([FromForm] int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
@@ -175,7 +171,7 @@ namespace kit_stem_api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        //[Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreByIdAsync([FromForm] int id)
         {
             var serviceResponse = await _kitService.RestoreByIdAsync(id);
