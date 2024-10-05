@@ -51,6 +51,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("Packages/{kitId:int}")]
         [ActionName(nameof(GetPackagesByKitIdAsync))]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId)
         {
             var serviceResponse = await _kitService.GetPackagesByKitId(kitId);
@@ -63,6 +64,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("Lab/{kitId:int}")]
         [ActionName(nameof(GetLabByKitIdAsync))]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetLabByKitIdAsync(int kitId)
         {
             var serviceResponse = await _kitService.GetLabByKitId(kitId);
@@ -71,7 +73,6 @@ namespace kit_stem_api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
-
         [HttpPost]
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm]KitCreateDTO DTO)
@@ -99,24 +100,26 @@ namespace kit_stem_api.Controllers
                      nameFiles); // image lên cloude 
 
                 if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
-                // -----------------//
-            List<String> urls = ServiceResponse.Details!["urls"] as List<String>;
+            // -----------------//
+            List<String>? urls = ServiceResponse.Details!["urls"] as List<String>;
             Guid imageId = Guid.Empty;
-
-            for (int i = 0; i < (imageCount - 1); i++)
+            if (urls != null)
             {
-
-                var url = urls.ElementAt(i);
-                foreach (var imageGuid in imageGuidList)
+                for (int i = 0; i < (imageCount - 1); i++)
                 {
-                    if (url.Contains(imageGuid.ToString()))
+                    var url = "";
+                    url = urls.ElementAt(i);
+                    foreach (var imageGuid in imageGuidList)
                     {
-                        imageId = imageGuid;
+                        if (url.Contains(imageGuid.ToString()))
+                        {
+                            imageId = imageGuid;
+                        }
                     }
-                }
 
-                var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, kitId, url);
-                if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
+                    var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, kitId, url);
+                    if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
+                }
             }
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
@@ -144,19 +147,22 @@ namespace kit_stem_api.Controllers
                      FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}",
                      nameFiles); // image lên cloude 
                 if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
-                List<String> urls = ServiceResponse.Details!["urls"] as List<String>;
+                List<String>? urls = ServiceResponse.Details!["urls"] as List<String>;
                 Guid imageId = Guid.Empty;
-                for (int i = 0; i < (imageCount - 1); i++)
+                if (urls != null)
                 {
-                    
-                    var url = urls.ElementAt(i);
-                    foreach (var GuidId in imageIdList)
+                    for (int i = 0; i < (imageCount - 1); i++)
                     {
-                        if (url.Contains(GuidId.ToString())) imageId = GuidId; 
+                        var url = urls.ElementAt(i);
+                        foreach (var GuidId in imageIdList)
+                        {
+                            if (url.Contains(GuidId.ToString())) imageId = GuidId;
+                        }
+                        var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, DTO.Id, url);
+                        if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
                     }
-                    var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, DTO.Id, url);
-                    if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
                 }
+                
             }
             else
             {

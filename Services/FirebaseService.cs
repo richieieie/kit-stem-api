@@ -44,7 +44,7 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", $"Không thể tạo {file.Name} ngay bây giờ!");
             }
         }
-        public async Task<ServiceResponse> UploadFilesAsync(string bucket, string folder, Dictionary<string, IFormFile> nameFiles)
+        public async Task<ServiceResponse> UploadFilesAsync(string bucket, string folder, Dictionary<string, IFormFile>? nameFiles)
         {
             
             var response = new ServiceResponse();
