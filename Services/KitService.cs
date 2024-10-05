@@ -187,7 +187,7 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(l => l.KitId == id);
+                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync((l) => (l.KitId == id), null, null, null, true);
                 var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin Package thành công!")

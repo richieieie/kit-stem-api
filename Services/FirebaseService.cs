@@ -51,13 +51,14 @@ namespace kit_stem_api.Services
             try
             {
                 var filePrefix = $"{folder}/";
-                // Try to delete existing folder if it exists on google cloud storage
+                // (Hưng) câu lệnh thực hiện xóa đi folder kitId nếu người dùng ko upload file image nào
                 if (nameFiles == null)
                 {
                     await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
                     return response
                         .SetSucceeded(true);
                 }
+                //
                 await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
 
                 var urls = new List<string>();
