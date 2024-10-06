@@ -5,6 +5,7 @@ using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
+using MailKit.Net.Imap;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -25,7 +26,7 @@ namespace kit_stem_api.Services
         {
             try
             {
-                Expression<Func<Kit, bool>> filter = (l) => l.Name.Contains(kitGetDTO.KitName ?? "") && l.Category.Name.Contains(kitGetDTO.CategoryName ?? "");
+                var filter = GetFilter(kitGetDTO);
 
                 var (Kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
                     filter,
@@ -34,12 +35,20 @@ namespace kit_stem_api.Services
                     take: sizePerPage,
                     query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
-                var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
-
-                return new ServiceResponse()
-                    .SetSucceeded(true)
-                    .AddDetail("message", "Lấy danh sách kit thành công")
-                    .AddDetail("data", new { totalPages, currcurrentPage = kitGetDTO.Page + 1, kits = kitsDTO });
+                if (Kits.Count() > 0)
+                {
+                    var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
+                    return new ServiceResponse()
+                         .SetSucceeded(true)
+                         .AddDetail("message", "Lấy danh sách kit thành công")
+                         .AddDetail("data", new { totalPages, currcurrentPage = kitGetDTO.Page + 1, kits = kitsDTO });
+                }
+                else
+                {
+                    return new ServiceResponse()
+                       .SetSucceeded(true)
+                       .AddDetail("message", "Không tìm thấy bộ kit!!!!!");
+                }
             }
             catch
             {
@@ -221,6 +230,11 @@ namespace kit_stem_api.Services
                     .AddDetail("message", "Lấy thông tin bài lab không thành công!")
                         .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
+        }
+
+        private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
+        {
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.Kitname.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.Categoryname.ToLower());
         }
     }
 }
