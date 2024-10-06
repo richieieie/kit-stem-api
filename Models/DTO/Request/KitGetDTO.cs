@@ -3,7 +3,7 @@
     public class KitGetDTO
     {
         public int Page { get; set; } = 0;
-        public string? KitName { get; set; }
-        public string? CategoryName { get; set; }
+        public string Kitname { get; set; } = "";
+        public string Categoryname { get; set; } = "";
     }
 }
