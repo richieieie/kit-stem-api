@@ -23,6 +23,7 @@ namespace kit_stem_api.Services
         {
             try
             {
+                System.Console.WriteLine(orderGetDTO.CustomerEmail);
                 var filter = GetFilter(orderGetDTO);
                 var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, null, skip: pageSize * orderGetDTO.Page, take: pageSize);
                 var orderDTOs = _mapper.Map<IEnumerable<OrderResponseDTO>>(orders);
@@ -123,7 +124,8 @@ namespace kit_stem_api.Services
         private Expression<Func<UserOrders, bool>>? GetFilter(OrderGetDTO orderGetDTO)
         {
             return o => o.CreatedAt >= orderGetDTO.CreatedFrom &&
-                        o.CreatedAt <= orderGetDTO.CreatedTo;
+                        o.CreatedAt <= orderGetDTO.CreatedTo &&
+                        o.User.Email!.Contains(orderGetDTO.CustomerEmail ?? "");
         }
 
         private Expression<Func<UserOrders, bool>>? GetByCustomerIdFilter(OrderGetDTO orderGetDTO, string customerId)

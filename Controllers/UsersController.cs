@@ -24,7 +24,7 @@ namespace kit_stem_api.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody)
+        public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDTO requestBody)
         {
             var serviceResponse = await _userService.RegisterAsync(requestBody, UserConstants.CustomerRole);
             if (!serviceResponse.Succeeded)
@@ -34,6 +34,24 @@ namespace kit_stem_api.Controllers
 
             var subject = "Chào mừng bạn đến với shop!";
             var body = $"Xin chào, Cảm ơn bạn đã đăng ký tài khoản tại KitStemHub! Chúng tôi rất vui khi có bạn là một phần của cộng đồng mua sắm của chúng tôi. Hãy khám phá và tận hưởng những ưu đãi đặc biệt dành riêng cho thành viên mới. Chúc bạn có trải nghiệm mua sắm tuyệt vời!";
+            await _emailService.SendEmail(requestBody.Email!, subject, body);
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+
+        [HttpPost]
+        [Route("Register/Staff")]
+        public async Task<IActionResult> RegisterStaffAsync([FromBody] UserRegisterDTO requestBody)
+        {
+            var serviceResponse = await _userService.RegisterAsync(requestBody, UserConstants.StaffRole);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var subject = "Chào mừng bạn đến với shop!";
+            var body = $"Chào mừng bạn đến với KitStemHub! Chúc mừng bạn đã chính thức trở thành một thành viên trong đội ngũ của chúng tôi. Hy vọng chúng ta sẽ hợp tác hiệu quả và gặt hái nhiều thành công cùng nhau!";
             await _emailService.SendEmail(requestBody.Email!, subject, body);
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });

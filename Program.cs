@@ -117,12 +117,13 @@ public class Program
 
             opt.ParameterFilter<KebabCaseParameterFilter>();
         });
-        builder.Services.AddControllers().AddJsonOptions(x =>
+        builder.Services
+        .AddControllers()
+        .AddJsonOptions(x =>
         {
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             x.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
-        }
-        );
+        });
         builder.Services.AddDbContext<KitStemDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("KitStemHubDb"));
