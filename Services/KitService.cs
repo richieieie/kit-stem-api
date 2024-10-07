@@ -13,7 +13,7 @@ namespace kit_stem_api.Services
 {
     public class KitService : IKitService
     {
-        private readonly int sizePerPage = 20;
+        private readonly int sizePerPage = 5;
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
@@ -87,18 +87,7 @@ namespace kit_stem_api.Services
             }
         }
 
-        public async Task<int> GetMaxIdAsync()
-        {
-            try
-            {
-                var kitId = await _unitOfWork.KitRepository.GetMaxIdAsync();
-                return kitId;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
+
 
         public async Task<ServiceResponse> CreateAsync(KitCreateDTO DTO)
         {
@@ -231,7 +220,18 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
-
+        public async Task<int> GetMaxIdAsync()
+        {
+            try
+            {
+                var kitId = await _unitOfWork.KitRepository.GetMaxIdAsync();
+                return kitId;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
             return (l) => l.Name.ToLower().Contains(kitGetDTO.Kitname.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.Categoryname.ToLower());

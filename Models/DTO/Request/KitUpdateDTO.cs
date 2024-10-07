@@ -11,7 +11,7 @@ namespace kit_stem_api.Models.DTO.Request
         public string? Brief { get; set; } = "";
         public string? Description { get; set; } = "";
         public int PurchaseCost { get; set; } = 1;
-        public List<IFormFile>? images { get; set; }
+        public List<IFormFile>? KitImages { get; set; }
         public bool Status { get; set; } = true;
     }
 }

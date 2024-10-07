@@ -84,15 +84,15 @@ namespace kit_stem_api.Controllers
 
             var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId cuối cùng
             var kitIdString = kitId.ToString(); // đổi tử int to string
-            int imageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
+            int kitImageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
             var nameFiles = new Dictionary<string, IFormFile>();
             List<Guid> imageGuidList = new List<Guid>();
-            foreach (var image in DTO.images)
+            foreach (var image in DTO.KitImages)
             {
                 var imageIdTemp = Guid.NewGuid();
                 imageGuidList.Add(imageIdTemp);
                 nameFiles.Add(imageIdTemp.ToString(), image);
-                imageCount++;
+                kitImageCount++;
             }
             var ServiceResponse = await _firebaseService.UploadFilesAsync
                     (FirebaseConstants.BucketPublic,
@@ -105,7 +105,7 @@ namespace kit_stem_api.Controllers
             Guid imageId = Guid.Empty;
             if (urls != null)
             {
-                for (int i = 0; i < (imageCount - 1); i++)
+                for (int i = 0; i < (kitImageCount - 1); i++)
                 {
                     var url = "";
                     url = urls.ElementAt(i);
@@ -130,18 +130,20 @@ namespace kit_stem_api.Controllers
             var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
             if (!imageServiceResponse.Succeeded) return BadRequest(new { status = imageServiceResponse.Status, detail = imageServiceResponse.Details });
 
-            if (DTO.images != null)
+            if (DTO.KitImages != null)
             {
-                int imageCount = 1;
+                int kitImageCount = 1;
                 var nameFiles = new Dictionary<string, IFormFile>();
                 var imageIdList = new List<Guid>();
-                foreach (var image in DTO.images)
+
+                foreach (var image in DTO.KitImages)
                 {
                     Guid imageIdTemp = Guid.NewGuid();
                     imageIdList.Add(imageIdTemp);
                     nameFiles.Add(imageIdTemp.ToString(), image);
-                    imageCount++;
+                    kitImageCount++;
                 }
+
                 var ServiceResponse = await _firebaseService.UploadFilesAsync
                 (FirebaseConstants.BucketPublic,
                      FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}",
@@ -149,9 +151,10 @@ namespace kit_stem_api.Controllers
                 if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
                 List<String>? urls = ServiceResponse.Details!["urls"] as List<String>;
                 Guid imageId = Guid.Empty;
+
                 if (urls != null)
                 {
-                    for (int i = 0; i < (imageCount - 1); i++)
+                    for (int i = 0; i < (kitImageCount - 1); i++)
                     {
                         var url = urls.ElementAt(i);
                         foreach (var GuidId in imageIdList)
