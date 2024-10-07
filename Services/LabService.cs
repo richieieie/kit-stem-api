@@ -11,7 +11,7 @@ namespace kit_stem_api.Services
 {
     public class LabService : ILabService
     {
-        private readonly int sizePerPage = 20;
+        private readonly int sizePerPage = 5;
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public LabService(UnitOfWork unitOfWork, IMapper mapper)
