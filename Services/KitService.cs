@@ -41,7 +41,7 @@ namespace kit_stem_api.Services
                     return new ServiceResponse()
                          .SetSucceeded(true)
                          .AddDetail("message", "Lấy danh sách kit thành công")
-                         .AddDetail("data", new { totalPages, currcurrentPage = kitGetDTO.Page + 1, kits = kitsDTO });
+                         .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page + 1, kits = kitsDTO });
                 }
                 else
                 {
@@ -125,7 +125,7 @@ namespace kit_stem_api.Services
             {
 
                 var kit = _mapper.Map<Kit>(DTO);
-                
+
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)

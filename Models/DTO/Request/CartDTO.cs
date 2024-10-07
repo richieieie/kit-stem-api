@@ -1,4 +1,6 @@
-﻿namespace kit_stem_api.Models.DTO.Request
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace kit_stem_api.Models.DTO.Request
 {
     public class CartDTO
     {
