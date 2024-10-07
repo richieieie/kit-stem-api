@@ -234,7 +234,7 @@ namespace kit_stem_api.Services
         }
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.Kitname.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.Categoryname.ToLower());
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
         }
     }
 }
