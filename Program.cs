@@ -118,7 +118,10 @@ public class Program
             opt.ParameterFilter<KebabCaseParameterFilter>();
         });
         builder.Services
-        .AddControllers()
+        .AddControllers(opt =>
+        {
+            opt.ModelBinderProviders.Insert(0, new KebabCaseModelBinderProvider());
+        })
         .AddJsonOptions(x =>
         {
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
