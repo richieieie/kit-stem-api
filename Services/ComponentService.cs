@@ -121,7 +121,8 @@ namespace kit_stem_api.Services
                 {
                     Id = component.Id,
                     TypeId = component.TypeId,
-                    Name = component.Name
+                    Name = component.Name,
+                    Status = true
                 };
                 await _unitOfWork.ComponentRepository.UpdateAsync(updateComponent);
                 return new ServiceResponse()

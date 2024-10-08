@@ -120,6 +120,7 @@ namespace kit_stem_api.Services
                 {
                     Id = componentTypeUpdateDTO.Id,
                     Name = componentTypeUpdateDTO.Name,
+                    Status = true,
                 };
                 await _unitOfWork.ComponentTypeRepository.UpdateAsync(type);
                 return new ServiceResponse()

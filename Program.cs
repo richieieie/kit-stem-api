@@ -110,7 +110,7 @@ public class Program
                 }
             });
         });
-        builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
+        builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null); ;
         builder.Services.AddDbContext<KitStemDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("KitStemHubDb"));

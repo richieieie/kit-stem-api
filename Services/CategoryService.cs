@@ -123,7 +123,8 @@ namespace kit_stem_api.Services
                 {
                     Id = categoryUpdateDTO.Id,
                     Name = categoryUpdateDTO.Name,
-                    Description = categoryUpdateDTO.Description!
+                    Description = categoryUpdateDTO.Description!,
+                    Status = true
                 };
                 await _unitOfWork.CategoryRepository.UpdateAsync(category);
                 return new ServiceResponse()
