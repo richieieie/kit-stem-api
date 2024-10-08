@@ -158,8 +158,8 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var component = await _unitOfWork.ComponentRepository.GetByIdAsync(id);
-                if (component == null)
+                var componentModel = await _unitOfWork.ComponentRepository.GetByIdAsync(id);
+                if (componentModel == null)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
@@ -167,6 +167,7 @@ namespace kit_stem_api.Services
                         .AddDetail("message", "Lấy thông tin linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
+                var component = _mapper.Map<Component, ComponentDTO>(componentModel);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("data", new { component });

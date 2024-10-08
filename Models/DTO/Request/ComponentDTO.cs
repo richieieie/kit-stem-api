@@ -11,5 +11,6 @@ namespace kit_stem_api.Models.DTO
         [StringLength(100)]
         public string Name { get; set; } = null!;
         
+        public bool Status { get; set; } 
     }
 }
