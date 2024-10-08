@@ -1,6 +1,8 @@
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Google.Cloud.Storage.V1;
+using kit_stem_api.Configs;
 using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Repositories;
@@ -25,6 +27,8 @@ public class Program
 
         Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
 
+        builder.Services.AddHttpContextAccessor();
+
         // Add repositories
         builder.Services.AddScoped<UnitOfWork>();
         builder.Services.AddScoped<ITokenRepository, TokenRepository>();
@@ -37,17 +41,18 @@ public class Program
         builder.Services.AddScoped<IComponentService, ComponentService>();
         builder.Services.AddScoped<IPackageService, PackageService>();
         builder.Services.AddScoped<IOrderService, OrderService>();
-
-        builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
-        builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
-        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
-
         builder.Services.AddScoped<ILevelService, LevelService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IComponentTypeService, ComponentTypeService>();
         builder.Services.AddScoped<IComponentService, ComponentService>();
         builder.Services.AddScoped<IKitService, KitService>();
+        builder.Services.AddScoped<IKitImageService, KitImageService>(); // Hưng thêm KitImageService
         builder.Services.AddScoped<ICartService, CartService>();
+        builder.Services.AddScoped<IVNPayService, VNPayService>();
+
+        builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
+        builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
+        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
 
         // Add services to the container.
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -109,8 +114,19 @@ public class Program
                     new string[]{}
                 }
             });
+
+            opt.ParameterFilter<KebabCaseParameterFilter>();
         });
-        builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles).AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null); ;
+        builder.Services
+        .AddControllers(opt =>
+        {
+            opt.ModelBinderProviders.Insert(0, new KebabCaseModelBinderProvider());
+        })
+        .AddJsonOptions(x =>
+        {
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            x.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
+        });
         builder.Services.AddDbContext<KitStemDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("KitStemHubDb"));

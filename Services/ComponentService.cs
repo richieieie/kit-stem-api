@@ -49,6 +49,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
@@ -76,6 +77,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Phục hồi linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
@@ -124,6 +126,16 @@ namespace kit_stem_api.Services
                     Name = component.Name,
                     Status = true
                 };
+                var alreadyComponent = await _unitOfWork.ComponentRepository.GetByIdAsync(component.Id);
+                if (alreadyComponent == null)
+                {
+                    return new ServiceResponse()
+                       .SetSucceeded(false)
+                       .SetStatusCode(StatusCodes.Status404NotFound)
+                       .AddDetail("message", "Chỉnh sửa linh kiện thất bại!")
+                       .AddError("notFound", "Không tìm thấy linh kiện!");
+                }
+
                 await _unitOfWork.ComponentRepository.UpdateAsync(updateComponent);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -147,6 +159,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy thông tin linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }

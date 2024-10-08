@@ -49,6 +49,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa loại kit thất bại!")
                         .AddError("notFound", "Không tìm thấy loại kit!");
                 }
@@ -77,6 +78,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Khôi phục loại kit thất bại!")
                         .AddError("notFound", "Không tìm thấy loại kit!");
                 }
@@ -149,6 +151,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy thông tin loại kit thất bại!")
                         .AddError("notFound", "Không tìm thấy loại kit!");
                 }

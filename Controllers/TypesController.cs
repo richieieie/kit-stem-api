@@ -19,13 +19,13 @@ namespace kit_stem_api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _componentTypeService.GetAllAsync();
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -33,39 +33,39 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _componentTypeService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO)
         {
             var serviceResponse = await _componentTypeService.CreateAsync(componentTypeCreateDTO);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPut]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateAsync(ComponentTypeUpdateDTO componentTypeUpdateDTO)
         {
             var serviceResponse = await _componentTypeService.UpdateAsync(componentTypeUpdateDTO);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -73,13 +73,13 @@ namespace kit_stem_api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentTypeService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return NoContent();
@@ -87,13 +87,13 @@ namespace kit_stem_api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentTypeService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });

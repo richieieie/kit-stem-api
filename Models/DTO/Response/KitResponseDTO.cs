@@ -1,4 +1,5 @@
 ﻿using kit_stem_api.Models.Domain;
+using kit_stem_api.Models.DTO.Request;
 using System.ComponentModel.DataAnnotations;
 
 namespace kit_stem_api.Models.DTO.Response
@@ -18,7 +19,8 @@ namespace kit_stem_api.Models.DTO.Response
         public int PurchaseCost { get; set; }
 
         public bool Status { get; set; }
-
         public virtual KitsCategory? KitsCategory { get; set; }
+
+        public virtual ICollection<KitImageDTO> KitImages { get; set; }
     }
 }

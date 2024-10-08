@@ -123,7 +123,8 @@ namespace kit_stem_api.Services
         private Expression<Func<UserOrders, bool>>? GetFilter(OrderGetDTO orderGetDTO)
         {
             return o => o.CreatedAt >= orderGetDTO.CreatedFrom &&
-                        o.CreatedAt <= orderGetDTO.CreatedTo;
+                        o.CreatedAt <= orderGetDTO.CreatedTo &&
+                        o.User.Email!.Contains(orderGetDTO.CustomerEmail ?? "");
         }
 
         private Expression<Func<UserOrders, bool>>? GetByCustomerIdFilter(OrderGetDTO orderGetDTO, string customerId)

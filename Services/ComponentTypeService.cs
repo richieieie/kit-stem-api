@@ -49,6 +49,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa loại linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy loại linh kiện!");
                 }
@@ -76,6 +77,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa loại linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy loại linh kiện!");
                 }
@@ -122,6 +124,15 @@ namespace kit_stem_api.Services
                     Name = componentTypeUpdateDTO.Name,
                     Status = true,
                 };
+                var allreadyType = await _unitOfWork.ComponentTypeRepository.GetByIdAsync(type.Id);
+                if (allreadyType == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Chỉnh sửa loại linh kiện thất bại!")
+                        .AddError("notFound", "Không tìm thấy loại linh kiện!");
+                }
                 await _unitOfWork.ComponentTypeRepository.UpdateAsync(type);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -144,6 +155,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy thông tin loại linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy loại linh kiện!");
                 }

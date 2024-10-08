@@ -2,6 +2,7 @@
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
+using kit_stem_api.Models.DTO.Response;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +34,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status401Unauthorized)
                         .AddDetail("message", "Thêm vào giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -64,6 +66,7 @@ namespace kit_stem_api.Services
                     {
                         return new ServiceResponse()
                             .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status404NotFound)
                             .AddDetail("message", "Thêm gói kit vào giỏ hàng thất bại!")
                             .AddError("notFound", "Không tìm thấy gói kit ngay lúc này!");
                     }
@@ -93,6 +96,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status401Unauthorized)
                         .AddDetail("message", "Lấy giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -112,20 +116,23 @@ namespace kit_stem_api.Services
                         .AddDetail("data", "Giỏ hàng của bạn đang trống!");
                 }
 
-                var cartDTO = _mapper.Map<IEnumerable<CartDTO>>(carts);
+                // Map carts to DTO
+                var cartDTOs = _mapper.Map<IEnumerable<CartResponseDTO>>(carts);
+
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy giỏ hàng thành công!")
-                    .AddDetail("data", new { carts = cartDTO });
+                    .AddDetail("data", new { carts = cartDTOs });
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
                     .AddDetail("message", "Lấy giỏ hàng thất bại!")
-                    .AddError("outOfService", "Không thể thêm gói kit vào giỏ hàng ngay lúc này!");
+                    .AddError("outOfService", "Không thể lấy giỏ hàng ngay lúc này!");
             }
         }
+
 
         public async Task<ServiceResponse> RemoveAllAsync(string userName)
         {
@@ -137,6 +144,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status401Unauthorized)
                         .AddDetail("message", "Xóa gói kit ra khỏi giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -180,6 +188,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status401Unauthorized)
                         .AddDetail("message", "Xóa gói kit ra khỏi giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -220,6 +229,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status401Unauthorized)
                         .AddDetail("message", "Chỉnh sửa giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -231,8 +241,9 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                          .SetSucceeded(false)
+                         .SetStatusCode(StatusCodes.Status404NotFound)
                          .AddDetail("message", "Chỉnh sửa giỏ hàng thất bại!")
-                         .AddError("notFounde", "Không tìm thấy gói kit ngay lúc này!");
+                         .AddError("notFound", "Không tìm thấy gói kit ngay lúc này!");
                 }
 
                 var cart = existingCart.Item1.First();

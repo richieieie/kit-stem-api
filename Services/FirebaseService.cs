@@ -44,13 +44,21 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", $"Không thể tạo {file.Name} ngay bây giờ!");
             }
         }
-        public async Task<ServiceResponse> UploadFilesAsync(string bucket, string folder, Dictionary<string, IFormFile> nameFiles)
+        public async Task<ServiceResponse> UploadFilesAsync(string bucket, string folder, Dictionary<string, IFormFile>? nameFiles)
         {
+            
             var response = new ServiceResponse();
             try
             {
                 var filePrefix = $"{folder}/";
-                // Try to delete existing folder if it exists on google cloud storage
+                // (Hưng) câu lệnh thực hiện xóa đi folder kitId nếu người dùng ko upload file image nào
+                if (nameFiles == null)
+                {
+                    await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
+                    return response
+                        .SetSucceeded(true);
+                }
+                //
                 await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
 
                 var urls = new List<string>();
