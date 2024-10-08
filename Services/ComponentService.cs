@@ -1,4 +1,5 @@
-﻿using kit_stem_api.Data;
+﻿using AutoMapper;
+using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories;
@@ -11,9 +12,11 @@ namespace kit_stem_api.Services
     {
 
         private readonly UnitOfWork _unitOfWork;
-        public ComponentService(UnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public ComponentService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse> CreateAsync(ComponentCreateDTO component)
@@ -100,11 +103,12 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var components = await _unitOfWork.ComponentRepository.GetAllAsync();
+                var list = await _unitOfWork.ComponentRepository.GetAllAsync();
+                var listComponent = _mapper.Map<List<Component>, List<ComponentDTO>>(list);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy danh sách linh kiện thành công!")
-                    .AddDetail("data", new { components });
+                    .AddDetail("data", new { listComponent });
             }
             catch
             {

@@ -65,6 +65,9 @@ namespace kit_stem_api.Utils
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
 
+            //Using for Component
+            CreateMap<Component, ComponentDTO>().ReverseMap();
+
         }
     }
 }
