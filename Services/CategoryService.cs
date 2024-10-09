@@ -1,7 +1,5 @@
-﻿using kit_stem_api.Data;
-using kit_stem_api.Models.Domain;
+﻿using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
-using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
 using kit_stem_api.Repositories;
 

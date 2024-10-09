@@ -12,7 +12,7 @@ namespace kit_stem_api.Repositories
         {
 
         }
-        public new async Task<Lab?> GetByIdAsync(Guid id)
+        public override async Task<Lab?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Labs
                                     .Include(l => l.Kit)
@@ -28,7 +28,7 @@ namespace kit_stem_api.Repositories
             int? take = null
         )
         {
-            var (labs, totalPages) = await GetFilterAsync(filter, orderBy, skip, take,
+            var (labs, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take,
                                                             query => query.Include(l => l.Kit),
                                                             query => query.Include(l => l.Level),
                                                             query => query.Include(l => l.Kit.Category)

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Google.Cloud.Storage.V1;
 using kit_stem_api.Services.IServices;
 
@@ -16,7 +12,7 @@ namespace kit_stem_api.Services
         }
         public async Task<ServiceResponse> UploadFileAsync(string bucket, string folder, string fileName, IFormFile file)
         {
-            var response = new ServiceResponse();
+            var serviceResponse = new ServiceResponse();
             try
             {
                 var filePrefix = $"{folder}/{fileName}";
@@ -32,13 +28,13 @@ namespace kit_stem_api.Services
 
                 await _storageClient.UploadObjectAsync(bucket, fullFileName, file.ContentType, stream);
 
-                return response
+                return serviceResponse
                         .SetSucceeded(true)
                         .AddDetail("url", fullFileName);
             }
             catch
             {
-                return response
+                return serviceResponse
                         .SetSucceeded(false)
                         .AddDetail("message", "Tạo mới bài file thất bại")
                         .AddError("outOfService", $"Không thể tạo {file.Name} ngay bây giờ!");
@@ -46,8 +42,8 @@ namespace kit_stem_api.Services
         }
         public async Task<ServiceResponse> UploadFilesAsync(string bucket, string folder, Dictionary<string, IFormFile>? nameFiles)
         {
-            
-            var response = new ServiceResponse();
+
+            var serviceResponse = new ServiceResponse();
             try
             {
                 var filePrefix = $"{folder}/";
@@ -55,7 +51,7 @@ namespace kit_stem_api.Services
                 if (nameFiles == null)
                 {
                     await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
-                    return response
+                    return serviceResponse
                         .SetSucceeded(true);
                 }
                 //
@@ -75,13 +71,13 @@ namespace kit_stem_api.Services
                     urls.Add($"https://storage.googleapis.com/{obj.Bucket}/{obj.Name}");
                 }
 
-                return response
+                return serviceResponse
                         .SetSucceeded(true)
                         .AddDetail("urls", urls);
             }
             catch
             {
-                return response
+                return serviceResponse
                         .SetSucceeded(false)
                         .AddDetail("message", "Tạo mới files thất bại")
                         .AddError("outOfService", $"Không thể tạo files ngay bây giờ!");
@@ -105,6 +101,28 @@ namespace kit_stem_api.Services
             catch
             {
                 throw;
+            }
+        }
+        public async Task<ServiceResponse> DownloadFileAsync(string bucket, string pathToFile)
+        {
+            var serviceResponse = new ServiceResponse();
+            try
+            {
+                var stream = new MemoryStream();
+                var obj = await _storageClient.DownloadObjectAsync(bucket, pathToFile, stream);
+                stream.Position = 0;
+
+                return serviceResponse
+                        .SetSucceeded(true)
+                        .AddDetail("stream", stream)
+                        .AddDetail("contentType", obj.ContentType);
+            }
+            catch
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Tải file thất bại")
+                        .AddError("outOfService", $"Không thể tải file ngay bây giờ!");
             }
         }
     }

@@ -33,7 +33,7 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Tạo mới linh kiện thành công!");
-            } 
+            }
             catch
             {
                 return new ServiceResponse()

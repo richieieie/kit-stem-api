@@ -19,6 +19,6 @@ namespace kit_stem_api.Models.DTO.Response
         public int TotalPrice { get; set; }
         public string? Note { get; set; }
         public PaymentResponseDTO? Payment { get; set; }
-        public ICollection<PackageOrder>? PackageOrders { get; set; }
+        public ICollection<PackageOrderResponseDTO>? PackageOrders { get; set; }
     }
 }

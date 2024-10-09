@@ -18,9 +18,9 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> GetAsync([FromQuery] OrderGetDTO orderGetDTO)
+        public async Task<IActionResult> GetAsync([FromQuery] OrderStaffGetDTO orderStaffGetDTO)
         {
-            var serviceResponse = await _orderService.GetAsync(orderGetDTO);
+            var serviceResponse = await _orderService.GetAsync(orderStaffGetDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -31,8 +31,8 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         [Route("Customers")]
-        // [Authorize(Roles = "customer")]
-        public async Task<IActionResult> GetByCurrentCustomerIdAsync([FromQuery] OrderGetDTO orderGetDTO)
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> GetByCurrentCurrentCustomerAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var serviceResponse = await _orderService.GetByCustomerIdAsync(userId!, orderGetDTO);
@@ -52,22 +52,6 @@ namespace kit_stem_api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var role = User.FindFirstValue(ClaimTypes.Role);
             var serviceResponse = await _orderService.GetByIdAsync(id, userId!, role!);
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
-
-        [HttpGet]
-        [Route("{id:guid}/PackageOrders")]
-        [Authorize(Roles = "staff,customer")]
-        public async Task<IActionResult> GetPackageOrdersByOrderIdAsync(Guid id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var role = User.FindFirstValue(ClaimTypes.Role);
-            var serviceResponse = await _orderService.GetPackageOrdersByOrderIdAsync(id, userId, role);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

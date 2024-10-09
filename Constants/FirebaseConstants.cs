@@ -7,10 +7,10 @@ namespace kit_stem_api.Constants
 {
     public static class FirebaseConstants
     {
-        public static string BucketPrivate = "swp391kitstemhubprivate";
-        public static string BucketPublic = "swp391kitstemhub.appspot.com";
-        public static string LabsFolder = "Labs";
-        public static string ImagesKitsFolder = "Images/Kits";
+        public const string BucketPrivate = "swp391kitstemhubprivate";
+        public const string BucketPublic = "swp391kitstemhub.appspot.com";
+        public const string LabsFolder = "Labs";
+        public const string ImagesKitsFolder = "Images/Kits";
 
         public static string GetCurrentKitFolder(int kitId)
         {
