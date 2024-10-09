@@ -233,7 +233,8 @@ namespace kit_stem_api.Services
             try
             {
                 var orderSupport = await _unitOfWork.OrderSupportRepository.GetByLabIdAndOrderIdAsync(labId, orderId);
-                if (orderSupport == null || orderSupport.Order.UserId != userId)
+                var payment = await _unitOfWork.PaymentRepository.GetByOrderId(orderId);
+                if (orderSupport == null || orderSupport.Order.UserId != userId || payment == null)
                 {
                     return serviceResponse
                         .SetSucceeded(false)
@@ -243,7 +244,7 @@ namespace kit_stem_api.Services
                 }
 
                 if (orderSupport.Order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus &&
-                orderSupport.Order.Payment.Status != OrderFulfillmentConstants.PaymentSuccess)
+                payment.Status != OrderFulfillmentConstants.PaymentSuccess)
                 {
                     return serviceResponse
                         .SetSucceeded(false)

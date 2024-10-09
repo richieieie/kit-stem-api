@@ -8,5 +8,7 @@ namespace kit_stem_api.Constants
         public const string OrderDeliveringStatus = "DELIVERING";
         public const string OrderSuccessStatus = "SUCCESS";
         public const string OrderFailStatus = "FAIL";
+        public const int PaymentCash = 1;
+        public const int PaymentVnPay = 2;
     }
 }

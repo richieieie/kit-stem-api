@@ -174,6 +174,8 @@ namespace kit_stem_api.Data
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.HasOne(d => d.Method).WithMany(p => p.Payments).HasConstraintName("FK__Payment__MethodI__0F624AF8");
+
+                entity.HasOne(p => p.UserOrders).WithMany().HasConstraintName("FK__Payment__UserOr__123451AF");
             });
 
             modelBuilder.Entity<UserOrders>(entity =>
@@ -182,11 +184,6 @@ namespace kit_stem_api.Data
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
-
-                entity.HasOne(d => d.Payment)
-                    .WithOne(p => p.UserOrders)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserOrders__Payme__160F4887");
 
                 entity.HasOne(d => d.User).WithMany(p => p.UserOrders)
                     .OnDelete(DeleteBehavior.ClientSetNull)

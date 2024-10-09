@@ -1,4 +1,5 @@
 using AutoMapper;
+using kit_stem_api.Constants;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
@@ -22,12 +23,30 @@ namespace kit_stem_api.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse> CreatePaymentUrl(VNPaymentRequestDTO paymentRequest)
+        public async Task<ServiceResponse> CreatePaymentUrl(PaymentVnPayCreateDTO paymentVnPayCreateDTO)
         {
-            var payment = _mapper.Map<Payment>(paymentRequest);
+            var serviceResponse = new ServiceResponse();
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(paymentVnPayCreateDTO.OrderId);
+            if (order == null)
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Tạo mới payment thất bại!")
+                        .AddError("notFound", "Không tìm thấy order của bạn!");
+            }
+
+            var payment = new Payment()
+            {
+                Id = Guid.NewGuid(),
+                MethodId = OrderFulfillmentConstants.PaymentVnPay,
+                CreatedAt = DateTimeOffset.Now,
+                Status = OrderFulfillmentConstants.PaymentFail,
+                Amount = order.TotalPrice,
+            };
+
             await _unitOfWork.PaymentRepository.CreateAsync(payment);
 
-            var serviceResponse = new ServiceResponse();
             var vnp_ReturnUrl = _configuration["VNPay:vnp_ReturnUrl"]!; //URL nhan ket qua tra ve 
             var vnp_Url = _configuration["VNPay:vnp_Url"]!; //URL thanh toan cua VNPAY 
             var vnp_TmnCode = _configuration["VNPay:vnp_TmnCode"]!; //Ma website
@@ -47,8 +66,8 @@ namespace kit_stem_api.Services
             vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
             vnPay.AddRequestData("vnp_Command", "pay");
             vnPay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnPay.AddRequestData("vnp_Amount", (paymentRequest.Amount * 100).ToString());
-            vnPay.AddRequestData("vnp_CreateDate", paymentRequest.CreatedDate.ToString("yyyyMMddHHmmss"));
+            vnPay.AddRequestData("vnp_Amount", (payment.Amount * 100).ToString());
+            vnPay.AddRequestData("vnp_CreateDate", payment.CreatedAt.ToString("yyyyMMddHHmmss"));
             vnPay.AddRequestData("vnp_CurrCode", _configuration["VNPay:vnp_CurrCode"]!);
             vnPay.AddRequestData("vnp_IpAddr", Utils.Utils.GetIpAddress(_httpContextAccessor)!);
             if (!string.IsNullOrEmpty(locale))
@@ -59,11 +78,11 @@ namespace kit_stem_api.Services
             {
                 vnPay.AddRequestData("vnp_Locale", "vn");
             }
-            vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {paymentRequest.Id}");
+            vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {payment.Id}");
             vnPay.AddRequestData("vnp_OrderType", "250000");
             vnPay.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
-            vnPay.AddRequestData("vnp_TxnRef", $"{paymentRequest.Id}");
-            vnPay.AddRequestData("vnp_ExpireDate", paymentRequest.CreatedDate.AddMinutes(3).ToString("yyyyMMddHHmmss"));
+            vnPay.AddRequestData("vnp_TxnRef", $"{payment.Id}");
+            vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(3).ToString("yyyyMMddHHmmss"));
 
             string paymentUrl = vnPay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
 

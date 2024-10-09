@@ -1,4 +1,5 @@
 using kit_stem_api.Models.DTO.Request;
+using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,24 +9,39 @@ namespace kit_stem_api.Controllers
     [Route("api/[controller]")]
     public class PaymentsController : ControllerBase
     {
+        private readonly IPaymentService _paymentService;
         private readonly IVNPayService _vnPayService;
-        public PaymentsController(IVNPayService vnPayService)
+        public PaymentsController(IPaymentService paymentService, IVNPayService vnPayService)
         {
+            _paymentService = paymentService;
             _vnPayService = vnPayService;
         }
 
-        [HttpGet]
+        [HttpPost]
+        [Route("Cash")]
+        public async Task<IActionResult> CreateCashAsync([FromBody] PaymentCreateDTO paymentCreateDTO)
+        {
+            var serviceResponse = await _paymentService.CreateCashAsync(paymentCreateDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
         [Route("VnPay")]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult> CreateVnPayAsync([FromBody] PaymentVnPayCreateDTO paymentVnPayCreateDTO)
         {
             // Change vnpPayment below into code that parse a cart from user in to a VNPaymentRequestDTO
-            var vnpPayment = new VNPaymentRequestDTO()
-            {
-                Amount = 144444,
-                Description = "Thanh toan thong qua VNPay"
-            };
+            // var vnpPayment = new VNPaymentRequestDTO()
+            // {
+            //     Amount = 144444,
+            //     Description = "Thanh toan thong qua VNPay"
+            // };
 
-            var serviceResponse = await _vnPayService.CreatePaymentUrl(vnpPayment);
+            var serviceResponse = await _vnPayService.CreatePaymentUrl(paymentVnPayCreateDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

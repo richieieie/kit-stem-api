@@ -48,6 +48,7 @@ public class Program
         builder.Services.AddScoped<IKitService, KitService>();
         builder.Services.AddScoped<IKitImageService, KitImageService>(); // Hưng thêm KitImageService
         builder.Services.AddScoped<ICartService, CartService>();
+        builder.Services.AddScoped<IPaymentService, PaymentService>();
         builder.Services.AddScoped<IVNPayService, VNPayService>();
 
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));

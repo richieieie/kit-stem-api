@@ -86,6 +86,14 @@ namespace kit_stem_api.Services
             try
             {
                 var package = await _unitOfWork.PackageRepository.GetByIdAsync(id);
+                if (package == null)
+                {
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Lấy thông tin gói kit thất bại!")
+                                .AddError("notFound", "Không tìm gói kit này!");
+                }
 
                 // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
                 var packageDTO = _mapper.Map<PackageResponseDTO>(package);
