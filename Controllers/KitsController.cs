@@ -182,7 +182,7 @@ namespace kit_stem_api.Controllers
         [HttpDelete]
         [Route("{id:int}")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RemoveByIdAsync([FromForm] int id)
+        public async Task<IActionResult> RemoveByIdAsync( int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
             if (!serviceResponse.Succeeded)
@@ -194,7 +194,7 @@ namespace kit_stem_api.Controllers
         [HttpPut]
         [Route("Restore/{id:int}")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RestoreByIdAsync([FromForm] int id)
+        public async Task<IActionResult> RestoreByIdAsync( int id)
         {
             var serviceResponse = await _kitService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)

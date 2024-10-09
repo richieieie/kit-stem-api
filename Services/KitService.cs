@@ -93,7 +93,16 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var kit = _mapper.Map<Kit>(DTO);
+                // var kit = _mapper.Map<Kit>(DTO); -- lỗi 
+                var kit = new Kit()
+                {
+                    CategoryId = DTO.CategoryId,
+                    Name = DTO.Name,
+                    Brief = DTO.Brief,
+                    Description = DTO.Description,
+                    PurchaseCost = DTO.PurchaseCost,
+                    Status = true
+                };
                 var kitId = await _unitOfWork.KitRepository.CreateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -112,9 +121,16 @@ namespace kit_stem_api.Services
         {
             try
             {
-
+                var exitedKit = await _unitOfWork.KitRepository.GetByIdAsync(DTO.Id);
+                if (exitedKit == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Không thể cập nhật kit")
+                        .AddError("notFound", "Không tìm thấy kit");
+                }
                 var kit = _mapper.Map<Kit>(DTO);
-
+                kit.Status = true;
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
