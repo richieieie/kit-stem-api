@@ -13,12 +13,12 @@ namespace kit_stem_api.Repositories
             _dbContext ??= context;
             _dbSet = context.Set<T>();
         }
-        public List<T> GetAll()
+        public virtual List<T> GetAll()
         {
             return _dbContext.Set<T>().ToList();
             //return _dbContext.Set<T>().AsNoTracking().ToList();
         }
-        public (IEnumerable<T>, int) GetFilter(
+        public virtual (IEnumerable<T>, int) GetFilter(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             int? skip = null,
@@ -86,19 +86,19 @@ namespace kit_stem_api.Repositories
             return totalPages;
         }
 
-        public bool Create(T entity)
+        public virtual bool Create(T entity)
         {
             _dbContext.Add(entity);
             return _dbContext.SaveChanges() > 0;
         }
 
-        public bool Create(IEnumerable<T> entities)
+        public virtual bool Create(IEnumerable<T> entities)
         {
             _dbContext.AddRange(entities);
             return _dbContext.SaveChanges() > 0;
         }
 
-        public bool Update(T entity)
+        public virtual bool Update(T entity)
         {
             var tracker = _dbContext.Attach(entity);
             tracker.State = EntityState.Modified;
@@ -107,34 +107,34 @@ namespace kit_stem_api.Repositories
 
 
 
-        public bool Remove(T entity)
+        public virtual bool Remove(T entity)
         {
             _dbContext.Remove(entity);
             return _dbContext.SaveChanges() > 0;
         }
 
-        public T? GetById(int id)
+        public virtual T? GetById(int id)
         {
             return _dbContext.Set<T>().Find(id);
         }
 
-        public T? GetById(string code)
+        public virtual T? GetById(string code)
         {
             return _dbContext.Set<T>().Find(code);
         }
 
-        public T? GetById(Guid code)
+        public virtual T? GetById(Guid code)
         {
             return _dbContext.Set<T>().Find(code);
         }
 
         #region Asynchronous
 
-        public async Task<List<T>> GetAllAsync()
+        public virtual async Task<List<T>> GetAllAsync()
         {
             return await _dbContext.Set<T>().ToListAsync();
         }
-        public async Task<(IEnumerable<T>, int)> GetFilterAsync(
+        public virtual async Task<(IEnumerable<T>, int)> GetFilterAsync(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             int? skip = null,
@@ -175,19 +175,19 @@ namespace kit_stem_api.Repositories
 
             return (await query.ToListAsync(), await CountTotalPagesAsync(filter, take));
         }
-        public async Task<bool> CreateAsync(T entity)
+        public virtual async Task<bool> CreateAsync(T entity)
         {
             _dbContext.Add(entity);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> CreateAsync(IEnumerable<T> entities)
+        public virtual async Task<bool> CreateAsync(IEnumerable<T> entities)
         {
             await _dbContext.AddRangeAsync(entities);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateAsync(T entity)
+        public virtual async Task<bool> UpdateAsync(T entity)
         {
             var tracker = _dbContext.Attach(entity);
             tracker.State = EntityState.Modified;
@@ -195,24 +195,24 @@ namespace kit_stem_api.Repositories
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RemoveAsync(T entity)
+        public virtual async Task<bool> RemoveAsync(T entity)
         {
             _dbContext.Remove(entity);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public async Task<T?> GetByIdAsync(string code)
+        public virtual async Task<T?> GetByIdAsync(string code)
         {
             return await _dbContext.Set<T>().FindAsync(code);
         }
 
-        public async Task<T?> GetByIdAsync(Guid code)
+        public virtual async Task<T?> GetByIdAsync(Guid code)
         {
             return await _dbContext.Set<T>().FindAsync(code);
         }
@@ -222,39 +222,39 @@ namespace kit_stem_api.Repositories
 
         #region Separating asigned entities and save operators        
 
-        public void PrepareCreate(T entity)
+        public virtual void PrepareCreate(T entity)
         {
             _dbContext.Add(entity);
         }
 
-        public void PrepareCreate(IEnumerable<T> entities)
+        public virtual void PrepareCreate(IEnumerable<T> entities)
         {
             _dbContext.AddRange(entities);
         }
 
-        public void PrepareUpdate(T entity)
+        public virtual void PrepareUpdate(T entity)
         {
             var tracker = _dbContext.Attach(entity);
             tracker.State = EntityState.Modified;
         }
 
-        public bool PrepareUpdate(IEnumerable<T> entities)
+        public virtual bool PrepareUpdate(IEnumerable<T> entities)
         {
             _dbContext.Attach(entities);
             return _dbContext.SaveChanges() > 0;
         }
 
-        public void PrepareRemove(T entity)
+        public virtual void PrepareRemove(T entity)
         {
             _dbContext.Remove(entity);
         }
 
-        public bool Save()
+        public virtual bool Save()
         {
             return _dbContext.SaveChanges() > 0;
         }
 
-        public async Task<bool> SaveAsync()
+        public virtual async Task<bool> SaveAsync()
         {
             return await _dbContext.SaveChangesAsync() > 0;
         }

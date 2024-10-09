@@ -18,9 +18,9 @@ namespace kit_stem_api.Controllers
 
         [HttpGet]
         // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> GetAsync([FromQuery] OrderGetDTO orderGetDTO)
+        public async Task<IActionResult> GetAsync([FromQuery] OrderStaffGetDTO orderStaffGetDTO)
         {
-            var serviceResponse = await _orderService.GetAsync(orderGetDTO);
+            var serviceResponse = await _orderService.GetAsync(orderStaffGetDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -32,7 +32,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("Customers")]
         // [Authorize(Roles = "customer")]
-        public async Task<IActionResult> GetByCurrentCustomerIdAsync([FromQuery] OrderGetDTO orderGetDTO)
+        public async Task<IActionResult> GetByCurrentCurrentCustomerAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var serviceResponse = await _orderService.GetByCustomerIdAsync(userId!, orderGetDTO);

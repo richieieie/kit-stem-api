@@ -19,17 +19,17 @@ namespace kit_stem_api.Services
             _unitOfWork = unitOfWork;
         }
         #region Service methods
-        public async Task<ServiceResponse> GetAsync(OrderGetDTO orderGetDTO)
+        public async Task<ServiceResponse> GetAsync(OrderStaffGetDTO orderStaffGetDTO)
         {
             try
             {
-                var filter = GetFilter(orderGetDTO);
-                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, null, skip: pageSize * orderGetDTO.Page, take: pageSize);
+                var filter = GetFilter(orderStaffGetDTO);
+                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, null, skip: pageSize * orderStaffGetDTO.Page, take: pageSize);
                 var orderDTOs = _mapper.Map<IEnumerable<OrderResponseDTO>>(orders);
 
                 return new ServiceResponse()
                         .AddDetail("message", "Lấy các order thành công!")
-                        .AddDetail("data", new { totalPages, currentPage = orderGetDTO.Page, orders = orderDTOs });
+                        .AddDetail("data", new { totalPages, currentPage = orderStaffGetDTO.Page, orders = orderDTOs });
             }
             catch
             {
@@ -59,7 +59,7 @@ namespace kit_stem_api.Services
 
                 return new ServiceResponse()
                         .AddDetail("message", "Lấy thông tin order thành công!")
-                        .AddDetail("data", new { orderDTO });
+                        .AddDetail("data", new { order = orderDTO });
             }
             catch
             {
@@ -120,18 +120,22 @@ namespace kit_stem_api.Services
         #endregion
 
         #region Methods that help service
-        private Expression<Func<UserOrders, bool>>? GetFilter(OrderGetDTO orderGetDTO)
+        private Expression<Func<UserOrders, bool>>? GetFilter(OrderStaffGetDTO orderStaffGetDTO)
         {
-            return o => o.CreatedAt >= orderGetDTO.CreatedFrom &&
-                        o.CreatedAt <= orderGetDTO.CreatedTo &&
-                        o.User.Email!.Contains(orderGetDTO.CustomerEmail ?? "");
+            return o => o.CreatedAt >= orderStaffGetDTO.CreatedFrom &&
+                        o.CreatedAt <= orderStaffGetDTO.CreatedTo &&
+                        o.User.Email!.Contains(orderStaffGetDTO.CustomerEmail ?? "") &&
+                        o.TotalPrice >= orderStaffGetDTO.FromAmount &&
+                        o.TotalPrice <= orderStaffGetDTO.ToAmount;
         }
 
         private Expression<Func<UserOrders, bool>>? GetByCustomerIdFilter(OrderGetDTO orderGetDTO, string customerId)
         {
             return o => o.CreatedAt >= orderGetDTO.CreatedFrom &&
                         o.CreatedAt <= orderGetDTO.CreatedTo &&
-                        o.UserId == customerId;
+                        o.UserId == customerId &&
+                        o.TotalPrice >= orderGetDTO.FromAmount &&
+                        o.TotalPrice <= orderGetDTO.ToAmount;
         }
         #endregion
     }

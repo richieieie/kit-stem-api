@@ -23,15 +23,16 @@ namespace kit_stem_api.Repositories
                                                                                                 .Include(o => o.Payment)
                                                                                                 .ThenInclude(p => p.Method)
                                                                                                 .Include(p => p.User);
-            var (orders, totalPages) = await GetFilterAsync(filter, orderBy, skip, take, includeQuery);
+            var (orders, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (orders, totalPages);
         }
 
-        public new async Task<UserOrders?> GetByIdAsync(Guid id)
+        public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
             return await _dbContext.UserOrders.Include(o => o.Payment)
                                                 .ThenInclude(p => p.Method)
                                                 .Include(p => p.PackageOrders)
+                                                .ThenInclude(p => p.Package)
                                                 .FirstOrDefaultAsync(o => o.Id == id);
         }
     }

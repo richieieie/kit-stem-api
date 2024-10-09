@@ -32,6 +32,7 @@ namespace kit_stem_api.Models.Domain
                 }
             }
         }
+        public bool Status { get; set; }
         [JsonIgnore]
         [InverseProperty("User")]
         public virtual ICollection<UserOrders> UserOrders { get; set; } = null!;

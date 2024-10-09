@@ -16,7 +16,8 @@ namespace kit_stem_api.Utils
     {
         public AutoMapperProfile()
         {
-            CreateMap<Kit, KitInPackageResponseDTO>();
+            // Using for users
+            CreateMap<ApplicationUser, UserProfileDTO>();
 
             // Using for packages
             CreateMap<Package, PackageResponseDTO>();
@@ -30,6 +31,7 @@ namespace kit_stem_api.Utils
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Lab.Level));
             CreateMap<Lab, LabInPackageResponseDTO>();
             CreateMap<PackageCreateDTO, Package>();
+            CreateMap<Kit, KitInPackageResponseDTO>();
 
             // Using for getting labs
             CreateMap<Lab, LabResponseDTO>();
@@ -40,6 +42,7 @@ namespace kit_stem_api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.MethodId, opt => opt.MapFrom(src => PaymentMethods.VNPay))

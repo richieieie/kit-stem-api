@@ -1,12 +1,11 @@
 ﻿using kit_stem_api.Data;
-using kit_stem_api.Models.Domain;
-using kit_stem_api.Repositories;
 
 namespace kit_stem_api.Repositories
 {
         public class UnitOfWork
         {
                 public readonly KitStemDbContext _dbContext;
+                public UserRepository UserRepository { get; }
                 public LabRepository LabRepository { get; }
                 public CategoryRepository CategoryRepository { get; }
                 public ComponentTypeRepository ComponentTypeRepository { get; }
@@ -23,6 +22,7 @@ namespace kit_stem_api.Repositories
                 public UnitOfWork(KitStemDbContext dbContext)
                 {
                         _dbContext = dbContext;
+                        UserRepository = new UserRepository(_dbContext);
                         LabRepository = new LabRepository(_dbContext);
                         CategoryRepository = new CategoryRepository(_dbContext);
                         ComponentTypeRepository = new ComponentTypeRepository(_dbContext);
