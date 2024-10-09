@@ -86,7 +86,7 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy kit thành công")
-                    .AddDetail("data", new { kitsDTO });
+                    .AddDetail("data", new { kit = kitsDTO });
             }
             catch
             {
