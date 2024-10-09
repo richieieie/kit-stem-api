@@ -105,7 +105,8 @@ namespace kit_stem_api.Services
                     u => u.UserId == user.Id,
                     includes: new Func<IQueryable<Cart>, IQueryable<Cart>>[]
                     {
-                        c => c.Include(p => p.Package)
+                        c => c.Include(p => p.Package).ThenInclude(p => p.PackageLabs).ThenInclude(p => p.Lab).ThenInclude(p => p.Level)
+                               .Include(p => p.Package).ThenInclude(p => p.Kit).ThenInclude(p => p.Category)
                     });
 
                 if (!carts.Any())
