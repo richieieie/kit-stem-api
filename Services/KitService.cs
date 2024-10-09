@@ -41,7 +41,7 @@ namespace kit_stem_api.Services
                     return new ServiceResponse()
                          .SetSucceeded(true)
                          .AddDetail("message", "Lấy danh sách kit thành công")
-                         .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page + 1, kits = kitsDTO });
+                         .AddDetail("data", new { totalPages, currentPage = (kitGetDTO.Page + 1), kits = kitsDTO });
                 }
                 else
                 {
@@ -71,12 +71,22 @@ namespace kit_stem_api.Services
                     null,
                     query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
+
+                if (Kits.FirstOrDefault() == null || !Kits.FirstOrDefault().Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy kit không thành công")
+                        .AddError("notFound", "Không tìm thấy kit");
+                }
+
                 var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
+                
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy kit thành công")
-                    .AddDetail("data", new { kitsDTO });
+                    .AddDetail("data", new { kit = kitsDTO });
             }
             catch
             {
@@ -87,18 +97,7 @@ namespace kit_stem_api.Services
             }
         }
 
-        public async Task<int> GetMaxIdAsync()
-        {
-            try
-            {
-                var kitId = await _unitOfWork.KitRepository.GetMaxIdAsync();
-                return kitId;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
+
 
         public async Task<ServiceResponse> CreateAsync(KitCreateDTO DTO)
         {
@@ -123,9 +122,21 @@ namespace kit_stem_api.Services
         {
             try
             {
-
-                var kit = _mapper.Map<Kit>(DTO);
-
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(DTO.Id);
+                if (kit == null || !kit.Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Không thể cập nhật kit")
+                        .AddError("notFound", "Không tìm thấy kit");
+                }
+                
+                kit.CategoryId = DTO.CategoryId;
+                kit.Name = DTO.Name;
+                kit.Brief = DTO.Brief;
+                kit.Description = DTO.Description;
+                kit.PurchaseCost = DTO.PurchaseCost;
+                kit.Status = true;
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -147,7 +158,8 @@ namespace kit_stem_api.Services
                 var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
                 if (kit == null)
                     return new ServiceResponse().SetSucceeded(false)
-                        .AddDetail("message", "Không tìm thấy kit!");
+                        .AddDetail("message", "Không tìm thấy kit!")
+                        .AddError("notFound", "Không tìm thấy kit"); ;
 
                 kit.Status = false;
 
@@ -196,11 +208,20 @@ namespace kit_stem_api.Services
         {
             try
             {
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
+                if (kit == null || !kit.Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy Packages không thành công")
+                        .AddError("notFound", $"Không tồn tại Kit với Id {id}");
+                }
+
                 var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync((l) => (l.KitId == id), null, null, null, true);
                 var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin Package thành công!")
-                            .AddDetail("data", new { totalPages, currentPage = 0, Package = packagesDTO });
+                            .AddDetail("data", new { totalPages, currentPage = 0, Packages = packagesDTO });
             }
             catch
             {
@@ -216,6 +237,15 @@ namespace kit_stem_api.Services
         {
             try
             {
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
+                if (kit == null || !kit.Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy Labs không thành công")
+                        .AddError("notFound", $"Không tồn tại Kit với Id {id}");
+                }
+
                 var (labs, totalPages) = await _unitOfWork.LabRepository.GetByKitIdAsync(id);
                 var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
                 return new ServiceResponse()
@@ -231,10 +261,21 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
-
+        public async Task<int> GetMaxIdAsync()
+        {
+            try
+            {
+                var kitId = await _unitOfWork.KitRepository.GetMaxIdAsync();
+                return kitId;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.Kitname.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.Categoryname.ToLower());
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
         }
     }
 }

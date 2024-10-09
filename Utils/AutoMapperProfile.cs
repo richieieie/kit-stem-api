@@ -4,6 +4,7 @@ using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace kit_stem_api.Utils
 {
@@ -27,7 +28,9 @@ namespace kit_stem_api.Utils
             CreateMap<Lab, LabInPackageResponseDTO>();
             CreateMap<PackageCreateDTO, Package>();
             CreateMap<Kit, KitInPackageResponseDTO>();
-            CreateMap<PackageCartResponseDTO, Package>().ReverseMap();
+            CreateMap<Package, PackageCartResponseDTO>()
+                .ForMember(dest => dest.PackageId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Labs, opt => opt.MapFrom(src => src.PackageLabs)).ReverseMap();
 
             // Using for getting labs
             CreateMap<Lab, LabResponseDTO>();
@@ -52,14 +55,13 @@ namespace kit_stem_api.Utils
             CreateMap<Cart, CartResponseDTO>().ReverseMap();
 
             // Using for Kit
-            CreateMap<Kit, KitUpdateDTO>().ReverseMap();
+
             CreateMap<Kit, KitCreateDTO>().ReverseMap();
             CreateMap<Kit, KitResponseDTO>()
                 .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
             CreateMap<KitsCategory, CategoryDTO>();
             CreateMap<KitImage, KitImageDTO>();
-
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
 

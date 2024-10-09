@@ -1,9 +1,14 @@
-﻿namespace kit_stem_api.Models.DTO.Request
+﻿using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
+namespace kit_stem_api.Models.DTO.Request
 {
     public class KitGetDTO
     {
         public int Page { get; set; } = 0;
-        public string Kitname { get; set; } = "";
-        public string Categoryname { get; set; } = "";
+        [FromQuery(Name = "kit-name")]
+        public string KitName { get; set; } = "";
+        [FromQuery(Name = "category-name")]
+        public string CategoryName { get; set; } = "";
     }
 }

@@ -5,17 +5,19 @@ namespace kit_stem_api.Models.DTO.Request
     public class KitCreateDTO
     {
         [Required]
-        public int CategoryId { get; set; } = 1;
+        public int CategoryId { get; set; }
         [Required(ErrorMessage = "phải đặt tên cho kit")]
-        [StringLength(100)]
-        public string Name { get; set; } = "test";
+        public string Name { get; set; } = null!;
         [Required(ErrorMessage = "phải ghi mô tả ngắn cho kit")]
-        [StringLength(255)]
-        public string Brief { get; set; } = "test";
-        public string Description { get; set; } = "Test";
-        public int PurchaseCost { get; set; } = 1;
-        public List<IFormFile> images { get; set; }
+        public string Brief { get; set; } = "";
         [Required]
-        public bool Status { get; set; } = true;
+        public string Description { get; set; } = "";
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "Giá mua phải lớn hơn hoặc bằng 0.")]
+        public int PurchaseCost { get; set; }
+        [Required]
+        public bool Status { get; set; }
+        [Required]
+        public List<IFormFile>? KitImagesList { get; set; }
     }
 }
