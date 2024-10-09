@@ -30,7 +30,7 @@ namespace kit_stem_api.Controllers
         {
             var serviceResponse = await _kitService.GetAsync(kitGetDTO);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
@@ -43,7 +43,7 @@ namespace kit_stem_api.Controllers
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
@@ -56,7 +56,7 @@ namespace kit_stem_api.Controllers
         {
             var serviceResponse = await _kitService.GetPackagesByKitId(kitId);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
@@ -69,7 +69,7 @@ namespace kit_stem_api.Controllers
         {
             var serviceResponse = await _kitService.GetLabByKitId(kitId);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
@@ -80,32 +80,32 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _kitService.CreateAsync(DTO);
 
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId cuối cùng
             var kitIdString = kitId.ToString(); // đổi tử int to string
-            int imageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
+            int kitImageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
             var nameFiles = new Dictionary<string, IFormFile>();
             List<Guid> imageGuidList = new List<Guid>();
-            foreach (var image in DTO.images)
+            foreach (var image in DTO.KitImagesList)
             {
                 var imageIdTemp = Guid.NewGuid();
                 imageGuidList.Add(imageIdTemp);
                 nameFiles.Add(imageIdTemp.ToString(), image);
-                imageCount++;
+                kitImageCount++;
             }
-            var ServiceResponse = await _firebaseService.UploadFilesAsync
+            var filesServiceResponse = await _firebaseService.UploadFilesAsync
                     (FirebaseConstants.BucketPublic,
                      FirebaseConstants.ImagesKitsFolder + $"/{kitId}",
                      nameFiles); // image lên cloude 
 
-            if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
+            if (!filesServiceResponse.Succeeded) return StatusCode(filesServiceResponse.StatusCode, new { status = filesServiceResponse.Status, details = filesServiceResponse.Details });
             // -----------------//
-            List<String>? urls = ServiceResponse.Details!["urls"] as List<String>;
+            List<String>? urls = filesServiceResponse.Details!["urls"] as List<String>;
             Guid imageId = Guid.Empty;
             if (urls != null)
             {
-                for (int i = 0; i < (imageCount - 1); i++)
+                for (int i = 0; i < (kitImageCount - 1); i++)
                 {
                     var url = "";
                     url = urls.ElementAt(i);
@@ -117,8 +117,8 @@ namespace kit_stem_api.Controllers
                         }
                     }
 
-                    var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, kitId, url);
-                    if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
+                    var imageServiceResponse = await _kitImageService.CreateAsync(imageId, kitId, url);
+                    if (!imageServiceResponse.Succeeded) StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
                 }
             }
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
@@ -128,61 +128,65 @@ namespace kit_stem_api.Controllers
         public async Task<IActionResult> UpdateAsync([FromForm] KitUpdateDTO DTO)
         {
             var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
-            if (!imageServiceResponse.Succeeded) return BadRequest(new { status = imageServiceResponse.Status, detail = imageServiceResponse.Details });
+            if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
 
-            if (DTO.images != null)
+            if (DTO.KitImagesList != null)
             {
-                int imageCount = 1;
+                int kitImageCount = 1;
                 var nameFiles = new Dictionary<string, IFormFile>();
                 var imageIdList = new List<Guid>();
-                foreach (var image in DTO.images)
+
+                foreach (var image in DTO.KitImagesList)
                 {
                     Guid imageIdTemp = Guid.NewGuid();
                     imageIdList.Add(imageIdTemp);
                     nameFiles.Add(imageIdTemp.ToString(), image);
-                    imageCount++;
+                    kitImageCount++;
                 }
-                var ServiceResponse = await _firebaseService.UploadFilesAsync
+
+                var fileServiceResponse = await _firebaseService.UploadFilesAsync
                 (FirebaseConstants.BucketPublic,
                      FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}",
                      nameFiles); // image lên cloude 
-                if (!ServiceResponse.Succeeded) return BadRequest(new { status = ServiceResponse.Status, detail = ServiceResponse.Details });
-                List<String>? urls = ServiceResponse.Details!["urls"] as List<String>;
+                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
+                List<String>? urls = fileServiceResponse.Details!["urls"] as List<String>;
                 Guid imageId = Guid.Empty;
+
                 if (urls != null)
                 {
-                    for (int i = 0; i < (imageCount - 1); i++)
+                    for (int i = 0; i < (kitImageCount - 1); i++)
                     {
                         var url = urls.ElementAt(i);
                         foreach (var GuidId in imageIdList)
                         {
                             if (url.Contains(GuidId.ToString())) imageId = GuidId;
                         }
-                        var ImageServiceResponse = await _kitImageService.CreateAsync(imageId, DTO.Id, url);
-                        if (!ImageServiceResponse.Succeeded) return BadRequest(new { status = ImageServiceResponse.Status, detail = ImageServiceResponse.Details });
+                        imageServiceResponse = await _kitImageService.CreateAsync(imageId, DTO.Id, url);
+                        if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
                     }
                 }
 
             }
             else
             {
-                var ServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
+                var fileServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
+                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new {status = fileServiceResponse.Status, details = fileServiceResponse.Details });
             }
 
             var serviceResponse = await _kitService.UpdateAsync(DTO);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode ,new { status = serviceResponse.Status, detail = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpDelete]
         [Route("{id:int}")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RemoveByIdAsync([FromForm] int id)
+        public async Task<IActionResult> RemoveByIdAsync( int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
@@ -190,11 +194,11 @@ namespace kit_stem_api.Controllers
         [HttpPut]
         [Route("Restore/{id:int}")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RestoreByIdAsync([FromForm] int id)
+        public async Task<IActionResult> RestoreByIdAsync( int id)
         {
             var serviceResponse = await _kitService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)
-                return BadRequest(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
