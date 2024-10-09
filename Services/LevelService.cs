@@ -2,6 +2,7 @@
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace kit_stem_api.Services
 {
@@ -63,6 +64,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy thông tin level thất bại!")
                         .AddError("notFound", "Không tìm thấy level!");
                 }
@@ -88,6 +90,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Chỉnh sửa level không thành công!")
                         .AddError("notFound", "Không thể tìm thấy level ngay lúc này!");
                 }
@@ -115,21 +118,22 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Chỉnh sửa level không thành công!")
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Phục hồi level không thành công!")
                         .AddError("notFound", "Không thể tìm thấy level ngay lúc này!");
                 }
                 level.Status = true;
                 await _unitOfWork.LevelRepository.UpdateAsync(level);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Xóa một level thành công!");
+                    .AddDetail("message", "Phục hồi level thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Xóa một level thất bại!")
-                    .AddError("outOfService", "Không thể xóa level ngay lúc này!");
+                    .AddDetail("message", "Phục hồi level thất bại!")
+                    .AddError("outOfService", "Không thể phục hồi level ngay lúc này!");
             }
         }
 
@@ -143,6 +147,16 @@ namespace kit_stem_api.Services
                     Name = level.Name,
                     Status = true
                 };
+                var alreadyLevel = await _unitOfWork.LevelRepository.GetByIdAsync(updateLevel.Id);
+                if (alreadyLevel == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Chỉnh sửa level không thành công!")
+                        .AddError("notFound", "Không thể tìm thấy level ngay lúc này!");
+                }
+
                 await _unitOfWork.LevelRepository.UpdateAsync(updateLevel);
                 return new ServiceResponse()
                     .SetSucceeded(true)

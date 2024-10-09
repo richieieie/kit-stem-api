@@ -1,4 +1,5 @@
-﻿using kit_stem_api.Data;
+﻿using AutoMapper;
+using kit_stem_api.Data;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Repositories;
@@ -11,9 +12,11 @@ namespace kit_stem_api.Services
     {
 
         private readonly UnitOfWork _unitOfWork;
-        public ComponentService(UnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public ComponentService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse> CreateAsync(ComponentCreateDTO component)
@@ -30,7 +33,7 @@ namespace kit_stem_api.Services
                 return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Tạo mới linh kiện thành công!");
-            } 
+            }
             catch
             {
                 return new ServiceResponse()
@@ -49,6 +52,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
@@ -76,6 +80,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Phục hồi linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
@@ -98,7 +103,8 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var components = await _unitOfWork.ComponentRepository.GetAllAsync();
+                var componentsModel = await _unitOfWork.ComponentRepository.GetAllAsync();
+                var components = _mapper.Map<List<Component>, List<ComponentDTO>>(componentsModel);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy danh sách linh kiện thành công!")
@@ -121,8 +127,19 @@ namespace kit_stem_api.Services
                 {
                     Id = component.Id,
                     TypeId = component.TypeId,
-                    Name = component.Name
+                    Name = component.Name,
+                    Status = true
                 };
+                var alreadyComponent = await _unitOfWork.ComponentRepository.GetByIdAsync(component.Id);
+                if (alreadyComponent == null)
+                {
+                    return new ServiceResponse()
+                       .SetSucceeded(false)
+                       .SetStatusCode(StatusCodes.Status404NotFound)
+                       .AddDetail("message", "Chỉnh sửa linh kiện thất bại!")
+                       .AddError("notFound", "Không tìm thấy linh kiện!");
+                }
+
                 await _unitOfWork.ComponentRepository.UpdateAsync(updateComponent);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -141,14 +158,16 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var component = await _unitOfWork.ComponentRepository.GetByIdAsync(id);
-                if (component == null)
+                var componentModel = await _unitOfWork.ComponentRepository.GetByIdAsync(id);
+                if (componentModel == null)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy thông tin linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
+                var component = _mapper.Map<Component, ComponentDTO>(componentModel);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("data", new { component });
