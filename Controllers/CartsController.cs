@@ -24,7 +24,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _cartService.GetByIdAsync(user!);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -39,7 +39,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _cartService.CreateAsync(userId!, cartDTO);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -54,7 +54,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _cartService.UpdateAsync(userId!, cartDTO);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -70,7 +70,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _cartService.RemoveByPackageIdAsync(userId!, packageId);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return NoContent();
@@ -85,7 +85,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _cartService.RemoveAllAsync(userId!);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return NoContent();

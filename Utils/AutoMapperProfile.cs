@@ -30,6 +30,7 @@ namespace kit_stem_api.Utils
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Lab.Level));
             CreateMap<Lab, LabInPackageResponseDTO>();
             CreateMap<PackageCreateDTO, Package>();
+            CreateMap<PackageCartResponseDTO, Package>().ReverseMap();
 
             // Using for getting labs
             CreateMap<Lab, LabResponseDTO>();
@@ -50,6 +51,7 @@ namespace kit_stem_api.Utils
 
             //Using for getting Carts
             CreateMap<Cart, CartDTO>().ReverseMap();
+            CreateMap<Cart, CartResponseDTO>().ReverseMap();
 
             // Using for Kit
             CreateMap<Kit, KitUpdateDTO>().ReverseMap();
@@ -62,6 +64,9 @@ namespace kit_stem_api.Utils
 
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
+
+            //Using for Component
+            CreateMap<Component, ComponentDTO>().ReverseMap();
 
         }
     }
