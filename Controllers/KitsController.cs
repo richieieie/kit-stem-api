@@ -87,7 +87,7 @@ namespace kit_stem_api.Controllers
             int kitImageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
             var nameFiles = new Dictionary<string, IFormFile>();
             List<Guid> imageGuidList = new List<Guid>();
-            foreach (var image in DTO.KitImages)
+            foreach (var image in DTO.KitImagesList)
             {
                 var imageIdTemp = Guid.NewGuid();
                 imageGuidList.Add(imageIdTemp);
@@ -130,13 +130,13 @@ namespace kit_stem_api.Controllers
             var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
             if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
 
-            if (DTO.KitImages != null)
+            if (DTO.KitImagesList != null)
             {
                 int kitImageCount = 1;
                 var nameFiles = new Dictionary<string, IFormFile>();
                 var imageIdList = new List<Guid>();
 
-                foreach (var image in DTO.KitImages)
+                foreach (var image in DTO.KitImagesList)
                 {
                     Guid imageIdTemp = Guid.NewGuid();
                     imageIdList.Add(imageIdTemp);

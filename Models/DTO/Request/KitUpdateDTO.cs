@@ -20,6 +20,6 @@ namespace kit_stem_api.Models.DTO.Request
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Giá mua phải lớn hơn hoặc bằng 0.")]
         public int PurchaseCost { get; set; } = 1;
-        public List<IFormFile>? KitImages { get; set; }
+        public List<IFormFile>? KitImagesList { get; set; }
     }
 }

@@ -71,7 +71,17 @@ namespace kit_stem_api.Services
                     null,
                     query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
+
+                if (Kits.FirstOrDefault() == null || !Kits.FirstOrDefault().Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy kit không thành công")
+                        .AddError("notFound", "Không tìm thấy kit");
+                }
+
                 var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
+                
 
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -93,16 +103,7 @@ namespace kit_stem_api.Services
         {
             try
             {
-                // var kit = _mapper.Map<Kit>(DTO); -- lỗi 
-                var kit = new Kit()
-                {
-                    CategoryId = DTO.CategoryId,
-                    Name = DTO.Name,
-                    Brief = DTO.Brief,
-                    Description = DTO.Description,
-                    PurchaseCost = DTO.PurchaseCost,
-                    Status = true
-                };
+                var kit = _mapper.Map<Kit>(DTO);
                 var kitId = await _unitOfWork.KitRepository.CreateAsync(kit);
                 return new ServiceResponse()
                     .SetSucceeded(true)
@@ -121,15 +122,20 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var exitedKit = await _unitOfWork.KitRepository.GetByIdAsync(DTO.Id);
-                if (exitedKit == null)
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(DTO.Id);
+                if (kit == null || !kit.Status)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
                         .AddDetail("message", "Không thể cập nhật kit")
                         .AddError("notFound", "Không tìm thấy kit");
                 }
-                var kit = _mapper.Map<Kit>(DTO);
+                
+                kit.CategoryId = DTO.CategoryId;
+                kit.Name = DTO.Name;
+                kit.Brief = DTO.Brief;
+                kit.Description = DTO.Description;
+                kit.PurchaseCost = DTO.PurchaseCost;
                 kit.Status = true;
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 return new ServiceResponse()
@@ -152,7 +158,8 @@ namespace kit_stem_api.Services
                 var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
                 if (kit == null)
                     return new ServiceResponse().SetSucceeded(false)
-                        .AddDetail("message", "Không tìm thấy kit!");
+                        .AddDetail("message", "Không tìm thấy kit!")
+                        .AddError("notFound", "Không tìm thấy kit"); ;
 
                 kit.Status = false;
 
@@ -201,6 +208,15 @@ namespace kit_stem_api.Services
         {
             try
             {
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
+                if (kit == null || !kit.Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy Packages không thành công")
+                        .AddError("notFound", $"Không tồn tại Kit với Id {id}");
+                }
+
                 var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync((l) => (l.KitId == id), null, null, null, true);
                 var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
                 return new ServiceResponse()
@@ -221,6 +237,15 @@ namespace kit_stem_api.Services
         {
             try
             {
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
+                if (kit == null || !kit.Status)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy Labs không thành công")
+                        .AddError("notFound", $"Không tồn tại Kit với Id {id}");
+                }
+
                 var (labs, totalPages) = await _unitOfWork.LabRepository.GetByKitIdAsync(id);
                 var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
                 return new ServiceResponse()
