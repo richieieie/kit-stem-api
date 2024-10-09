@@ -103,12 +103,12 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var list = await _unitOfWork.ComponentRepository.GetAllAsync();
-                var listComponent = _mapper.Map<List<Component>, List<ComponentDTO>>(list);
+                var componentsModel = await _unitOfWork.ComponentRepository.GetAllAsync();
+                var components = _mapper.Map<List<Component>, List<ComponentDTO>>(listModel);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy danh sách linh kiện thành công!")
-                    .AddDetail("data", new { listComponent });
+                    .AddDetail("data", new { components });
             }
             catch
             {
