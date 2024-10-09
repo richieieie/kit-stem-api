@@ -59,16 +59,16 @@ namespace kit_stem_api.Controllers
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var labUrl = serviceResponse.Details!["url"].ToString();
-            var labName = serviceResponse.Details!["fileName"].ToString();
+            var labUrl = serviceResponse.Details![ServiceResponse.ToKebabCase("url")].ToString();
+            var labName = serviceResponse.Details![ServiceResponse.ToKebabCase("fileName")].ToString();
             serviceResponse = await _firebaseService.DownloadFileAsync(FirebaseConstants.BucketPrivate, labUrl!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var stream = (MemoryStream)serviceResponse.Details!["stream"];
-            var contentType = serviceResponse.Details!["contentType"].ToString();
+            var stream = (MemoryStream)serviceResponse.Details![ServiceResponse.ToKebabCase("stream")];
+            var contentType = serviceResponse.Details![ServiceResponse.ToKebabCase("contentType")].ToString();
 
             return File(stream, contentType!, labName);
         }
@@ -85,16 +85,16 @@ namespace kit_stem_api.Controllers
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var labUrl = serviceResponse.Details!["url"].ToString();
-            var labName = serviceResponse.Details!["fileName"].ToString();
+            var labUrl = serviceResponse.Details![ServiceResponse.ToKebabCase("url")].ToString();
+            var labName = serviceResponse.Details![ServiceResponse.ToKebabCase("fileName")].ToString();
             serviceResponse = await _firebaseService.DownloadFileAsync(FirebaseConstants.BucketPrivate, labUrl!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var stream = (MemoryStream)serviceResponse.Details!["stream"];
-            var contentType = serviceResponse.Details!["contentType"].ToString();
+            var stream = (MemoryStream)serviceResponse.Details![ServiceResponse.ToKebabCase("stream")];
+            var contentType = serviceResponse.Details![ServiceResponse.ToKebabCase("contentType")].ToString();
 
             return File(stream, contentType!, labName);
         }
@@ -111,7 +111,7 @@ namespace kit_stem_api.Controllers
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var url = serviceResponse.Details!["url"].ToString();
+            var url = serviceResponse.Details![ServiceResponse.ToKebabCase("url")].ToString();
             serviceResponse = await _labService.CreateAsync(labUploadDTO, labId, url!);
             if (!serviceResponse.Succeeded)
             {
@@ -134,7 +134,7 @@ namespace kit_stem_api.Controllers
                 {
                     return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
                 }
-                url = serviceResponse.Details!["url"].ToString();
+                url = serviceResponse.Details![ServiceResponse.ToKebabCase("url")].ToString();
             }
 
             serviceResponse = await _labService.UpdateAsync(labUpdateDTO, url);

@@ -175,7 +175,11 @@ namespace kit_stem_api.Data
 
                 entity.HasOne(d => d.Method).WithMany(p => p.Payments).HasConstraintName("FK__Payment__MethodI__0F624AF8");
 
-                entity.HasOne(p => p.UserOrders).WithMany().HasConstraintName("FK__Payment__UserOr__123451AF");
+                entity.HasOne(p => p.UserOrders)
+                        .WithMany()
+                        .HasForeignKey(p => p.OrderId)
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Payment__UserOrders__123451AF");
             });
 
             modelBuilder.Entity<UserOrders>(entity =>

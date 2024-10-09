@@ -35,6 +35,7 @@ namespace kit_stem_api.Services
                     CreatedAt = DateTimeOffset.Now,
                     Status = OrderFulfillmentConstants.PaymentFail,
                     Amount = order.TotalPrice,
+                    OrderId = order.Id
                 };
 
                 await _unitOfWork.PaymentRepository.CreateAsync(payment);

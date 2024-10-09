@@ -26,69 +26,80 @@ namespace kit_stem_api.Services
         public async Task<ServiceResponse> CreatePaymentUrl(PaymentVnPayCreateDTO paymentVnPayCreateDTO)
         {
             var serviceResponse = new ServiceResponse();
-            var order = await _unitOfWork.OrderRepository.GetByIdAsync(paymentVnPayCreateDTO.OrderId);
-            if (order == null)
+            try
+            {
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(paymentVnPayCreateDTO.OrderId);
+                if (order == null)
+                {
+                    return serviceResponse
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status404NotFound)
+                            .AddDetail("message", "Tạo mới payment thất bại!")
+                            .AddError("notFound", "Không tìm thấy order của bạn!");
+                }
+
+                var payment = new Payment()
+                {
+                    Id = Guid.NewGuid(),
+                    MethodId = OrderFulfillmentConstants.PaymentVnPay,
+                    CreatedAt = DateTimeOffset.Now,
+                    Status = OrderFulfillmentConstants.PaymentFail,
+                    Amount = order.TotalPrice,
+                    OrderId = order.Id
+                };
+
+                await _unitOfWork.PaymentRepository.CreateAsync(payment);
+
+                var vnp_ReturnUrl = _configuration["VNPay:vnp_ReturnUrl"]!; //URL nhan ket qua tra ve 
+                var vnp_Url = _configuration["VNPay:vnp_Url"]!; //URL thanh toan cua VNPAY 
+                var vnp_TmnCode = _configuration["VNPay:vnp_TmnCode"]!; //Ma website
+                var vnp_HashSecret = _configuration["VNPay:vnp_HashSecret"]!; //Chuoi bi mat
+                if (string.IsNullOrEmpty(vnp_TmnCode) || string.IsNullOrEmpty(vnp_HashSecret))
+                {
+                    return serviceResponse
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status500InternalServerError)
+                            .AddDetail("message", "Lấy url giao dịch thất bại!")
+                            .AddError("outOfService", "Không thể lấy được url giao dịch ngay lúc này, vui lòng liên hệ với nhà cung cấp để được hỗ trợ!");
+                }
+                var locale = _configuration["VNPay:vnp_Locale"]!;
+
+                //Build URL for VNPAY
+                VnPayLibrary vnPay = new VnPayLibrary();
+                vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+                vnPay.AddRequestData("vnp_Command", "pay");
+                vnPay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+                vnPay.AddRequestData("vnp_Amount", (payment.Amount * 100).ToString());
+                vnPay.AddRequestData("vnp_CreateDate", payment.CreatedAt.ToString("yyyyMMddHHmmss"));
+                vnPay.AddRequestData("vnp_CurrCode", _configuration["VNPay:vnp_CurrCode"]!);
+                vnPay.AddRequestData("vnp_IpAddr", Utils.Utils.GetIpAddress(_httpContextAccessor)!);
+                if (!string.IsNullOrEmpty(locale))
+                {
+                    vnPay.AddRequestData("vnp_Locale", locale);
+                }
+                else
+                {
+                    vnPay.AddRequestData("vnp_Locale", "vn");
+                }
+                vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {payment.Id}");
+                vnPay.AddRequestData("vnp_OrderType", "250000");
+                vnPay.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
+                vnPay.AddRequestData("vnp_TxnRef", $"{payment.Id}");
+                vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(3).ToString("yyyyMMddHHmmss"));
+
+                string paymentUrl = vnPay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+
+                return serviceResponse
+                            .AddDetail("message", "Lấy url giao dịch thành công!")
+                            .AddDetail("data", new { url = paymentUrl });
+            }
+            catch
             {
                 return serviceResponse
                         .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Tạo mới payment thất bại!")
-                        .AddError("notFound", "Không tìm thấy order của bạn!");
+                        .AddError("outOfService", "Không thể tạo một order mới ngay lúc này!");
             }
-
-            var payment = new Payment()
-            {
-                Id = Guid.NewGuid(),
-                MethodId = OrderFulfillmentConstants.PaymentVnPay,
-                CreatedAt = DateTimeOffset.Now,
-                Status = OrderFulfillmentConstants.PaymentFail,
-                Amount = order.TotalPrice,
-            };
-
-            await _unitOfWork.PaymentRepository.CreateAsync(payment);
-
-            var vnp_ReturnUrl = _configuration["VNPay:vnp_ReturnUrl"]!; //URL nhan ket qua tra ve 
-            var vnp_Url = _configuration["VNPay:vnp_Url"]!; //URL thanh toan cua VNPAY 
-            var vnp_TmnCode = _configuration["VNPay:vnp_TmnCode"]!; //Ma website
-            var vnp_HashSecret = _configuration["VNPay:vnp_HashSecret"]!; //Chuoi bi mat
-            if (string.IsNullOrEmpty(vnp_TmnCode) || string.IsNullOrEmpty(vnp_HashSecret))
-            {
-                return serviceResponse
-                        .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status500InternalServerError)
-                        .AddDetail("message", "Lấy url giao dịch thất bại!")
-                        .AddError("outOfService", "Không thể lấy được url giao dịch ngay lúc này, vui lòng liên hệ với nhà cung cấp để được hỗ trợ!");
-            }
-            var locale = _configuration["VNPay:vnp_Locale"]!;
-
-            //Build URL for VNPAY
-            VnPayLibrary vnPay = new VnPayLibrary();
-            vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
-            vnPay.AddRequestData("vnp_Command", "pay");
-            vnPay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnPay.AddRequestData("vnp_Amount", (payment.Amount * 100).ToString());
-            vnPay.AddRequestData("vnp_CreateDate", payment.CreatedAt.ToString("yyyyMMddHHmmss"));
-            vnPay.AddRequestData("vnp_CurrCode", _configuration["VNPay:vnp_CurrCode"]!);
-            vnPay.AddRequestData("vnp_IpAddr", Utils.Utils.GetIpAddress(_httpContextAccessor)!);
-            if (!string.IsNullOrEmpty(locale))
-            {
-                vnPay.AddRequestData("vnp_Locale", locale);
-            }
-            else
-            {
-                vnPay.AddRequestData("vnp_Locale", "vn");
-            }
-            vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {payment.Id}");
-            vnPay.AddRequestData("vnp_OrderType", "250000");
-            vnPay.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
-            vnPay.AddRequestData("vnp_TxnRef", $"{payment.Id}");
-            vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(3).ToString("yyyyMMddHHmmss"));
-
-            string paymentUrl = vnPay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-
-            return serviceResponse
-                        .AddDetail("message", "Lấy url giao dịch thành công!")
-                        .AddDetail("data", new { url = paymentUrl });
         }
 
         public async Task<ServiceResponse> PaymentExecute(IQueryCollection vnPayData)

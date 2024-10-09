@@ -691,15 +691,12 @@ namespace kit_stem_api.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("UserOrdersId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id")
                         .HasName("PK__Payment__3214EC079CC5A858");
 
                     b.HasIndex("MethodId");
 
-                    b.HasIndex("UserOrdersId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Payment");
                 });
@@ -1027,8 +1024,9 @@ namespace kit_stem_api.Migrations
 
                     b.HasOne("kit_stem_api.Models.Domain.UserOrders", "UserOrders")
                         .WithMany()
-                        .HasForeignKey("UserOrdersId")
-                        .HasConstraintName("FK__Payment__UserOr__123451AF");
+                        .HasForeignKey("OrderId")
+                        .IsRequired()
+                        .HasConstraintName("FK__Payment__UserOrders__123451AF");
 
                     b.Navigation("Method");
 

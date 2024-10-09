@@ -30,21 +30,15 @@ namespace kit_stem_api.Migrations
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "UserOrdersId",
-                table: "Payment",
-                type: "uniqueidentifier",
-                nullable: true);
-
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_UserOrdersId",
+                name: "IX_Payment_OrderId",
                 table: "Payment",
-                column: "UserOrdersId");
+                column: "OrderId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK__Payment__UserOr__123451AF",
+                name: "FK__Payment__UserOrders__123451AF",
                 table: "Payment",
-                column: "UserOrdersId",
+                column: "OrderId",
                 principalTable: "Order",
                 principalColumn: "Id");
         }
@@ -53,19 +47,15 @@ namespace kit_stem_api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK__Payment__UserOr__123451AF",
+                name: "FK__Payment__UserOrders__123451AF",
                 table: "Payment");
 
             migrationBuilder.DropIndex(
-                name: "IX_Payment_UserOrdersId",
+                name: "IX_Payment_OrderId",
                 table: "Payment");
 
             migrationBuilder.DropColumn(
                 name: "OrderId",
-                table: "Payment");
-
-            migrationBuilder.DropColumn(
-                name: "UserOrdersId",
                 table: "Payment");
 
             migrationBuilder.AddColumn<Guid>(

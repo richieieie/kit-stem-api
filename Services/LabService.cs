@@ -243,7 +243,7 @@ namespace kit_stem_api.Services
                         .AddError("notFound", "Bạn chưa mua sản phẩm nào bao gồm bài lab này!");
                 }
 
-                if (orderSupport.Order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus &&
+                if (orderSupport.Order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus ||
                 payment.Status != OrderFulfillmentConstants.PaymentSuccess)
                 {
                     return serviceResponse

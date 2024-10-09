@@ -54,7 +54,7 @@ namespace kit_stem_api.Services
             return this;
         }
 
-        private static string ToKebabCase(string input)
+        public static string ToKebabCase(string input)
         {
             return string.Concat(input.Select((c, i) =>
                 i > 0 && char.IsUpper(c) ? "-" + char.ToLower(c).ToString() : char.ToLower(c).ToString()));
