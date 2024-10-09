@@ -29,11 +29,16 @@ namespace kit_stem_api.Repositories
 
         public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.UserOrders.Include(o => o.Payment)
-                                                .ThenInclude(p => p.Method)
-                                                .Include(p => p.PackageOrders)
-                                                .ThenInclude(p => p.Package)
-                                                .FirstOrDefaultAsync(o => o.Id == id);
+            return await _dbContext.UserOrders
+                            .Include(o => o.Payment)
+                                .ThenInclude(p => p.Method)
+                            .Include(p => p.PackageOrders)
+                                .ThenInclude(p => p.Package)
+                                    .ThenInclude(p => p.Kit)
+                            .Include(o => o.PackageOrders)
+                                .ThenInclude(po => po.Package)
+                                    .ThenInclude(p => p.Level)
+                            .FirstOrDefaultAsync(o => o.Id == id);
         }
     }
 }

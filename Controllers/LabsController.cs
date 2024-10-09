@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using kit_stem_api.Constants;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Services;
@@ -46,6 +47,58 @@ namespace kit_stem_api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+        [HttpGet]
+        [Route("{id:guid}/Download")]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> DownloadLabByIdAsync(Guid id)
+        {
+            var serviceResponse = await _labService.GetFileUrlByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var labUrl = serviceResponse.Details!["url"].ToString();
+            var labName = serviceResponse.Details!["fileName"].ToString();
+            serviceResponse = await _firebaseService.DownloadFileAsync(FirebaseConstants.BucketPrivate, labUrl!);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var stream = (MemoryStream)serviceResponse.Details!["stream"];
+            var contentType = serviceResponse.Details!["contentType"].ToString();
+
+            return File(stream, contentType!, labName);
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/Orders/{orderId:guid}/Download")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> DownloadLabByIdAsync(Guid id, Guid orderId)
+        {
+            var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var serviceResponse = await _labService.GetFileUrlByIdAndOrderIdAsync(customerId!, id, orderId);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var labUrl = serviceResponse.Details!["url"].ToString();
+            var labName = serviceResponse.Details!["fileName"].ToString();
+            serviceResponse = await _firebaseService.DownloadFileAsync(FirebaseConstants.BucketPrivate, labUrl!);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var stream = (MemoryStream)serviceResponse.Details!["stream"];
+            var contentType = serviceResponse.Details!["contentType"].ToString();
+
+            return File(stream, contentType!, labName);
+        }
+
 
         [HttpPost]
         // [Authorize(Roles = "manager")]

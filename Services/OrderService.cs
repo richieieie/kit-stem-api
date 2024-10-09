@@ -35,7 +35,6 @@ namespace kit_stem_api.Services
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .SetStatusCode(500)
                         .AddDetail("message", "Lấy dữ liệu orders thất bại!bại")
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
@@ -90,31 +89,6 @@ namespace kit_stem_api.Services
                         .SetStatusCode(500)
                         .AddDetail("message", "Lấy dữ liệu orders thất bại!")
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
-            }
-        }
-
-        public async Task<ServiceResponse> GetPackageOrdersByOrderIdAsync(Guid id, string? userId, string? role)
-        {
-            try
-            {
-                var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
-                if (order == null || (userId != order.UserId && role != "staff"))
-                {
-                    return new ServiceResponse()
-                            .SetSucceeded(false)
-                            .SetStatusCode(StatusCodes.Status404NotFound)
-                            .AddDetail("message", "Lấy thông tin order thất bại!")
-                            .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
-                }
-                return new ServiceResponse();
-            }
-            catch
-            {
-                return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .SetStatusCode(500)
-                        .AddDetail("message", "Lấy dữ liệu orders thất bại!")
-                        .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!"); ;
             }
         }
         #endregion

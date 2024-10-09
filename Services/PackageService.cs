@@ -181,7 +181,6 @@ namespace kit_stem_api.Services
                 package.Name = packageUpdateDTO.Name!;
                 package.LevelId = packageUpdateDTO.LevelId!;
                 package.Price = packageUpdateDTO.Price!;
-                package.Status = packageUpdateDTO.Status!;
                 await _unitOfWork.PackageRepository.UpdateAsync(package);
 
                 return new ServiceResponse()

@@ -10,6 +10,5 @@ namespace kit_stem_api.Models.DTO.Request
         public string? Name { get; set; }
         public int LevelId { get; set; }
         public int Price { get; set; }
-        public bool Status { get; set; } = true;
     }
 }
