@@ -25,7 +25,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _componentTypeService.GetAllAsync();
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -39,7 +39,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _componentTypeService.GetByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -52,7 +52,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _componentTypeService.CreateAsync(componentTypeCreateDTO);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -65,7 +65,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _componentTypeService.UpdateAsync(componentTypeUpdateDTO);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -79,7 +79,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _componentTypeService.RemoveByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return NoContent();
@@ -93,7 +93,7 @@ namespace kit_stem_api.Controllers
             var serviceResponse = await _componentTypeService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)
             {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });

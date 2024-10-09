@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using kit_stem_api.Constants;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace kit_stem_api.Utils
 {
@@ -16,7 +11,8 @@ namespace kit_stem_api.Utils
     {
         public AutoMapperProfile()
         {
-            CreateMap<Kit, KitInPackageResponseDTO>();
+            // Using for users
+            CreateMap<ApplicationUser, UserProfileDTO>();
 
             // Using for packages
             CreateMap<Package, PackageResponseDTO>();
@@ -30,6 +26,8 @@ namespace kit_stem_api.Utils
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Lab.Level));
             CreateMap<Lab, LabInPackageResponseDTO>();
             CreateMap<PackageCreateDTO, Package>();
+            CreateMap<Kit, KitInPackageResponseDTO>();
+            CreateMap<PackageCartResponseDTO, Package>().ReverseMap();
 
             // Using for getting labs
             CreateMap<Lab, LabResponseDTO>();
@@ -40,6 +38,7 @@ namespace kit_stem_api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.MethodId, opt => opt.MapFrom(src => PaymentMethods.VNPay))
@@ -50,6 +49,7 @@ namespace kit_stem_api.Utils
 
             //Using for getting Carts
             CreateMap<Cart, CartDTO>().ReverseMap();
+            CreateMap<Cart, CartResponseDTO>().ReverseMap();
 
             // Using for Kit
             CreateMap<Kit, KitUpdateDTO>().ReverseMap();
@@ -62,6 +62,9 @@ namespace kit_stem_api.Utils
 
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
+
+            //Using for Component
+            CreateMap<Component, ComponentDTO>().ReverseMap();
 
         }
     }

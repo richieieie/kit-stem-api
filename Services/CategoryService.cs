@@ -1,7 +1,5 @@
-﻿using kit_stem_api.Data;
-using kit_stem_api.Models.Domain;
+﻿using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO;
-using kit_stem_api.Repositories.IRepositories;
 using kit_stem_api.Services.IServices;
 using kit_stem_api.Repositories;
 
@@ -49,6 +47,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa loại kit thất bại!")
                         .AddError("notFound", "Không tìm thấy loại kit!");
                 }
@@ -77,6 +76,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Khôi phục loại kit thất bại!")
                         .AddError("notFound", "Không tìm thấy loại kit!");
                 }
@@ -123,7 +123,8 @@ namespace kit_stem_api.Services
                 {
                     Id = categoryUpdateDTO.Id,
                     Name = categoryUpdateDTO.Name,
-                    Description = categoryUpdateDTO.Description!
+                    Description = categoryUpdateDTO.Description!,
+                    Status = true
                 };
                 await _unitOfWork.CategoryRepository.UpdateAsync(category);
                 return new ServiceResponse()
@@ -148,6 +149,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy thông tin loại kit thất bại!")
                         .AddError("notFound", "Không tìm thấy loại kit!");
                 }

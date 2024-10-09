@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using kit_stem_api.Models.DTO.Response;
+using kit_stem_api.Constants;
 
 namespace kit_stem_api.Services
 {
@@ -196,6 +197,72 @@ namespace kit_stem_api.Services
                         .SetSucceeded(false)
                         .AddDetail("message", "Khôi phục bài lab thất bại!")
                         .AddError("outOfService", "Không thể khôi phục được bài lab hiện tại!");
+            }
+        }
+        public async Task<ServiceResponse> GetFileUrlByIdAsync(Guid id)
+        {
+            var serviceResponse = new ServiceResponse();
+            try
+            {
+                var lab = await _unitOfWork.LabRepository.GetByIdAsync(id);
+                if (lab == null)
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("notFound", "Không tìm thấy bài lab!");
+                }
+
+                return serviceResponse
+                            .AddDetail("url", lab.Url)
+                            .AddDetail("fileName", lab.Name);
+            }
+            catch
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
+            }
+        }
+
+        public async Task<ServiceResponse> GetFileUrlByIdAndOrderIdAsync(string userId, Guid labId, Guid orderId)
+        {
+            var serviceResponse = new ServiceResponse();
+            try
+            {
+                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByLabIdAndOrderIdAsync(labId, orderId);
+                if (orderSupport == null || orderSupport.Order.UserId != userId)
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("notFound", "Bạn chưa mua sản phẩm nào bao gồm bài lab này!");
+                }
+
+                if (orderSupport.Order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus &&
+                orderSupport.Order.Payment.Status != OrderFulfillmentConstants.PaymentSuccess)
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status500InternalServerError)
+                        .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("unavailable", "Bạn vui lòng thanh toán và chờ đợi đơn hàng giao tới mình để có thể tải được bài lab!");
+                }
+
+                var lab = orderSupport.Lab;
+                return serviceResponse
+                            .AddDetail("url", lab.Url)
+                            .AddDetail("fileName", lab.Name);
+            }
+            catch
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy thông tin bài lab không thành công!")
+                        .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }
         #endregion

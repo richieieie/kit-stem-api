@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Google.Apis.Auth;
 using kit_stem_api.Constants;
 using kit_stem_api.Models.DTO;
+using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -103,6 +104,20 @@ namespace kit_stem_api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
+        [HttpGet]
+        [Route("Customers")]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> GetAsync([FromQuery] UserManagerGetDTO userManagerGetDTO)
+        {
+            var serviceResponse = await _userService.GetAllAsync(userManagerGetDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
         [HttpPut]
         [Route("Profile")]
         [Authorize(Roles = "customer")]
@@ -126,6 +141,34 @@ namespace kit_stem_api.Controllers
             if (!serviceResponse.Succeeded)
             {
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpDelete]
+        [Route("{userName}")]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RemoveByEmailAsync(string userName)
+        {
+            var serviceResponse = await _userService.RemoveByEmailAsync(userName);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        [Route("Restore/{userName}")]
+        // [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RestoreByEmailAsync(string userName)
+        {
+            var serviceResponse = await _userService.RestoreByEmailAsync(userName);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
