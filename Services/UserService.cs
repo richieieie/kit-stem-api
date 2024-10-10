@@ -244,12 +244,12 @@ namespace kit_stem_api.Services
             }
 
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            if (user!.Status == false)
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
                         .AddDetail("message", "Làm mới phiên đăng nhập không thành công!")
-                        .AddError("invalidCredentials", "Token yêu cầu đã hết hạn hoặc không hợp lệ!");
+                        .AddError("unavailable", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liên hệ số điện thoại 000000000 để được hỗ trợ!");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
