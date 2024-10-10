@@ -12,8 +12,8 @@ using kit_stem_api.Data;
 namespace kit_stem_api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    [Migration("20241010025202_Add_Constraint_To_Payment")]
-    partial class Add_Constraint_To_Payment
+    [Migration("20241010093710_Fix_Payment_LabSupport_Tables")]
+    partial class Fix_Payment_LabSupport_Tables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -503,9 +503,6 @@ namespace kit_stem_api.Migrations
 
                     b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
-
-                    b.Property<Guid>("LabSupportId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OrderSupportId")
                         .HasColumnType("uniqueidentifier");
