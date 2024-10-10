@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using kit_stem_api.Models.Domain;
+using kit_stem_api.Models.DTO.Response;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kit_stem_api.Models.DTO.Request
 {
@@ -24,5 +27,8 @@ namespace kit_stem_api.Models.DTO.Request
         public int TotalPrice { get; set; }
 
         public string? Note { get; set; }
+
+        public ICollection<PackageOrderCreateDTO> PackageOrders { get; set; } = new List<PackageOrderCreateDTO>();
+
     }
 }

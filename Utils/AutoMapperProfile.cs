@@ -69,6 +69,8 @@ namespace kit_stem_api.Utils
             //Using for Component
             CreateMap<Component, ComponentDTO>().ReverseMap();
 
+            //Using for PackageOrder
+            CreateMap<PackageOrder, PackageOrderCreateDTO>().ReverseMap();
         }
     }
 }
