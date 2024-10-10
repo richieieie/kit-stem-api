@@ -104,6 +104,7 @@ namespace kit_stem_api.Services
                 {
                     UserName = email,
                     Email = email,
+                    Status = true
                 };
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
                 var identityResult = await _userManager.CreateAsync(user);

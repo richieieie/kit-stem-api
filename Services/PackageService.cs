@@ -24,15 +24,16 @@ namespace kit_stem_api.Services
         #region Service methods
         public async Task<(ServiceResponse, int)> CreateAsync(PackageCreateDTO packageCreateDTO)
         {
+            var serviceResponse = new ServiceResponse();
             try
             {
                 var package = _mapper.Map<Package>(packageCreateDTO);
-                // Validate Package Labs from request
+
                 package = await TryCreatePackageLabsAsync(packageCreateDTO, package);
 
                 if (package == null)
                 {
-                    return (new ServiceResponse()
+                    return (serviceResponse
                             .SetSucceeded(false)
                             .SetStatusCode(StatusCodes.Status400BadRequest)
                             .AddDetail("message", "Thêm mới gói kit thất bại!")
@@ -42,13 +43,13 @@ namespace kit_stem_api.Services
 
                 await _unitOfWork.PackageRepository.CreateAsync(package);
 
-                return (new ServiceResponse()
+                return (serviceResponse
                             .AddDetail("message", "Thêm mới gói kit thành công!"),
                             package.Id);
             }
             catch
             {
-                return (new ServiceResponse()
+                return (serviceResponse
                         .SetSucceeded(false)
                         .AddDetail("message", "Thêm mới gói kit thất bại!")
                         .AddError("outOfService", "Không thể thêm mới gói kit vào thời điểm hiện tại hoặc do thông tin yêu cầu không chính xác!"),
@@ -60,13 +61,10 @@ namespace kit_stem_api.Services
         {
             try
             {
-                // Construct filter for using in Where()
                 Expression<Func<Package, bool>> filter = GetFilter(packageGetFilterDTO);
 
-                // Try to get an IEnumerable<Package> and total pages
                 var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(filter, null, skip: sizePerPage * packageGetFilterDTO.Page, take: sizePerPage, packageGetFilterDTO.IncludeLabs);
 
-                // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
                 var packageDTOs = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
                 return new ServiceResponse()
                                 .AddDetail("message", "Lấy thông tin các gói kit thành công!")
@@ -86,6 +84,14 @@ namespace kit_stem_api.Services
             try
             {
                 var package = await _unitOfWork.PackageRepository.GetByIdAsync(id);
+                if (package == null)
+                {
+                    return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Lấy thông tin gói kit thất bại!")
+                                .AddError("notFound", "Không tìm gói kit này!");
+                }
 
                 // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
                 var packageDTO = _mapper.Map<PackageResponseDTO>(package);
@@ -120,7 +126,6 @@ namespace kit_stem_api.Services
                 package.Status = false;
                 await _unitOfWork.PackageRepository.UpdateAsync(package);
 
-                // Map IEnumerable<Package> to IEnumerable<PackageResponseDTO> using AutoMapper
                 var packageDTO = _mapper.Map<PackageResponseDTO>(package);
                 return new ServiceResponse()
                                 .AddDetail("message", "Xoá gói kit thành công!");

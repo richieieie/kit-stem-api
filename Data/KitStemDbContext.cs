@@ -174,6 +174,8 @@ namespace kit_stem_api.Data
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.HasOne(d => d.Method).WithMany(p => p.Payments).HasConstraintName("FK__Payment__MethodI__0F624AF8");
+
+                entity.HasAlternateKey(p => p.OrderId);
             });
 
             modelBuilder.Entity<UserOrders>(entity =>
@@ -183,17 +185,16 @@ namespace kit_stem_api.Data
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
 
-                entity.HasOne(d => d.Payment)
-                    .WithOne(p => p.UserOrders)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserOrders__Payme__160F4887");
-
                 entity.HasOne(d => d.User).WithMany(p => p.UserOrders)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserOrders__UserI__151B244E");
 
                 entity.HasMany(uo => uo.PackageOrders).WithOne(po => po.Order)
                         .HasForeignKey(po => po.OrderId);
+
+                entity.HasOne(o => o.Payment)
+                        .WithOne(p => p.UserOrders)
+                        .HasForeignKey<Payment>(p => p.OrderId);
 
             });
             modelBuilder.Entity<LabSupport>(entity =>

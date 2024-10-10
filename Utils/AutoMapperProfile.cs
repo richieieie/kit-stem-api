@@ -44,7 +44,7 @@ namespace kit_stem_api.Utils
             CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.MethodId, opt => opt.MapFrom(src => PaymentMethods.VNPay))
+                .ForMember(dest => dest.MethodId, opt => opt.MapFrom(src => OrderFulfillmentConstants.PaymentVnPay))
                 .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedDate))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => false));

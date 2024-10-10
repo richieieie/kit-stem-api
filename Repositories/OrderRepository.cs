@@ -20,8 +20,6 @@ namespace kit_stem_api.Repositories
         )
         {
             Func<IQueryable<UserOrders>, IQueryable<UserOrders>> includeQuery = includeQuery => includeQuery
-                                                                                                .Include(o => o.Payment)
-                                                                                                .ThenInclude(p => p.Method)
                                                                                                 .Include(p => p.User);
             var (orders, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (orders, totalPages);
@@ -30,8 +28,6 @@ namespace kit_stem_api.Repositories
         public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
             return await _dbContext.UserOrders
-                            .Include(o => o.Payment)
-                                .ThenInclude(p => p.Method)
                             .Include(p => p.PackageOrders)
                                 .ThenInclude(p => p.Package)
                                     .ThenInclude(p => p.Kit)

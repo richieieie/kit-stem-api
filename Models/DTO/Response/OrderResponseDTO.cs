@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using kit_stem_api.Models.Domain;
-
 namespace kit_stem_api.Models.DTO.Response
 {
     public class OrderResponseDTO
@@ -18,7 +12,6 @@ namespace kit_stem_api.Models.DTO.Response
         public int Discount { get; set; }
         public int TotalPrice { get; set; }
         public string? Note { get; set; }
-        public PaymentResponseDTO? Payment { get; set; }
         public ICollection<PackageOrderResponseDTO>? PackageOrders { get; set; }
     }
 }
