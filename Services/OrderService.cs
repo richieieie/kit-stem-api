@@ -98,18 +98,18 @@ namespace kit_stem_api.Services
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
-        public async Task<ServiceResponse> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note)
+        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note)
         {
             try
             {
                 var user = await _userManager.FindByNameAsync(userId);
                 if (user == null)
                 {
-                    return new ServiceResponse()
+                    return (new ServiceResponse()
                         .SetSucceeded(false)
                         .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
-                        .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
+                        .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!"), Guid.Empty);
                 }
 
                 var (carts, totalPages) = await _unitOfWork.CartRepository.GetFilterAsync(
@@ -121,11 +121,11 @@ namespace kit_stem_api.Services
 
                 if (!carts.Any())
                 {
-                    return new ServiceResponse()
+                    return (new ServiceResponse()
                         .SetSucceeded(false)
                         .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
-                        .AddError("notFound", "Giỏ hàng của bạn đang trống!");
+                        .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
                 int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
 
@@ -164,18 +164,18 @@ namespace kit_stem_api.Services
 
                 await _unitOfWork.OrderRepository.CreateAsync(order);
                 await _userManager.UpdateAsync(user);
-                return new ServiceResponse()
+                return (new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Tạo đơn hàng thành công!");
+                    .AddDetail("message", "Tạo đơn hàng thành công!"), orderId);
 
             } 
             catch
             {
-                return new ServiceResponse()
+                return (new ServiceResponse()
                         .SetSucceeded(false)
                         .SetStatusCode(500)
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
-                        .AddError("outOfService", "Không thể tạo đơn hàng ngay lúc này!");
+                        .AddError("outOfService", "Không thể tạo đơn hàng ngay lúc này!"), Guid.Empty);
             }
         }
         #endregion

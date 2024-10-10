@@ -48,6 +48,7 @@ namespace kit_stem_api.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [Authorize(Roles = "staff,customer")]
+        [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -63,16 +64,17 @@ namespace kit_stem_api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "customer")]
+    
         public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string note)
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
-            var serviceResponse = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, note);
+            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, note);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            return CreatedAtAction(nameof(GetByIdAsync), new {id = guid} ,new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         // [HttpGet]
