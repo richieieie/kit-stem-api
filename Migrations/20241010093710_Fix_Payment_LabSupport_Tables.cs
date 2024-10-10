@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace kit_stem_api.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_Constraint_To_Payment : Migration
+    public partial class Fix_Payment_LabSupport_Tables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,10 @@ namespace kit_stem_api.Migrations
             migrationBuilder.DropColumn(
                 name: "PaymentId",
                 table: "Order");
+
+            migrationBuilder.DropColumn(
+                name: "LabSupportId",
+                table: "LabSupport");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "OrderId",
@@ -62,6 +66,13 @@ namespace kit_stem_api.Migrations
             migrationBuilder.AddColumn<Guid>(
                 name: "PaymentId",
                 table: "Order",
+                type: "uniqueidentifier",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "LabSupportId",
+                table: "LabSupport",
                 type: "uniqueidentifier",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));

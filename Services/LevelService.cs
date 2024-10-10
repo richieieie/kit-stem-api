@@ -100,7 +100,7 @@ namespace kit_stem_api.Services
                     .SetSucceeded(true)
                     .AddDetail("message", "Xóa một level thành công!");
             }
-            catch 
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -141,13 +141,7 @@ namespace kit_stem_api.Services
         {
             try
             {
-                var updateLevel = new Level()
-                {
-                    Id = level.Id,
-                    Name = level.Name,
-                    Status = true
-                };
-                var alreadyLevel = await _unitOfWork.LevelRepository.GetByIdAsync(updateLevel.Id);
+                var alreadyLevel = await _unitOfWork.LevelRepository.GetByIdAsync(level.Id);
                 if (alreadyLevel == null)
                 {
                     return new ServiceResponse()
@@ -157,11 +151,13 @@ namespace kit_stem_api.Services
                         .AddError("notFound", "Không thể tìm thấy level ngay lúc này!");
                 }
 
-                await _unitOfWork.LevelRepository.UpdateAsync(updateLevel);
+                alreadyLevel.Name = level.Name;
+
+                await _unitOfWork.LevelRepository.UpdateAsync(alreadyLevel);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Chỉnh sửa level thành công!");
-            } 
+            }
             catch
             {
                 return new ServiceResponse()
