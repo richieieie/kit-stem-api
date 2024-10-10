@@ -34,7 +34,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status401Unauthorized)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Thêm vào giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -96,7 +96,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status401Unauthorized)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Lấy giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -145,7 +145,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status401Unauthorized)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Xóa gói kit ra khỏi giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }
@@ -230,7 +230,7 @@ namespace kit_stem_api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status401Unauthorized)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Chỉnh sửa giỏ hàng thất bại!")
                         .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
                 }

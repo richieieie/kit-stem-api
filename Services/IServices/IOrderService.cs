@@ -7,5 +7,6 @@ namespace kit_stem_api.Services.IServices
         Task<ServiceResponse> GetAsync(OrderStaffGetDTO orderStaffGetDTO);
         Task<ServiceResponse> GetByCustomerIdAsync(string customerId, OrderGetDTO orderGetDTO);
         Task<ServiceResponse> GetByIdAsync(Guid id, string userId, string role);
+        Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note);
     }
 }
