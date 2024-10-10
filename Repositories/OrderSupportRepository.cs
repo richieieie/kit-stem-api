@@ -15,8 +15,6 @@ namespace kit_stem_api.Repositories
             return await _dbContext.OrderSupports
                                     .Include(os => os.Lab)
                                     .Include(os => os.Order)
-                                        .ThenInclude(o => o.Payment)
-                                            .ThenInclude(p => p.Method)
                                     .Include(os => os.Package)
                                     .FirstOrDefaultAsync(os => os.OrderId == orderId && os.LabId == labId);
         }

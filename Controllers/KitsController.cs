@@ -101,7 +101,7 @@ namespace kit_stem_api.Controllers
 
             if (!filesServiceResponse.Succeeded) return StatusCode(filesServiceResponse.StatusCode, new { status = filesServiceResponse.Status, details = filesServiceResponse.Details });
             // -----------------//
-            List<String>? urls = filesServiceResponse.Details!["urls"] as List<String>;
+            List<String>? urls = filesServiceResponse.Details![ServiceResponse.ToKebabCase("urls")] as List<String>;
             Guid imageId = Guid.Empty;
             if (urls != null)
             {
@@ -149,7 +149,7 @@ namespace kit_stem_api.Controllers
                      FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}",
                      nameFiles); // image lên cloude 
                 if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
-                List<String>? urls = fileServiceResponse.Details!["urls"] as List<String>;
+                List<String>? urls = fileServiceResponse.Details![ServiceResponse.ToKebabCase("urls")] as List<String>;
                 Guid imageId = Guid.Empty;
 
                 if (urls != null)
@@ -170,19 +170,19 @@ namespace kit_stem_api.Controllers
             else
             {
                 var fileServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
-                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new {status = fileServiceResponse.Status, details = fileServiceResponse.Details });
+                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
             }
 
             var serviceResponse = await _kitService.UpdateAsync(DTO);
             if (!serviceResponse.Succeeded)
-                return StatusCode(serviceResponse.StatusCode ,new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
 
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpDelete]
         [Route("{id:int}")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RemoveByIdAsync( int id)
+        public async Task<IActionResult> RemoveByIdAsync(int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
             if (!serviceResponse.Succeeded)
@@ -194,7 +194,7 @@ namespace kit_stem_api.Controllers
         [HttpPut]
         [Route("Restore/{id:int}")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> RestoreByIdAsync( int id)
+        public async Task<IActionResult> RestoreByIdAsync(int id)
         {
             var serviceResponse = await _kitService.RestoreByIdAsync(id);
             if (!serviceResponse.Succeeded)

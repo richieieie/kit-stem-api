@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace kit_stem_api.Services
 {
     public class ServiceResponse
@@ -31,7 +26,7 @@ namespace kit_stem_api.Services
             {
                 Details = new Dictionary<string, object>();
             }
-            Details.Add(key, value);
+            Details.Add(ToKebabCase(key), value);
             return this;
         }
 
@@ -48,7 +43,7 @@ namespace kit_stem_api.Services
             }
 
             var errors = (Dictionary<string, string>)Details["errors"];
-            errors.Add(key, value);
+            errors.Add(ToKebabCase(key), value);
 
             return this;
         }
@@ -57,6 +52,12 @@ namespace kit_stem_api.Services
         {
             StatusCode = code;
             return this;
+        }
+
+        public static string ToKebabCase(string input)
+        {
+            return string.Concat(input.Select((c, i) =>
+                i > 0 && char.IsUpper(c) ? "-" + char.ToLower(c).ToString() : char.ToLower(c).ToString()));
         }
     }
 }

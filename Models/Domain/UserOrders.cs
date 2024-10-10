@@ -13,8 +13,6 @@ namespace kit_stem_api.Models.Domain
         [StringLength(450)]
         public string UserId { get; set; } = null!;
 
-        public Guid PaymentId { get; set; }
-
         public DateTimeOffset CreatedAt { get; set; }
 
         public DateTimeOffset? DeliveredAt { get; set; }
@@ -39,12 +37,11 @@ namespace kit_stem_api.Models.Domain
         [InverseProperty("Order")]
         public virtual ICollection<PackageOrder> PackageOrders { get; set; } = null!;
 
-        [ForeignKey("PaymentId")]
-        [InverseProperty("UserOrders")]
-        public virtual Payment Payment { get; set; } = null!;
-
         [ForeignKey("UserId")]
         [InverseProperty("UserOrders")]
         public virtual ApplicationUser User { get; set; } = null!;
+
+        [InverseProperty("UserOrders")]
+        public virtual Payment? Payment { get; set; }
     }
 }

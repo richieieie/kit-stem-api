@@ -3,6 +3,7 @@ using Google.Apis.Auth;
 using kit_stem_api.Constants;
 using kit_stem_api.Models.DTO;
 using kit_stem_api.Models.DTO.Request;
+using kit_stem_api.Services;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -80,7 +81,7 @@ namespace kit_stem_api.Controllers
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            serviceResponse = await _userService.LoginWithGoogleAsync((GoogleJsonWebSignature.Payload)serviceResponse.Details!["payload"]);
+            serviceResponse = await _userService.LoginWithGoogleAsync((GoogleJsonWebSignature.Payload)serviceResponse.Details![ServiceResponse.ToKebabCase("payload")]);
             if (!serviceResponse.Succeeded)
             {
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });

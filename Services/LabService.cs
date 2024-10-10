@@ -85,13 +85,10 @@ namespace kit_stem_api.Services
         {
             try
             {
-                // Construct file
                 Expression<Func<Lab, bool>> filter = GetFilter(labGetDTO);
 
-                // Try to get an IEnumerable<Lab> and total pages 
                 var (labs, totalPages) = await _unitOfWork.LabRepository.GetFilterAsync(filter, null, skip: sizePerPage * labGetDTO.Page, take: sizePerPage);
 
-                // Map IEnumerable<Lab> to IEnumerable<LabResponseDTO> using AutoMapper
                 var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin các bài lab thành công!")
@@ -233,7 +230,8 @@ namespace kit_stem_api.Services
             try
             {
                 var orderSupport = await _unitOfWork.OrderSupportRepository.GetByLabIdAndOrderIdAsync(labId, orderId);
-                if (orderSupport == null || orderSupport.Order.UserId != userId)
+                var payment = await _unitOfWork.PaymentRepository.GetByOrderId(orderId);
+                if (orderSupport == null || orderSupport.Order.UserId != userId || payment == null)
                 {
                     return serviceResponse
                         .SetSucceeded(false)
@@ -242,8 +240,8 @@ namespace kit_stem_api.Services
                         .AddError("notFound", "Bạn chưa mua sản phẩm nào bao gồm bài lab này!");
                 }
 
-                if (orderSupport.Order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus &&
-                orderSupport.Order.Payment.Status != OrderFulfillmentConstants.PaymentSuccess)
+                if (orderSupport.Order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus ||
+                payment.Status != OrderFulfillmentConstants.PaymentSuccess)
                 {
                     return serviceResponse
                         .SetSucceeded(false)
