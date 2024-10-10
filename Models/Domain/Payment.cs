@@ -17,8 +17,8 @@ namespace kit_stem_api.Models.Domain
         [ForeignKey("MethodId")]
         [InverseProperty("Payments")]
         public virtual Method Method { get; set; } = null!;
-
-        [JsonIgnore]
+        [ForeignKey("OrderId")]
+        [InverseProperty("Payment")]
         public virtual UserOrders? UserOrders { get; set; }
     }
 }

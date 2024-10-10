@@ -175,11 +175,7 @@ namespace kit_stem_api.Data
 
                 entity.HasOne(d => d.Method).WithMany(p => p.Payments).HasConstraintName("FK__Payment__MethodI__0F624AF8");
 
-                entity.HasOne(p => p.UserOrders)
-                        .WithMany()
-                        .HasForeignKey(p => p.OrderId)
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Payment__UserOrders__123451AF");
+                entity.HasAlternateKey(p => p.OrderId);
             });
 
             modelBuilder.Entity<UserOrders>(entity =>
@@ -195,6 +191,10 @@ namespace kit_stem_api.Data
 
                 entity.HasMany(uo => uo.PackageOrders).WithOne(po => po.Order)
                         .HasForeignKey(po => po.OrderId);
+
+                entity.HasOne(o => o.Payment)
+                        .WithOne(p => p.UserOrders)
+                        .HasForeignKey<Payment>(p => p.OrderId);
 
             });
             modelBuilder.Entity<LabSupport>(entity =>

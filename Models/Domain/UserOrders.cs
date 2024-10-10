@@ -40,5 +40,8 @@ namespace kit_stem_api.Models.Domain
         [ForeignKey("UserId")]
         [InverseProperty("UserOrders")]
         public virtual ApplicationUser User { get; set; } = null!;
+
+        [InverseProperty("UserOrders")]
+        public virtual Payment? Payment { get; set; }
     }
 }

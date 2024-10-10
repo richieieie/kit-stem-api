@@ -85,13 +85,10 @@ namespace kit_stem_api.Services
         {
             try
             {
-                // Construct file
                 Expression<Func<Lab, bool>> filter = GetFilter(labGetDTO);
 
-                // Try to get an IEnumerable<Lab> and total pages 
                 var (labs, totalPages) = await _unitOfWork.LabRepository.GetFilterAsync(filter, null, skip: sizePerPage * labGetDTO.Page, take: sizePerPage);
 
-                // Map IEnumerable<Lab> to IEnumerable<LabResponseDTO> using AutoMapper
                 var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin các bài lab thành công!")

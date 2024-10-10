@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace kit_stem_api.Migrations
 {
     /// <inheritdoc />
-    public partial class Add_OrderId_To_Payment : Migration
+    public partial class Add_Constraint_To_Payment : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,28 +30,29 @@ namespace kit_stem_api.Migrations
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Payment_OrderId",
+            migrationBuilder.AddUniqueConstraint(
+                name: "AK_Payment_OrderId",
                 table: "Payment",
                 column: "OrderId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK__Payment__UserOrders__123451AF",
+                name: "FK_Payment_Order_OrderId",
                 table: "Payment",
                 column: "OrderId",
                 principalTable: "Order",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK__Payment__UserOrders__123451AF",
+                name: "FK_Payment_Order_OrderId",
                 table: "Payment");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Payment_OrderId",
+            migrationBuilder.DropUniqueConstraint(
+                name: "AK_Payment_OrderId",
                 table: "Payment");
 
             migrationBuilder.DropColumn(

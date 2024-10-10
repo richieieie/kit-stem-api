@@ -694,9 +694,9 @@ namespace kit_stem_api.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Payment__3214EC079CC5A858");
 
-                    b.HasIndex("MethodId");
+                    b.HasAlternateKey("OrderId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("MethodId");
 
                     b.ToTable("Payment");
                 });
@@ -1023,10 +1023,10 @@ namespace kit_stem_api.Migrations
                         .HasConstraintName("FK__Payment__MethodI__0F624AF8");
 
                     b.HasOne("kit_stem_api.Models.Domain.UserOrders", "UserOrders")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .IsRequired()
-                        .HasConstraintName("FK__Payment__UserOrders__123451AF");
+                        .WithOne("Payment")
+                        .HasForeignKey("kit_stem_api.Models.Domain.Payment", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Method");
 
@@ -1113,6 +1113,8 @@ namespace kit_stem_api.Migrations
                     b.Navigation("OrderSupports");
 
                     b.Navigation("PackageOrders");
+
+                    b.Navigation("Payment");
                 });
 #pragma warning restore 612, 618
         }

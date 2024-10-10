@@ -34,13 +34,6 @@ namespace kit_stem_api.Controllers
         [Route("VnPay")]
         public async Task<IActionResult> CreateVnPayAsync([FromBody] PaymentVnPayCreateDTO paymentVnPayCreateDTO)
         {
-            // Change vnpPayment below into code that parse a cart from user in to a VNPaymentRequestDTO
-            // var vnpPayment = new VNPaymentRequestDTO()
-            // {
-            //     Amount = 144444,
-            //     Description = "Thanh toan thong qua VNPay"
-            // };
-
             var serviceResponse = await _vnPayService.CreatePaymentUrl(paymentVnPayCreateDTO);
             if (!serviceResponse.Succeeded)
             {

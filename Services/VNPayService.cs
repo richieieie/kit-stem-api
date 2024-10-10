@@ -105,66 +105,77 @@ namespace kit_stem_api.Services
         public async Task<ServiceResponse> PaymentExecute(IQueryCollection vnPayData)
         {
             var serviceResponse = new ServiceResponse();
-            if (vnPayData.Count == 0)
+            try
             {
-                return serviceResponse
+                if (vnPayData.Count == 0)
+                {
+                    return serviceResponse
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Thực hiện giao dịch thất bại!")
+                                .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
+                }
+
+                string vnp_HashSecret = _configuration["VNPay:vnp_HashSecret"]!;
+                var vnPay = new VnPayLibrary();
+                foreach (var (key, value) in vnPayData)
+                {
+                    if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
+                    {
+                        vnPay.AddResponseData(key, value);
+                    }
+                }
+
+                var paymentId = Guid.Parse(vnPay.GetResponseData("vnp_TxnRef"));
+                var vnp_Amount = Convert.ToInt64(vnPay.GetResponseData("vnp_Amount")) / 100;
+                var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
+                var vnp_ResponseCode = vnPay.GetResponseData("vnp_ResponseCode");
+                var vnp_TransactionStatus = vnPay.GetResponseData("vnp_TransactionStatus");
+                string? vnp_SecureHash = vnPayData.FirstOrDefault(d => d.Key == "vnp_SecureHash").Value;
+                var checkSignature = vnPay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
+                if (!checkSignature)
+                {
+                    return serviceResponse
                             .SetSucceeded(false)
                             .SetStatusCode(StatusCodes.Status404NotFound)
                             .AddDetail("message", "Thực hiện giao dịch thất bại!")
                             .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
-            }
-
-            string vnp_HashSecret = _configuration["VNPay:vnp_HashSecret"]!;
-            var vnPay = new VnPayLibrary();
-            foreach (var (key, value) in vnPayData)
-            {
-                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
-                {
-                    vnPay.AddResponseData(key, value);
                 }
-            }
+                var payment = await _unitOfWork.PaymentRepository.GetByIdAsync(paymentId);
+                if (payment == null || payment.Amount != vnp_Amount)
+                {
+                    return serviceResponse
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status404NotFound)
+                            .AddDetail("message", "Thực hiện giao dịch thất bại!")
+                            .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
+                }
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(payment.OrderId);
+                if (vnp_ResponseCode != "00" || vnp_TransactionStatus != "00")
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status500InternalServerError)
+                        .AddDetail("message", "Giao dịch thất bại!");
+                }
 
-            var paymentId = Guid.Parse(vnPay.GetResponseData("vnp_TxnRef"));
-            var vnp_Amount = Convert.ToInt64(vnPay.GetResponseData("vnp_Amount")) / 100;
-            var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
-            var vnp_ResponseCode = vnPay.GetResponseData("vnp_ResponseCode");
-            var vnp_TransactionStatus = vnPay.GetResponseData("vnp_TransactionStatus");
-            string? vnp_SecureHash = vnPayData.FirstOrDefault(d => d.Key == "vnp_SecureHash").Value;
-            var checkSignature = vnPay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
-            if (!checkSignature)
+                // Update payment status
+                payment.Status = true;
+                await _unitOfWork.PaymentRepository.UpdateAsync(payment);
+                // Update order status
+                order!.ShippingStatus = OrderFulfillmentConstants.OrderVerifyingStatus;
+                await _unitOfWork.OrderRepository.UpdateAsync(order);
+
+                return serviceResponse
+                        .AddDetail("message", "Giao dịch thành công!");
+            }
+            catch
             {
                 return serviceResponse
                         .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status404NotFound)
-                        .AddDetail("message", "Thực hiện giao dịch thất bại!")
-                        .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
+                        .AddDetail("message", "Tạo mới payment thất bại!")
+                        .AddError("outOfService", "Không thể tạo một payment mới ngay lúc này!");
             }
-            var payment = await _unitOfWork.PaymentRepository.GetByIdAsync(paymentId);
-            if (payment == null || payment.Amount != vnp_Amount)
-            {
-                return serviceResponse
-                        .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status404NotFound)
-                        .AddDetail("message", "Thực hiện giao dịch thất bại!")
-                        .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
-            }
-
-            PaymentResponseDTO paymentDTO;
-            if (vnp_ResponseCode != "00" || vnp_TransactionStatus != "00")
-            {
-                paymentDTO = _mapper.Map<PaymentResponseDTO>(payment);
-                return serviceResponse
-                    .AddDetail("message", "Lấy thông tin giao dịch thành công!")
-                    .AddDetail("data", new { payment = paymentDTO });
-            }
-
-            payment.Status = true;
-            await _unitOfWork.PaymentRepository.UpdateAsync(payment);
-            paymentDTO = _mapper.Map<PaymentResponseDTO>(payment);
-
-            return serviceResponse
-                    .AddDetail("message", "Lấy thông tin giao dịch thành công!")
-                    .AddDetail("data", new { payment = paymentDTO });
         }
     }
 }

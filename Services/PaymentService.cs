@@ -37,11 +37,13 @@ namespace kit_stem_api.Services
                     Amount = order.TotalPrice,
                     OrderId = order.Id
                 };
+                order.ShippingStatus = OrderFulfillmentConstants.OrderVerifyingStatus;
 
                 await _unitOfWork.PaymentRepository.CreateAsync(payment);
+                await _unitOfWork.OrderRepository.UpdateAsync(order);
 
                 return serviceResponse
-                        .AddDetail("message", "Tạo mới payment thành công!");
+                        .AddDetail("message", "Giao dịch thành công!");
             }
             catch
             {
