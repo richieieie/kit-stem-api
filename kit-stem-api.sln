@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kit-stem-api", "kit-stem-api.csproj", "{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KSH.Api", ".\KSH.Api\KSH.Api.csproj", "{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KSH.Api.Tests", "KSH.Api.Tests\KSH.Api.Tests.csproj", "{60E80A05-E92D-4884-AD87-9C125FD6A33F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D331B50-FC7D-4B30-9D12-EBD00AD8BE54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E80A05-E92D-4884-AD87-9C125FD6A33F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E80A05-E92D-4884-AD87-9C125FD6A33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E80A05-E92D-4884-AD87-9C125FD6A33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E80A05-E92D-4884-AD87-9C125FD6A33F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
