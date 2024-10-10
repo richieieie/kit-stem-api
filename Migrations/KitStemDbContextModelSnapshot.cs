@@ -501,9 +501,6 @@ namespace kit_stem_api.Migrations
                     b.Property<bool>("IsFinished")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LabSupportId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("OrderSupportId")
                         .HasColumnType("uniqueidentifier");
 
