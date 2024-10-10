@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Security.Cryptography;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -52,6 +53,20 @@ namespace kit_stem_api.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var role = User.FindFirstValue(ClaimTypes.Role);
             var serviceResponse = await _orderService.GetByIdAsync(id, userId!, role!);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string note)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.Email);
+            var serviceResponse = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, note);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

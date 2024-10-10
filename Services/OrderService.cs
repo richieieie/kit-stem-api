@@ -1,10 +1,14 @@
+using System.Drawing;
 using System.Linq.Expressions;
+using System.Runtime.Intrinsics.Wasm;
 using AutoMapper;
 using kit_stem_api.Models.Domain;
 using kit_stem_api.Models.DTO.Request;
 using kit_stem_api.Models.DTO.Response;
 using kit_stem_api.Repositories;
 using kit_stem_api.Services.IServices;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace kit_stem_api.Services
 {
@@ -13,10 +17,13 @@ namespace kit_stem_api.Services
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
         private readonly int pageSize = 20;
-        public OrderService(IMapper mapper, UnitOfWork unitOfWork)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private const int pointRate = 100;
+        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
         #region Service methods
         public async Task<ServiceResponse> GetAsync(OrderStaffGetDTO orderStaffGetDTO)
@@ -89,6 +96,86 @@ namespace kit_stem_api.Services
                         .SetStatusCode(500)
                         .AddDetail("message", "Lấy dữ liệu orders thất bại!")
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
+            }
+        }
+        public async Task<ServiceResponse> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userId);
+                if (user == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Tạo đơn hàng thất bại!")
+                        .AddError("notFound", "Không tìm thấy tài khoản ngay lúc này!");
+                }
+
+                var (carts, totalPages) = await _unitOfWork.CartRepository.GetFilterAsync(
+                    u => u.UserId == user.Id,
+                    includes: new Func<IQueryable<Cart>, IQueryable<Cart>>[]
+                    {
+                        c => c.Include(p => p.Package)
+                    });
+
+                if (!carts.Any())
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Tạo đơn hàng thất bại!")
+                        .AddError("notFound", "Giỏ hàng của bạn đang trống!");
+                }
+                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
+
+                int point = 0;
+                if (isUsePoint) 
+                { 
+                    point = user.Points;
+                    user.Points -= point;
+                }
+
+                int totalPrice = price - point;
+
+                var orderId = Guid.NewGuid();
+                var orderDTO = new OrderCreateDTO()
+                {
+                    Id = orderId,
+                    UserId = user.Id,
+                    CreatedAt = DateTimeOffset.Now,
+                    DeliveredAt = null,
+                    ShippingStatus = "fail",
+                    IsLabDownloaded = false,
+                    Price = price,
+                    Discount = point,
+                    TotalPrice = totalPrice,
+                    Note = note,
+                    PackageOrders = carts.Select(cart => new PackageOrderCreateDTO
+                    {
+                        PackageId = cart.PackageId,
+                        OrderId = orderId,
+                        PackageQuantity = cart.PackageQuantity
+                    }).ToList()
+                };
+
+                var order = _mapper.Map<UserOrders>(orderDTO);
+                user.Points += totalPrice / pointRate;
+
+                await _unitOfWork.OrderRepository.CreateAsync(order);
+                await _userManager.UpdateAsync(user);
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Tạo đơn hàng thành công!");
+
+            } 
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(500)
+                        .AddDetail("message", "Tạo đơn hàng thất bại!")
+                        .AddError("outOfService", "Không thể tạo đơn hàng ngay lúc này!");
             }
         }
         #endregion
