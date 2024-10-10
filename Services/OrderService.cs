@@ -18,7 +18,7 @@ namespace kit_stem_api.Services
         private readonly UnitOfWork _unitOfWork;
         private readonly int pageSize = 20;
         private readonly UserManager<ApplicationUser> _userManager;
-
+        private const int pointRate = 100;
         public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _mapper = mapper;
@@ -138,7 +138,6 @@ namespace kit_stem_api.Services
 
                 int totalPrice = price - point;
 
-                #region Mapping to Order
                 var orderId = Guid.NewGuid();
                 var orderDTO = new OrderCreateDTO()
                 {
@@ -159,8 +158,9 @@ namespace kit_stem_api.Services
                         PackageQuantity = cart.PackageQuantity
                     }).ToList()
                 };
-                #endregion
+
                 var order = _mapper.Map<UserOrders>(orderDTO);
+                user.Points += totalPrice / pointRate;
 
                 await _unitOfWork.OrderRepository.CreateAsync(order);
                 await _userManager.UpdateAsync(user);
