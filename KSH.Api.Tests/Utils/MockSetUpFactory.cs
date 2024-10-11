@@ -43,6 +43,9 @@ namespace KSH.Api.Tests.Utils
 
                 var typeRepositoryMock = new Mock<ComponentTypeRepository>(GetDbContextMock().Object);
                 unitOfWorkMock.Setup(u => u.ComponentTypeRepository).Returns(typeRepositoryMock.Object);
+
+                var categoryRepositoryMock = new Mock<CategoryRepository>(GetDbContextMock().Object);
+                unitOfWorkMock.Setup(u => u.CategoryRepository).Returns(categoryRepositoryMock.Object);
             }
             return unitOfWorkMock;
         }
