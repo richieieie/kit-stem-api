@@ -25,9 +25,13 @@ namespace KSH.Api.Tests.Utils
         {
             if (unitOfWorkMock == null)
             {
-                var labRepositoryMock = new Mock<LabRepository>(GetDbContextMock().Object);
                 unitOfWorkMock = new Mock<UnitOfWork>(GetDbContextMock().Object);
+
+                var labRepositoryMock = new Mock<LabRepository>(GetDbContextMock().Object);
                 unitOfWorkMock.Setup(u => u.LabRepository).Returns(labRepositoryMock.Object);
+
+                var typeRepositoryMock = new Mock<ComponentTypeRepository>(GetDbContextMock().Object);
+                unitOfWorkMock.Setup(u => u.ComponentTypeRepository).Returns(typeRepositoryMock.Object);
             }
             return unitOfWorkMock;
         }

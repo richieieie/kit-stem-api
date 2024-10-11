@@ -109,14 +109,6 @@ namespace KST.Api.Services
                                .Include(p => p.Package).ThenInclude(p => p.Kit).ThenInclude(p => p.Category)
                     });
 
-                if (!carts.Any())
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Lấy giỏ hàng thành công!")
-                        .AddDetail("data", "Giỏ hàng của bạn đang trống!");
-                }
-
                 // Map carts to DTO
                 var cartDTOs = _mapper.Map<IEnumerable<CartResponseDTO>>(carts);
 

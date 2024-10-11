@@ -107,7 +107,7 @@ namespace KSH.Api.Tests
                 Id = Guid.NewGuid().ToString()
             };
             string role = "customer";
-            _userManagerMock.Setup(um => um.FindByNameAsync(requestBody.Email)).ReturnsAsync(existedUser);
+            _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
 
             //Act
             var response = await _userService.RegisterAsync(requestBody, role);
