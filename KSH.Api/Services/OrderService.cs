@@ -1,6 +1,5 @@
 using AutoMapper;
 using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
 using KST.Api.Models.DTO.Request;
 using KST.Api.Models.DTO.Response;
 using KST.Api.Repositories;
@@ -180,17 +179,18 @@ namespace KST.Api.Services
         {
             try
             {
-                var userOrder = _unitOfWork.OrderRepository.GetByIdAsync(getDTO.Id);
-                if (userOrder == null)
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(getDTO.Id);
+                if (order == null)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
                         .AddError("notFound", "Không tìm thấy đơn hàng này!")
                         .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
-                var updateUserOrder = _mapper.Map<UserOrders>(userOrder);
-                updateUserOrder.ShippingStatus = getDTO.ShippingStatus;
-                if (await _unitOfWork.OrderRepository.UpdateAsync(updateUserOrder))
+                var orderDTO = _mapper.Map<UserOrders>(order);
+                orderDTO.ShippingStatus = getDTO.ShippingStatus!;
+
+                if (await _unitOfWork.OrderRepository.UpdateAsync(orderDTO))
                 {
                     return new ServiceResponse()
                         .SetSucceeded(true)

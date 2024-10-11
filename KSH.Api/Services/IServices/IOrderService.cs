@@ -1,4 +1,3 @@
-using KST.Api.Models.DTO;
 using KST.Api.Models.DTO.Request;
 
 namespace KST.Api.Services.IServices

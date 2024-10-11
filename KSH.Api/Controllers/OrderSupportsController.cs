@@ -1,6 +1,7 @@
 ﻿using KST.Api.Models.DTO.Request;
 using KST.Api.Services;
 using KST.Api.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace KST.Api.Controllers
             _orderSupportService = orderSupportService;
         }
         [HttpGet]
+        // [Authorize(Roles = "staff")]
         public async Task<IActionResult>GetAsync([FromQuery]OrderSupportGetDTO getDTO)
         {
             var serviceResponse = await _orderSupportService.GetAsync(getDTO);

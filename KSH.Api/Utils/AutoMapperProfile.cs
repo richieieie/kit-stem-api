@@ -49,7 +49,7 @@ namespace KST.Api.Utils
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedDate))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => false));
             CreateMap<Payment, PaymentResponseDTO>();
-            CreateMap<UserOrders, OrderCreateDTO>().ReverseMap();
+            CreateMap<UserOrders, OrderCreateDTO>().ReverseMap(); 
 
             //Using for getting Carts
             CreateMap<Cart, CartDTO>().ReverseMap();
@@ -79,6 +79,7 @@ namespace KST.Api.Utils
             CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
             CreateMap<LabSupport, LabSupportResponseDTO>()
                 .ForMember(dest => dest.RemainSupportTimes, opt => opt.MapFrom(src => src.OrderSupport.RemainSupportTimes));
+           
 
         }
     }

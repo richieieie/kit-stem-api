@@ -2,11 +2,11 @@
 
 namespace KST.Api.Models.DTO.Request
 {
-    public class LabSupportUpdateStaffDTO
+    public class LabSupportReviewUpdateDTO
     {
         [Required]
         public Guid Id { get; set; }
-        [Required]
-        public Guid OrderSupportId { get; set; }
+        public int Rating { get; set; }
+        public string? FeedBack { get; set; }
     }
 }

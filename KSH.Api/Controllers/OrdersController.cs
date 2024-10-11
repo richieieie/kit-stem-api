@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
-using KST.Api.Models.DTO;
 using KST.Api.Models.DTO.Request;
 using KST.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -77,19 +76,6 @@ namespace KST.Api.Controllers
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = guid }, new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
-        [HttpPut]
-        [Authorize(Roles = "staff")]
-
-        public async Task<IActionResult> UpdateShippingStatus(OrderUpdateShippingStatusDTO getDTO)
-        {
-            var serviceResponse = _orderService.UpdateShippingStatus(getDTO);
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = guid }, new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
 
         // [HttpGet]
         // [Route("{id:guid}/OrderSupports")]
@@ -117,5 +103,17 @@ namespace KST.Api.Controllers
 
         //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         // }
+        [HttpPut]
+        // [Authorize(Roles = "staff")]
+        public async Task<IActionResult> UpdateShippingStatus(OrderUpdateShippingStatusDTO getDTO)
+        {
+            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }
