@@ -25,7 +25,6 @@ namespace KST.Api.Services
                 using var stream = new MemoryStream();
                 await file.CopyToAsync(stream);
 
-
                 await _storageClient.UploadObjectAsync(bucket, fullFileName, file.ContentType, stream);
 
                 return serviceResponse
@@ -47,15 +46,14 @@ namespace KST.Api.Services
             try
             {
                 var filePrefix = $"{folder}/";
+                await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
                 // (Hưng) câu lệnh thực hiện xóa đi folder kitId nếu người dùng ko upload file image nào
                 if (nameFiles == null)
                 {
-                    await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
                     return serviceResponse
-                        .SetSucceeded(true);
+                            .SetSucceeded(true);
                 }
                 //
-                await DeleteFileWithUnknownExtensionAsync(bucket, filePrefix);
 
                 var urls = new List<string>();
                 foreach (KeyValuePair<string, IFormFile> entry in nameFiles)
