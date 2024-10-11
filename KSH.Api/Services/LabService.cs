@@ -3,7 +3,6 @@ using KST.Api.Models.DTO;
 using KST.Api.Services.IServices;
 using KST.Api.Repositories;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using KST.Api.Models.DTO.Response;
 using KST.Api.Constants;
