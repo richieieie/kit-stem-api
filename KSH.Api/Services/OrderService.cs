@@ -162,6 +162,7 @@ namespace KST.Api.Services
                 var order = _mapper.Map<UserOrders>(orderDTO);
 
                 await _unitOfWork.OrderRepository.CreateAsync(order);
+                await _userManager.UpdateAsync(user);
                 return (new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Tạo đơn hàng thành công!"), orderId);
