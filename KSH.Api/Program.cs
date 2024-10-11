@@ -51,6 +51,8 @@ public class Program
         builder.Services.AddScoped<ICartService, CartService>();
         builder.Services.AddScoped<IPaymentService, PaymentService>();
         builder.Services.AddScoped<IVNPayService, VNPayService>();
+        builder.Services.AddScoped<ILabSupportService, LabSupportService>();
+        builder.Services.AddScoped<IOrderSupportService, OrderSupportService>();
 
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));

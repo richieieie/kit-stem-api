@@ -1,14 +1,13 @@
-using System.Drawing;
-using System.Linq.Expressions;
-using System.Runtime.Intrinsics.Wasm;
 using AutoMapper;
 using KST.Api.Models.Domain;
+using KST.Api.Models.DTO;
 using KST.Api.Models.DTO.Request;
 using KST.Api.Models.DTO.Response;
 using KST.Api.Repositories;
 using KST.Api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace KST.Api.Services
 {
@@ -176,6 +175,41 @@ namespace KST.Api.Services
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
                         .AddError("outOfService", "Không thể tạo đơn hàng ngay lúc này!"), Guid.Empty);
             }
+        }
+        public async Task<ServiceResponse> UpdateShippingStatus(OrderUpdateShippingStatusDTO getDTO)
+        {
+            try
+            {
+                var userOrder = _unitOfWork.OrderRepository.GetByIdAsync(getDTO.Id);
+                if (userOrder == null)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddError("notFound", "Không tìm thấy đơn hàng này!")
+                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                }
+                var updateUserOrder = _mapper.Map<UserOrders>(userOrder);
+                updateUserOrder.ShippingStatus = getDTO.ShippingStatus;
+                if (await _unitOfWork.OrderRepository.UpdateAsync(updateUserOrder))
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(true)
+                        .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
+                }
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddError("invalidCredentials", "Thông tin nhập không hợp lệ")
+                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddError("outOfService", "Không thể hỗ trợ ngay lúc này")
+                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+            }
+            
+
         }
         #endregion
 

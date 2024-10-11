@@ -19,6 +19,7 @@ namespace KST.Api.Repositories
                 public virtual KitImageRepository KitImageRepository { get; set; }
                 public virtual PaymentRepository PaymentRepository { get; set; }
                 public virtual OrderSupportRepository OrderSupportRepository { get; set; }
+                public virtual LabSupportRepository LabSupportRepository { get; set; }
 
                 public UnitOfWork(KitStemDbContext dbContext)
                 {
@@ -37,6 +38,7 @@ namespace KST.Api.Repositories
                         KitImageRepository = new KitImageRepository(_dbContext);
                         PaymentRepository = new PaymentRepository(_dbContext);
                         OrderSupportRepository = new OrderSupportRepository(_dbContext);
+                        LabSupportRepository = new LabSupportRepository(_dbContext);
                 }
         }
 }

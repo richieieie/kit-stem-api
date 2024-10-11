@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
+using KST.Api.Models.DTO;
 using KST.Api.Models.DTO.Request;
 using KST.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -69,6 +70,19 @@ namespace KST.Api.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
             var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, note);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = guid }, new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Authorize(Roles = "staff")]
+
+        public async Task<IActionResult> UpdateShippingStatus(OrderUpdateShippingStatusDTO getDTO)
+        {
+            var serviceResponse = _orderService.UpdateShippingStatus(getDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

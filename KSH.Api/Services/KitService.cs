@@ -97,8 +97,6 @@ namespace KST.Api.Services
             }
         }
 
-
-
         public async Task<ServiceResponse> CreateAsync(KitCreateDTO DTO)
         {
             try

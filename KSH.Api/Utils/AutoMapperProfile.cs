@@ -75,6 +75,11 @@ namespace KST.Api.Utils
             //Using for Type
             CreateMap<ComponentsType, ComponentTypeCreateDTO>().ReverseMap();
 
+            //Using for LabSupport
+            CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
+            CreateMap<LabSupport, LabSupportResponseDTO>()
+                .ForMember(dest => dest.RemainSupportTimes, opt => opt.MapFrom(src => src.OrderSupport.RemainSupportTimes));
+
         }
     }
 }
