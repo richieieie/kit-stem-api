@@ -160,7 +160,6 @@ namespace KST.Api.Services
                 };
 
                 var order = _mapper.Map<UserOrders>(orderDTO);
-                user.Points += totalPrice / pointRate;
 
                 await _unitOfWork.OrderRepository.CreateAsync(order);
                 await _userManager.UpdateAsync(user);

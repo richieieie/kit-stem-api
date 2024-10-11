@@ -2,15 +2,18 @@
 using KST.Api.Models.DTO;
 using KST.Api.Services.IServices;
 using KST.Api.Repositories;
+using AutoMapper;
 
 namespace KST.Api.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly UnitOfWork _unitOfWork;
-        public CategoryService(UnitOfWork unitOfWork)
+        private readonly IMapper _mappers;
+        public CategoryService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mappers = mapper;
         }
 
         public async Task<ServiceResponse> CreateAsync(CategoryCreateDTO categoryCreateDTO)
