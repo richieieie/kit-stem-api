@@ -3,7 +3,6 @@ using KST.Api.Models.DTO;
 using KST.Api.Services.IServices;
 using KST.Api.Repositories;
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using KST.Api.Models.DTO.Response;
 using KST.Api.Constants;
@@ -44,12 +43,13 @@ namespace KST.Api.Services
         }
         public async Task<ServiceResponse> UpdateAsync(LabUpdateDTO labUpdateDTO, string? url)
         {
+            var serviceResponse = new ServiceResponse();
             try
             {
                 var lab = await _unitOfWork.LabRepository.GetByIdAsync(labUpdateDTO.Id);
                 if (lab == null)
                 {
-                    return new ServiceResponse()
+                    return serviceResponse
                         .SetSucceeded(false)
                         .SetStatusCode(StatusCodes.Status404NotFound)
                         .AddDetail("message", "Chỉnh sửa bài lab thất bại!")
@@ -69,13 +69,13 @@ namespace KST.Api.Services
 
                 await _unitOfWork.LabRepository.UpdateAsync(lab);
 
-                return new ServiceResponse()
+                return serviceResponse
                         .SetSucceeded(true)
                         .AddDetail("message", "Chỉnh sửa bài lab thành công!");
             }
             catch
             {
-                return new ServiceResponse()
+                return serviceResponse
                         .SetSucceeded(false)
                         .AddDetail("message", "Chỉnh sửa bài lab thất bại!")
                         .AddError("outOfService", "Không thể tạo mới bài lab ngay lúc này");
@@ -98,7 +98,7 @@ namespace KST.Api.Services
             {
                 return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddDetail("message", "Lấy thông tin các bài lab thành công!")
+                        .AddDetail("message", "Lấy thông tin các bài lab thất bại!")
                         .AddError("outOfService", "Không thể lấy được thông tin các bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
             }
         }

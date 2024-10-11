@@ -147,18 +147,10 @@ namespace KST.Api.Services
 
         public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody, string role)
         {
-            var user = await _userManager.FindByNameAsync(requestBody.Email!);
-            if (user != null)
-            {
-                return new ServiceResponse()
-                            .SetSucceeded(false)
-                            .AddDetail("message", "Tạo tài khoản thất bại")
-                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
-            }
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                user = new ApplicationUser()
+                var user = new ApplicationUser()
                 {
                     UserName = requestBody.Email,
                     Email = requestBody.Email,
@@ -170,7 +162,7 @@ namespace KST.Api.Services
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("message", "Tạo tài khoản thất bại")
+                            .AddDetail("message", "Tạo tài khoản thất bại!")
                             .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
                 }
 

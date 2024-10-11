@@ -123,15 +123,9 @@ namespace KST.Api.Services
         {
             try
             {
-                var updateComponent = new Component()
-                {
-                    Id = component.Id,
-                    TypeId = component.TypeId,
-                    Name = component.Name,
-                    Status = true
-                };
-                var alreadyComponent = await _unitOfWork.ComponentRepository.GetByIdAsync(component.Id);
-                if (alreadyComponent == null)
+                
+                var updateComponent = await _unitOfWork.ComponentRepository.GetByIdAsync(component.Id);
+                if (updateComponent == null)
                 {
                     return new ServiceResponse()
                        .SetSucceeded(false)
@@ -139,6 +133,11 @@ namespace KST.Api.Services
                        .AddDetail("message", "Chỉnh sửa linh kiện thất bại!")
                        .AddError("notFound", "Không tìm thấy linh kiện!");
                 }
+
+                updateComponent.Id = component.Id;
+                updateComponent.TypeId = component.TypeId;
+                updateComponent.Name = component.Name;
+                updateComponent.Status = true;
 
                 await _unitOfWork.ComponentRepository.UpdateAsync(updateComponent);
                 return new ServiceResponse()

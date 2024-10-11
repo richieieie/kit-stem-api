@@ -1,4 +1,5 @@
-﻿using KST.Api.Models.Domain;
+﻿using AutoMapper;
+using KST.Api.Models.Domain;
 using KST.Api.Models.DTO;
 using KST.Api.Repositories;
 using KST.Api.Repositories.IRepositories;
@@ -10,10 +11,12 @@ namespace KST.Api.Services
     public class ComponentTypeService : IComponentTypeService
     {
         private readonly UnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ComponentTypeService(UnitOfWork unitOfWork)
+        public ComponentTypeService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO)
@@ -28,14 +31,14 @@ namespace KST.Api.Services
                 await _unitOfWork.ComponentTypeRepository.CreateAsync(newComponentType);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Tạo mới một linh kiện thành công!");
+                    .AddDetail("message", "Tạo mới loại linh kiện thành công!");
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Tạo loại thành phần thất bại!")
-                    .AddError("unhandledExeption", "Không thể tạo loại thành phần ngay lúc này!");
+                    .AddDetail("message", "Tạo mới loại linh kiện thất bại!")
+                    .AddError("unhandledExeption", "Không thể tạo loại linh kiện ngay lúc này!");
             }
 
         }
@@ -118,14 +121,8 @@ namespace KST.Api.Services
         {
             try
             {
-                var type = new ComponentsType()
-                {
-                    Id = componentTypeUpdateDTO.Id,
-                    Name = componentTypeUpdateDTO.Name,
-                    Status = true,
-                };
-                var allreadyType = await _unitOfWork.ComponentTypeRepository.GetByIdAsync(type.Id);
-                if (allreadyType == null)
+                var type = await _unitOfWork.ComponentTypeRepository.GetByIdAsync(componentTypeUpdateDTO.Id);
+                if (type == null)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
@@ -133,6 +130,11 @@ namespace KST.Api.Services
                         .AddDetail("message", "Chỉnh sửa loại linh kiện thất bại!")
                         .AddError("notFound", "Không tìm thấy loại linh kiện!");
                 }
+
+                type.Id = componentTypeUpdateDTO.Id;
+                type.Name = componentTypeUpdateDTO.Name;
+                type.Status = true;
+
                 await _unitOfWork.ComponentTypeRepository.UpdateAsync(type);
                 return new ServiceResponse()
                     .SetSucceeded(true)

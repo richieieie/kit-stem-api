@@ -1,16 +1,16 @@
 using AutoMapper;
+using KSH.Api.Tests.Utils;
 using KST.Api.Data;
 using KST.Api.Models.Domain;
 using KST.Api.Models.DTO;
 using KST.Api.Repositories.IRepositories;
 using KST.Api.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Moq;
 
-namespace kit_stem_api_tests
+namespace KSH.Api.Tests
 {
     public class UserServiceTests
     {
@@ -21,16 +21,9 @@ namespace kit_stem_api_tests
         private UserService _userService;
         public UserServiceTests()
         {
-            var options = new DbContextOptionsBuilder<KitStemDbContext>().Options;
-            var transactionMock = new Mock<IDbContextTransaction>();
-            _dbContextMock = new Mock<KitStemDbContext>(options);
-            var dbFacade = new Mock<DatabaseFacade>(_dbContextMock.Object);
-            _dbContextMock.Setup(dbCtx => dbCtx.Database).Returns(dbFacade.Object);
-            _dbContextMock.Setup(dbCtx => dbCtx.Database.BeginTransactionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(transactionMock.Object);
-            transactionMock.Setup(t => t.CommitAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+            _dbContextMock = MockSetUpFactory.GetDbContextMock();
 
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            _userManagerMock = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            _userManagerMock = MockSetUpFactory.GetUserManagerMock();
 
             _tokenRepositoryMock = new Mock<ITokenRepository>();
 
@@ -80,15 +73,11 @@ namespace kit_stem_api_tests
         public async Task RegisterAsync_ValidCredentials_ReturnSucceed()
         {
             //Arrange
-            var requestBody = new UserRegisterDTO()
-            {
-                Email = "test@example.com",
-                Password = "12345aA@"
-            };
+            var requestBody = new UserRegisterDTO();
             var role = "customer";
-            _userManagerMock.Setup(um => um.FindByNameAsync(requestBody.Email)).ReturnsAsync((ApplicationUser?)null);
-            _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), requestBody.Password)).ReturnsAsync(IdentityResult.Success);
-            _userManagerMock.Setup(um => um.AddToRoleAsync(It.IsAny<ApplicationUser>(), role)).ReturnsAsync(IdentityResult.Success);
+            _userManagerMock.Setup(um => um.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser?)null);
+            _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            _userManagerMock.Setup(um => um.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
             //Act
             var response = await _userService.RegisterAsync(requestBody, role);
@@ -112,7 +101,7 @@ namespace kit_stem_api_tests
                 Id = Guid.NewGuid().ToString()
             };
             string role = "customer";
-            _userManagerMock.Setup(um => um.FindByNameAsync(requestBody.Email)).ReturnsAsync(existedUser);
+            _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
 
             //Act
             var response = await _userService.RegisterAsync(requestBody, role);
@@ -120,7 +109,7 @@ namespace kit_stem_api_tests
             //Assert
             var errors = (Dictionary<string, string>)response.GetDetailsValue("errors")!;
             Assert.False(response.Succeeded);
-            Assert.Equal("Tạo tài khoản thất bại", response.GetDetailsValue("message"));
+            Assert.Equal("Tạo tài khoản thất bại!", response.GetDetailsValue("message"));
             Assert.Equal("Tên tài khoản đã tồn tại!", errors["unavailable-username"]);
         }
 

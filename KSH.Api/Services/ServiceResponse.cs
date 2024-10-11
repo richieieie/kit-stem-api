@@ -65,6 +65,15 @@ namespace KST.Api.Services
             return Details[$"{key}"];
         }
 
+        public Dictionary<string, string>? GetErrors()
+        {
+            if (Details == null)
+            {
+                return null;
+            }
+            return (Dictionary<string, string>?)Details["errors"];
+        }
+
         public static string ToKebabCase(string input)
         {
             return string.Concat(input.Select((c, i) =>
