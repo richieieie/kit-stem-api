@@ -10,6 +10,7 @@ using KST.Api.Repositories.IRepositories;
 using KST.Api.Services;
 using KST.Api.Services.IServices;
 using KST.Api.Utils;
+using KST.Api.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,7 @@ public class Program
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
         builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
+        builder.Services.AddSingleton<IEmailTemplateProvider, EmailTemplateProvider>();
 
         // Add services to the container.
         builder.Services.AddRouting(options => options.LowercaseUrls = true);

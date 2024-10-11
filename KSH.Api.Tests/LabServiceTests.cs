@@ -2,6 +2,7 @@ using AutoMapper;
 using KSH.Api.Tests.Utils;
 using KST.Api.Models.Domain;
 using KST.Api.Models.DTO;
+using KST.Api.Models.DTO.Response;
 using KST.Api.Repositories;
 using KST.Api.Services;
 using Moq;
@@ -81,6 +82,23 @@ namespace KSH.Api.Tests
             Assert.False(response.Succeeded);
             Assert.Equal("Chỉnh sửa bài lab thất bại!", response.GetDetailsValue("message"));
             Assert.Equal("Không tìm thấy bài lab để chỉnh sửa!", errors!["invalid-credentials"]);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_IdExists_ReturnTrue()
+        {
+            //Arrange
+            _unitOfWorkMock.Setup(u => u.LabRepository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Lab());
+            _mapperMock.Setup(m => m.Map<LabResponseDTO>(It.IsAny<Lab>())).Returns(new LabResponseDTO());
+
+            //Act
+            var response = await _labService.GetByIdAsync(It.IsAny<Guid>());
+
+            //Assert
+            var data = response.GetDetailsValue("data");
+            Assert.True(response.Succeeded);
+            Assert.Equal("Lấy thông tin bài lab thành công!", response.GetDetailsValue("message"));
+            Assert.NotNull(data!.GetType().GetProperty("lab")?.GetValue(data));
         }
     }
 }

@@ -5,6 +5,7 @@ using KST.Api.Models.DTO;
 using KST.Api.Models.DTO.Request;
 using KST.Api.Services;
 using KST.Api.Services.IServices;
+using KST.Api.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,36 +18,53 @@ namespace KST.Api.Controllers
         private readonly IUserService _userService;
         private readonly IGoogleService _googleService;
         private readonly IEmailService _emailService;
-        public UsersController(IUserService userService, IGoogleService googleService, IEmailService emailService)
+        private readonly IEmailTemplateProvider _emailTemplateProvider;
+        public UsersController(IUserService userService, IGoogleService googleService, IEmailService emailService, IEmailTemplateProvider emailTemplateProvider)
         {
             _userService = userService;
             _googleService = googleService;
             _emailService = emailService;
+            _emailTemplateProvider = emailTemplateProvider;
         }
 
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDTO requestBody)
         {
-            var serviceResponse = await _userService.RegisterAsync(requestBody, UserConstants.CustomerRole);
+            var (serviceResponse, token) = await _userService.RegisterAsync(requestBody, UserConstants.CustomerRole);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
             var subject = "Chào mừng bạn đến với shop!";
-            var body = $"Xin chào, Cảm ơn bạn đã đăng ký tài khoản tại KitStemHub! Chúng tôi rất vui khi có bạn là một phần của cộng đồng mua sắm của chúng tôi. Hãy khám phá và tận hưởng những ưu đãi đặc biệt dành riêng cho thành viên mới. Chúc bạn có trải nghiệm mua sắm tuyệt vời!";
+            var clientBaseUrl = "https://kit-stem-hub-fe-customer.vercel.app";
+            var verifyUrl = $"{clientBaseUrl}/verify?email={Uri.EscapeDataString(requestBody.Email!)}&token={Uri.EscapeDataString(token!)}";
+            var body = _emailTemplateProvider.GetRegisterTemplate(requestBody.Email!, "KitStemHub", verifyUrl!);
             await _emailService.SendEmail(requestBody.Email!, subject, body);
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
+        [HttpGet]
+        [Route("Email/Verify")]
+        [ActionName(nameof(VerifyEmail))]
+        public async Task<IActionResult> VerifyEmail([FromQuery] string email, [FromQuery] string token)
+        {
+            var serviceResponse = await _userService.VerifyEmail(email, token);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
 
         [HttpPost]
         [Route("Register/Staff")]
         public async Task<IActionResult> RegisterStaffAsync([FromBody] UserRegisterDTO requestBody)
         {
-            var serviceResponse = await _userService.RegisterAsync(requestBody, UserConstants.StaffRole);
+            var (serviceResponse, token) = await _userService.RegisterAsync(requestBody, UserConstants.StaffRole);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -179,7 +197,7 @@ namespace KST.Api.Controllers
         [Route("RegisterWithRole/Only-For-Testing/{role}")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO requestBody, string role)
         {
-            var serviceResponse = await _userService.RegisterAsync(requestBody, role);
+            var (serviceResponse, token) = await _userService.RegisterAsync(requestBody, role);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

@@ -6,7 +6,7 @@ namespace KST.Api.Services.IServices
 {
     public interface IUserService
     {
-        Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody, string role);
+        Task<(ServiceResponse, string?)> RegisterAsync(UserRegisterDTO requestBody, string role);
         Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody);
         Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO);
         Task<ServiceResponse> GetAsync(string userName);
@@ -15,5 +15,6 @@ namespace KST.Api.Services.IServices
         Task<ServiceResponse> LoginWithGoogleAsync(GoogleJsonWebSignature.Payload payload);
         Task<ServiceResponse> RemoveByEmailAsync(string userName);
         Task<ServiceResponse> RestoreByEmailAsync(string userName);
+        Task<ServiceResponse> VerifyEmail(string email, string token);
     }
 }
