@@ -6,8 +6,6 @@ using KST.Api.Models.DTO;
 using KST.Api.Repositories.IRepositories;
 using KST.Api.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Moq;
 
 namespace KSH.Api.Tests
@@ -75,15 +73,18 @@ namespace KSH.Api.Tests
             //Arrange
             var requestBody = new UserRegisterDTO();
             var role = "customer";
+            var expectedToken = "verify-token";
             _userManagerMock.Setup(um => um.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser?)null);
             _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             _userManagerMock.Setup(um => um.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            _userManagerMock.Setup(um => um.GenerateEmailConfirmationTokenAsync(It.IsAny<ApplicationUser>())).ReturnsAsync(expectedToken);
 
             //Act
-            var response = await _userService.RegisterAsync(requestBody, role);
+            var (response, token) = await _userService.RegisterAsync(requestBody, role);
 
             //Assert
             Assert.True(response.Succeeded);
+            Assert.Equal(expectedToken, token);
             Assert.Equal("Tạo mới tài khoản thành công!", response.GetDetailsValue("message"));
         }
 
@@ -104,7 +105,7 @@ namespace KSH.Api.Tests
             _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed());
 
             //Act
-            var response = await _userService.RegisterAsync(requestBody, role);
+            var (response, token) = await _userService.RegisterAsync(requestBody, role);
 
             //Assert
             var errors = (Dictionary<string, string>)response.GetDetailsValue("errors")!;

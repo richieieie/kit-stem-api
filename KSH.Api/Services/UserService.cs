@@ -145,8 +145,9 @@ namespace KST.Api.Services
                     .AddDetail("refreshToken", refreshToken);
         }
 
-        public async Task<ServiceResponse> RegisterAsync(UserRegisterDTO requestBody, string role)
+        public async Task<(ServiceResponse, string?)> RegisterAsync(UserRegisterDTO requestBody, string role)
         {
+            var serviceResponse = new ServiceResponse();
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
@@ -160,34 +161,40 @@ namespace KST.Api.Services
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
-                    return new ServiceResponse()
+                    return (serviceResponse
                             .SetSucceeded(false)
                             .AddDetail("message", "Tạo tài khoản thất bại!")
-                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
+                            .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!"),
+                            null);
                 }
 
                 identityResult = await _userManager.AddToRoleAsync(user, role);
                 if (!identityResult.Succeeded)
                 {
                     await transaction.RollbackAsync();
-                    return new ServiceResponse()
+                    return (serviceResponse
                                 .SetSucceeded(false)
                                 .AddDetail("message", "Tạo tài khoản thất bại!")
-                                .AddError("invalidCredentials", "Vai trò yêu cầu không tồn tại!");
+                                .AddError("invalidCredentials", "Vai trò yêu cầu không tồn tại!"),
+                            null);
                 }
 
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
                 await transaction.CommitAsync();
-                return new ServiceResponse()
+                return (serviceResponse
                             .SetSucceeded(true)
-                            .AddDetail("message", "Tạo mới tài khoản thành công!");
+                            .AddDetail("message", "Tạo mới tài khoản thành công!"),
+                        token);
             }
             catch
             {
                 await transaction.RollbackAsync();
-                return new ServiceResponse()
+                return (serviceResponse
                             .SetSucceeded(false)
                             .AddDetail("message", "Tạo tài khoản thất bại!")
-                            .AddError("outOfService", "Không thể tạo tài khoản ngay lúc này!");
+                            .AddError("outOfService", "Không thể tạo tài khoản ngay lúc này!"),
+                        null);
             }
         }
 
@@ -317,6 +324,41 @@ namespace KST.Api.Services
                     .SetSucceeded(false)
                     .AddDetail("message", "Khôi phục tài khoản thất bại!")
                     .AddError("outOutService", "Không thể Khôi phục tài khoản ngay lúc này!");
+            }
+        }
+
+        public async Task<ServiceResponse> VerifyEmail(string email, string token)
+        {
+            var serviceResponse = new ServiceResponse();
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xác thực tài khoản thất bại")
+                        .AddError("unavailable", "Thông tin cung cấp xác thực không hợp lệ!");
+                }
+
+                var identityResult = await _userManager.ConfirmEmailAsync(user, token);
+                if (!identityResult.Succeeded)
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xác thực tài khoản thất bại")
+                        .AddError("unavailable", "Thông tin cung cấp xác thực không hợp lệ!");
+                }
+
+                return serviceResponse
+                    .AddDetail("message", "Xác thực tài khoản thành công!");
+            }
+            catch
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Xác thực tài khoản thất bại")
+                        .AddError("outOutService", "Không thể xác thực tài khoản ngay lúc này!");
             }
         }
     }

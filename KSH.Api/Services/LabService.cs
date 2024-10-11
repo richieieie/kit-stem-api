@@ -104,17 +104,27 @@ namespace KST.Api.Services
         }
         public async Task<ServiceResponse> GetByIdAsync(Guid id)
         {
+            var serviceResponse = new ServiceResponse();
             try
             {
                 var lab = await _unitOfWork.LabRepository.GetByIdAsync(id);
+                if (lab == null)
+                {
+                    return serviceResponse
+                                .SetSucceeded(false)
+                                .SetStatusCode(StatusCodes.Status404NotFound)
+                                .AddDetail("message", "Xoá bài lab thất bại")
+                                .AddError("notFound", "Không tìm thấy bài lab của bạn");
+                }
+
                 var labDTO = _mapper.Map<LabResponseDTO>(lab);
-                return new ServiceResponse()
+                return serviceResponse
                             .AddDetail("message", "Lấy thông tin bài lab thành công!")
-                            .AddDetail("data", new { lab });
+                            .AddDetail("data", new { lab = labDTO });
             }
             catch
             {
-                return new ServiceResponse()
+                return serviceResponse
                         .SetSucceeded(false)
                         .AddDetail("message", "Lấy thông tin bài lab không thành công!")
                         .AddError("outOfService", "Không thể lấy được thông tin bài lab hiện tại hoặc vui lòng kiểm tra lại thông tin!");
