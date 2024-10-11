@@ -71,6 +71,10 @@ namespace KST.Api.Utils
 
             //Using for PackageOrder
             CreateMap<PackageOrder, PackageOrderCreateDTO>().ReverseMap();
+
+            //Using for Type
+            CreateMap<ComponentsType, ComponentTypeCreateDTO>().ReverseMap();
+
         }
     }
 }
