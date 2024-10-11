@@ -94,12 +94,12 @@ namespace KST.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> CreateAsync(Guid orderId)
+        public async Task<ServiceResponse> CreateAsync(Guid orderSupportId)
         {
             try
             {
-                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderId);
-                if (orderSupport != null && orderSupport.RemainSupportTimes <= 0)
+                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderSupportId);
+                if (orderSupport == null && orderSupport.RemainSupportTimes <= 0)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
@@ -109,12 +109,12 @@ namespace KST.Api.Services
                 var labSupport = new LabSupport()
                 {
                     Id = Guid.NewGuid(),
-                    OrderSupportId = orderId,
+                    OrderSupportId = orderSupportId,
                     StaffId = null,
                     Rating = 0,
                     FeedBack = "",
                     IsFinished = false,
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTimeOffset.Now,
                 };
                 if (await _unitOfWork.LabSupportRepository.CreateAsync(labSupport))
                 {

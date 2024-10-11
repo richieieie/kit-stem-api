@@ -8,7 +8,7 @@ namespace KST.Api.Services.IServices
         Task<ServiceResponse> GetSupportsAsync(LabSupportGetDTO getDTO);
         Task<ServiceResponse> GetByCustomerId(String userId);
 
-        Task<ServiceResponse> CreateAsync(Guid orderId);
+        Task<ServiceResponse> CreateAsync(Guid orderSupportId);
         Task<ServiceResponse> UpdateStaffAsync(String staffId, Guid labSupportId);
         Task<ServiceResponse> UpdateFinishedAsync(Guid labSupportId);
         Task<ServiceResponse> UpdateReviewAsync(LabSupportReviewUpdateDTO DTO);

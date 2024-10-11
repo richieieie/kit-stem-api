@@ -56,11 +56,11 @@ namespace KST.Api.Controllers
 
 
         [HttpPost]
-        [Route("{orderId:guid}")]
+        [Route("{orderSupportId:guid}")]
         // [Authorize(Roles = "customer")]
-        public async Task<IActionResult>CreateAsync(Guid orderId)
+        public async Task<IActionResult>CreateAsync(Guid orderSupportId)
         {
-            var serviceResponse = await _labSupportService.CreateAsync(orderId);
+            var serviceResponse = await _labSupportService.CreateAsync(orderSupportId);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details});
