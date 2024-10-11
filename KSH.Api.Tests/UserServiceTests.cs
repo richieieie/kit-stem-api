@@ -22,14 +22,8 @@ namespace KSH.Api.Tests
         public UserServiceTests()
         {
             _dbContextMock = MockSetUpFactory.GetDbContextMock();
-            var transactionMock = new Mock<IDbContextTransaction>();
-            var dbFacade = new Mock<DatabaseFacade>(_dbContextMock.Object);
-            _dbContextMock.Setup(dbCtx => dbCtx.Database).Returns(dbFacade.Object);
-            _dbContextMock.Setup(dbCtx => dbCtx.Database.BeginTransactionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(transactionMock.Object);
-            transactionMock.Setup(t => t.CommitAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            _userManagerMock = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            _userManagerMock = MockSetUpFactory.GetUserManagerMock();
 
             _tokenRepositoryMock = new Mock<ITokenRepository>();
 
@@ -115,7 +109,7 @@ namespace KSH.Api.Tests
             //Assert
             var errors = (Dictionary<string, string>)response.GetDetailsValue("errors")!;
             Assert.False(response.Succeeded);
-            Assert.Equal("Tạo tài khoản thất bại", response.GetDetailsValue("message"));
+            Assert.Equal("Tạo tài khoản thất bại!", response.GetDetailsValue("message"));
             Assert.Equal("Tên tài khoản đã tồn tại!", errors["unavailable-username"]);
         }
 

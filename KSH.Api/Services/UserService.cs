@@ -162,7 +162,7 @@ namespace KST.Api.Services
                     await transaction.RollbackAsync();
                     return new ServiceResponse()
                             .SetSucceeded(false)
-                            .AddDetail("message", "Tạo tài khoản thất bại")
+                            .AddDetail("message", "Tạo tài khoản thất bại!")
                             .AddError("unavailableUsername", "Tên tài khoản đã tồn tại!");
                 }
 
