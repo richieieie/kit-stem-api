@@ -34,7 +34,7 @@ namespace KSH.Api.Services
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    query => query.Include(l => l.Category).Include(l => l.KitImages).Include(l => l.Packages)
+                    query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
                 if (Kits.Count() > 0)
                 {
