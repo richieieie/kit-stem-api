@@ -1,12 +1,12 @@
 using AutoMapper;
-using KST.Api.Constants;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Models.DTO.Response;
+using KSH.Api.Constants;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Models.DTO.Response;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace KST.Api.Utils
+namespace KSH.Api.Utils
 {
     public class AutoMapperProfile : Profile
     {

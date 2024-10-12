@@ -1,4 +1,4 @@
-namespace KST.Api.Utils.Interfaces
+namespace KSH.Api.Utils.Interfaces
 {
     public interface IEmailTemplateProvider
     {

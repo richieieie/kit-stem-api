@@ -1,13 +1,13 @@
-﻿using KST.Api.Constants;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Services;
-using KST.Api.Services.IServices;
+﻿using KSH.Api.Constants;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Services;
+using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Utilities;
 
-namespace KST.Api.Controllers
+namespace KSH.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

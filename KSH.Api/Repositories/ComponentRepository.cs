@@ -1,13 +1,13 @@
-﻿using KST.Api.Data;
-using KST.Api.Models.DTO;
-using KST.Api.Repositories.IRepositories;
+﻿using KSH.Api.Data;
+using KSH.Api.Models.DTO;
+using KSH.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using KST.Api.Repositories;
+using KSH.Api.Repositories;
 using System.ComponentModel;
 using System.Diagnostics.Metrics;
-using KST.Api.Models.Domain;
+using KSH.Api.Models.Domain;
 
-namespace KST.Api.Repositories
+namespace KSH.Api.Repositories
 {
     public class ComponentRepository : GenericRepository<Models.Domain.Component>
     {

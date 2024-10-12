@@ -1,15 +1,15 @@
 using System.Security.Claims;
 using Google.Apis.Auth;
-using KST.Api.Constants;
-using KST.Api.Models.DTO;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Services;
-using KST.Api.Services.IServices;
-using KST.Api.Utils.Interfaces;
+using KSH.Api.Constants;
+using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Services;
+using KSH.Api.Services.IServices;
+using KSH.Api.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KST.Api.Controllers
+namespace KSH.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

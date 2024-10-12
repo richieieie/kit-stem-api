@@ -3,7 +3,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace KST.Api.Utils
+namespace KSH.Api.Utils
 {
     public class VnPayLibrary
     {

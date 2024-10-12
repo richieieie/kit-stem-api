@@ -1,12 +1,12 @@
-﻿using KST.Api.Data;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Repositories.IRepositories;
+﻿using KSH.Api.Data;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using KST.Api.Repositories;
+using KSH.Api.Repositories;
 
 
-namespace KST.Api.Repositories
+namespace KSH.Api.Repositories
 {
     public class CategoryRepository : GenericRepository<KitsCategory>
     {

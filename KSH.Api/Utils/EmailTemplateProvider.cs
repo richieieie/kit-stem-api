@@ -1,6 +1,6 @@
-using KST.Api.Utils.Interfaces;
+using KSH.Api.Utils.Interfaces;
 
-namespace KST.Api.Utils
+namespace KSH.Api.Utils
 {
     public class EmailTemplateProvider : IEmailTemplateProvider
     {
