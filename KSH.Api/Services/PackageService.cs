@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Models.DTO.Response;
-using KST.Api.Repositories;
-using KST.Api.Services.IServices;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Models.DTO.Response;
+using KSH.Api.Repositories;
+using KSH.Api.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class PackageService : IPackageService
     {

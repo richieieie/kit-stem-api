@@ -1,10 +1,10 @@
-﻿using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Repositories;
-using KST.Api.Services.IServices;
+﻿using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Repositories;
+using KSH.Api.Services.IServices;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class LevelService : ILevelService
     {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
     public partial class ADD_DATABASE : Migration

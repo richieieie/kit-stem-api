@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace KST.Api.Models.DTO.Request
+namespace KSH.Api.Models.DTO.Request
 {
     public class CartDTO
     {

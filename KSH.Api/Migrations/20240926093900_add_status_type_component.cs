@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
     public partial class add_status_type_component : Migration

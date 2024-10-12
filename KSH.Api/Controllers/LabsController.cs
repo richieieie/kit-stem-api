@@ -1,12 +1,12 @@
 using System.Security.Claims;
-using KST.Api.Constants;
-using KST.Api.Models.DTO;
-using KST.Api.Services;
-using KST.Api.Services.IServices;
+using KSH.Api.Constants;
+using KSH.Api.Models.DTO;
+using KSH.Api.Services;
+using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KST.Api.Controllers
+namespace KSH.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

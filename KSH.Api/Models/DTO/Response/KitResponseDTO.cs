@@ -1,8 +1,8 @@
-﻿using KST.Api.Models.Domain;
-using KST.Api.Models.DTO.Request;
+﻿using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 using System.ComponentModel.DataAnnotations;
 
-namespace KST.Api.Models.DTO.Response
+namespace KSH.Api.Models.DTO.Response
 {
     public class KitResponseDTO
     {
