@@ -70,10 +70,6 @@ namespace KSH.Api.Controllers
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var subject = "Chào mừng bạn đến với shop!";
-            var body = $"Chào mừng bạn đến với KitStemHub! Chúc mừng bạn đã chính thức trở thành một thành viên trong đội ngũ của chúng tôi. Hy vọng chúng ta sẽ hợp tác hiệu quả và gặt hái nhiều thành công cùng nhau!";
-            await _emailService.SendEmail(requestBody.Email!, subject, body);
-
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
