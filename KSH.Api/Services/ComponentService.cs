@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using KST.Api.Data;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Repositories;
-using KST.Api.Repositories.IRepositories;
-using KST.Api.Services.IServices;
+using KSH.Api.Data;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Repositories;
+using KSH.Api.Repositories.IRepositories;
+using KSH.Api.Services.IServices;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class ComponentService : IComponentService
     {
@@ -123,7 +123,7 @@ namespace KST.Api.Services
         {
             try
             {
-                
+
                 var updateComponent = await _unitOfWork.ComponentRepository.GetByIdAsync(component.Id);
                 if (updateComponent == null)
                 {

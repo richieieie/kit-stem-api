@@ -1,11 +1,11 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Services.IServices;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KST.Api.Controllers
+namespace KSH.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -64,11 +64,10 @@ namespace KST.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "customer")]
-
-        public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string note)
+        public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string shippingAddress, string phoneNumber, string? note)
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
-            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, note);
+            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

@@ -2,15 +2,16 @@ using System.Drawing;
 using System.Linq.Expressions;
 using System.Runtime.Intrinsics.Wasm;
 using AutoMapper;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Models.DTO.Response;
-using KST.Api.Repositories;
-using KST.Api.Services.IServices;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Models.DTO.Response;
+using KSH.Api.Repositories;
+using KSH.Api.Services.IServices;
+using KSH.Api.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class OrderService : IOrderService
     {
@@ -19,11 +20,13 @@ namespace KST.Api.Services
         private readonly int pageSize = 20;
         private readonly UserManager<ApplicationUser> _userManager;
         private const int pointRate = 100;
-        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
+        private readonly ICartService _cartService;
+        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, ICartService cartService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _cartService = cartService;
         }
         #region Service methods
         public async Task<ServiceResponse> GetAsync(OrderStaffGetDTO orderStaffGetDTO)
@@ -98,7 +101,7 @@ namespace KST.Api.Services
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
-        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note)
+        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string shippingAddress, string phoneNumber, string note)
         {
             try
             {
@@ -127,15 +130,14 @@ namespace KST.Api.Services
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
                         .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
-                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
 
+                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
                 int point = 0;
                 if (isUsePoint)
                 {
                     point = user.Points;
                     user.Points -= point;
                 }
-
                 int totalPrice = price - point;
 
                 var orderId = Guid.NewGuid();
@@ -143,9 +145,11 @@ namespace KST.Api.Services
                 {
                     Id = orderId,
                     UserId = user.Id,
-                    CreatedAt = DateTimeOffset.Now,
+                    CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                     DeliveredAt = null,
                     ShippingStatus = "fail",
+                    ShippingAddress = shippingAddress,
+                    PhoneNumber = phoneNumber,
                     IsLabDownloaded = false,
                     Price = price,
                     Discount = point,
@@ -162,6 +166,7 @@ namespace KST.Api.Services
                 var order = _mapper.Map<UserOrders>(orderDTO);
 
                 await _unitOfWork.OrderRepository.CreateAsync(order);
+                await _cartService.RemoveAllAsync(userId);
                 await _userManager.UpdateAsync(user);
                 return (new ServiceResponse()
                     .SetSucceeded(true)

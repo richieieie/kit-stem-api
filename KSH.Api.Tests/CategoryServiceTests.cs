@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using KSH.Api.Tests.Utils;
-using KST.Api.Repositories;
-using KST.Api.Services;
+using KSH.Api.Repositories;
+using KSH.Api.Services;
 using Moq;
 
 namespace KSH.Api.Tests

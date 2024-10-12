@@ -1,9 +1,9 @@
-﻿using KST.Api.Models.Domain;
-using KST.Api.Models.DTO.Response;
+﻿using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Response;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KST.Api.Models.DTO.Request
+namespace KSH.Api.Models.DTO.Request
 {
     public class OrderCreateDTO
     {
@@ -17,6 +17,10 @@ namespace KST.Api.Models.DTO.Request
         public DateTimeOffset? DeliveredAt { get; set; }
 
         public string ShippingStatus { get; set; } = null!;
+
+        public string ShippingAddress { get; set; }= null!;
+
+        public string PhoneNumber { get; set; } = null!;
 
         public bool IsLabDownloaded { get; set; }
 

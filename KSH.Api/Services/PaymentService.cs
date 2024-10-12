@@ -1,10 +1,10 @@
-using KST.Api.Constants;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Repositories;
-using KST.Api.Services.IServices;
+using KSH.Api.Constants;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Repositories;
+using KSH.Api.Services.IServices;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class PaymentService : IPaymentService
     {

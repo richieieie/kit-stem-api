@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KST.Api.Models.Domain;
+using KSH.Api.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 
-namespace KST.Api.Repositories.IRepositories
+namespace KSH.Api.Repositories.IRepositories
 {
     public interface ITokenRepository
     {

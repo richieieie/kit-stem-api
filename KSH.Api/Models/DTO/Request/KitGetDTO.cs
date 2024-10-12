@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace KST.Api.Models.DTO.Request
+namespace KSH.Api.Models.DTO.Request
 {
     public class KitGetDTO
     {

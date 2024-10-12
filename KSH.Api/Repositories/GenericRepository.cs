@@ -1,8 +1,8 @@
-﻿using KST.Api.Data;
+﻿using KSH.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace KST.Api.Repositories
+namespace KSH.Api.Repositories
 {
     public abstract class GenericRepository<T> where T : class
     {

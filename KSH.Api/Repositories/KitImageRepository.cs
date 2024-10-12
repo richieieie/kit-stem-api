@@ -1,7 +1,7 @@
-﻿using KST.Api.Data;
-using KST.Api.Models.Domain;
+﻿using KSH.Api.Data;
+using KSH.Api.Models.Domain;
 
-namespace KST.Api.Repositories
+namespace KSH.Api.Repositories
 {
     public class KitImageRepository : GenericRepository<KitImage>
     {

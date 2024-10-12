@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KST.Api.Models.Domain
+namespace KSH.Api.Models.Domain
 {
     [Table("Cart")]
     public class Cart

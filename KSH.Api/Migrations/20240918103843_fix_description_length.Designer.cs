@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using KST.Api.Data;
+using KSH.Api.Data;
 
 #nullable disable
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
     [Migration("20240918103843_fix_description_length")]
@@ -188,7 +188,7 @@ namespace KST.Api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.ApplicationUser", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -268,7 +268,7 @@ namespace KST.Api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Component", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Component", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -295,7 +295,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Component");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.ComponentsType", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.ComponentsType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -314,7 +314,7 @@ namespace KST.Api.Migrations
                     b.ToTable("ComponentsType");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Kit", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Kit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -353,7 +353,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Kit");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.KitComponent", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.KitComponent", b =>
                 {
                     b.Property<int>("KitId")
                         .HasColumnType("int");
@@ -375,7 +375,7 @@ namespace KST.Api.Migrations
                     b.ToTable("KitComponent");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.KitImage", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.KitImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -396,7 +396,7 @@ namespace KST.Api.Migrations
                     b.ToTable("KitImages");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.KitsCategory", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.KitsCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -418,7 +418,7 @@ namespace KST.Api.Migrations
                     b.ToTable("KitsCategory");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Lab", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Lab", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -463,7 +463,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Lab");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.LabSupport", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.LabSupport", b =>
                 {
                     b.Property<Guid>("LabId")
                         .HasColumnType("uniqueidentifier");
@@ -482,7 +482,7 @@ namespace KST.Api.Migrations
                     b.ToTable("LabSupport");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Level", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Level", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -512,7 +512,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Level");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Method", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Method", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -536,7 +536,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Method");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Package", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Package", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -558,7 +558,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Package");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.PackageLab", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.PackageLab", b =>
                 {
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -574,7 +574,7 @@ namespace KST.Api.Migrations
                     b.ToTable("PackageLab");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.PackageOrder", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.PackageOrder", b =>
                 {
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
@@ -592,7 +592,7 @@ namespace KST.Api.Migrations
                     b.ToTable("PackageOrder");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Payment", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Payment", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -614,7 +614,7 @@ namespace KST.Api.Migrations
                     b.ToTable("Payment");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.ShippingStatus", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.ShippingStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -638,7 +638,7 @@ namespace KST.Api.Migrations
                     b.ToTable("ShippingStatus");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.UserOrders", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.UserOrders", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -704,7 +704,7 @@ namespace KST.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.ApplicationUser", null)
+                    b.HasOne("KSH.Api.Models.Domain.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -713,7 +713,7 @@ namespace KST.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.ApplicationUser", null)
+                    b.HasOne("KSH.Api.Models.Domain.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -728,7 +728,7 @@ namespace KST.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KST.Api.Models.Domain.ApplicationUser", null)
+                    b.HasOne("KSH.Api.Models.Domain.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -737,16 +737,16 @@ namespace KST.Api.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.ApplicationUser", null)
+                    b.HasOne("KSH.Api.Models.Domain.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Component", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Component", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.ComponentsType", "Type")
+                    b.HasOne("KSH.Api.Models.Domain.ComponentsType", "Type")
                         .WithMany("Components")
                         .HasForeignKey("TypeId")
                         .IsRequired()
@@ -755,9 +755,9 @@ namespace KST.Api.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Kit", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Kit", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.KitsCategory", "Category")
+                    b.HasOne("KSH.Api.Models.Domain.KitsCategory", "Category")
                         .WithMany("Kits")
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("FK__Kit__CategoryId__6E01572D");
@@ -765,15 +765,15 @@ namespace KST.Api.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.KitComponent", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.KitComponent", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Component", "Component")
+                    b.HasOne("KSH.Api.Models.Domain.Component", "Component")
                         .WithMany("KitComponents")
                         .HasForeignKey("ComponentId")
                         .IsRequired()
                         .HasConstraintName("FK__KitCompon__Compo__73BA3083");
 
-                    b.HasOne("KST.Api.Models.Domain.Kit", "Kit")
+                    b.HasOne("KSH.Api.Models.Domain.Kit", "Kit")
                         .WithMany("KitComponents")
                         .HasForeignKey("KitId")
                         .IsRequired()
@@ -784,9 +784,9 @@ namespace KST.Api.Migrations
                     b.Navigation("Kit");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.KitImage", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.KitImage", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Kit", "Kit")
+                    b.HasOne("KSH.Api.Models.Domain.Kit", "Kit")
                         .WithMany("KitImages")
                         .HasForeignKey("KitId")
                         .IsRequired()
@@ -795,15 +795,15 @@ namespace KST.Api.Migrations
                     b.Navigation("Kit");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Lab", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Lab", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Kit", "Kit")
+                    b.HasOne("KSH.Api.Models.Domain.Kit", "Kit")
                         .WithMany("Labs")
                         .HasForeignKey("KitId")
                         .IsRequired()
                         .HasConstraintName("FK__Lab__KitId__00200768");
 
-                    b.HasOne("KST.Api.Models.Domain.Level", "Level")
+                    b.HasOne("KSH.Api.Models.Domain.Level", "Level")
                         .WithMany("Labs")
                         .HasForeignKey("LevelId")
                         .IsRequired()
@@ -814,15 +814,15 @@ namespace KST.Api.Migrations
                     b.Navigation("Level");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.LabSupport", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.LabSupport", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Lab", "Lab")
+                    b.HasOne("KSH.Api.Models.Domain.Lab", "Lab")
                         .WithMany("LabSupports")
                         .HasForeignKey("LabId")
                         .IsRequired()
                         .HasConstraintName("FK__LabSuppor__LabId__22751F6C");
 
-                    b.HasOne("KST.Api.Models.Domain.UserOrders", "Order")
+                    b.HasOne("KSH.Api.Models.Domain.UserOrders", "Order")
                         .WithMany("LabSupports")
                         .HasForeignKey("OrderId")
                         .IsRequired()
@@ -833,9 +833,9 @@ namespace KST.Api.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Package", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Package", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Kit", "Kit")
+                    b.HasOne("KSH.Api.Models.Domain.Kit", "Kit")
                         .WithMany("Packages")
                         .HasForeignKey("KitId")
                         .IsRequired()
@@ -844,15 +844,15 @@ namespace KST.Api.Migrations
                     b.Navigation("Kit");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.PackageLab", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.PackageLab", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Lab", "Lab")
+                    b.HasOne("KSH.Api.Models.Domain.Lab", "Lab")
                         .WithMany("PackageLabs")
                         .HasForeignKey("LabId")
                         .IsRequired()
                         .HasConstraintName("FK__PackageLa__LabId__0A9D95DB");
 
-                    b.HasOne("KST.Api.Models.Domain.Package", "Package")
+                    b.HasOne("KSH.Api.Models.Domain.Package", "Package")
                         .WithMany("PackageLabs")
                         .HasForeignKey("PackageId")
                         .IsRequired()
@@ -863,16 +863,16 @@ namespace KST.Api.Migrations
                     b.Navigation("Package");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.PackageOrder", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.PackageOrder", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.UserOrders", "Order")
+                    b.HasOne("KSH.Api.Models.Domain.UserOrders", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__PackageOr__Order__1F98B2C1");
 
-                    b.HasOne("KST.Api.Models.Domain.Package", "Package")
+                    b.HasOne("KSH.Api.Models.Domain.Package", "Package")
                         .WithMany()
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -884,9 +884,9 @@ namespace KST.Api.Migrations
                     b.Navigation("Package");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Payment", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Payment", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Method", "Method")
+                    b.HasOne("KSH.Api.Models.Domain.Method", "Method")
                         .WithMany("Payments")
                         .HasForeignKey("MethodId")
                         .HasConstraintName("FK__Payment__MethodI__0F624AF8");
@@ -894,21 +894,21 @@ namespace KST.Api.Migrations
                     b.Navigation("Method");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.UserOrders", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.UserOrders", b =>
                 {
-                    b.HasOne("KST.Api.Models.Domain.Payment", "Payment")
+                    b.HasOne("KSH.Api.Models.Domain.Payment", "Payment")
                         .WithMany("UserOrders")
                         .HasForeignKey("PaymentId")
                         .IsRequired()
                         .HasConstraintName("FK__UserOrders__Payme__160F4887");
 
-                    b.HasOne("KST.Api.Models.Domain.ShippingStatus", "ShippingStatus")
+                    b.HasOne("KSH.Api.Models.Domain.ShippingStatus", "ShippingStatus")
                         .WithMany("UserOrders")
                         .HasForeignKey("ShippingStatusId")
                         .IsRequired()
                         .HasConstraintName("FK__UserOrders__Shipp__17F790F9");
 
-                    b.HasOne("KST.Api.Models.Domain.ApplicationUser", "User")
+                    b.HasOne("KSH.Api.Models.Domain.ApplicationUser", "User")
                         .WithMany("UserOrders")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -921,22 +921,22 @@ namespace KST.Api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.ApplicationUser", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.ApplicationUser", b =>
                 {
                     b.Navigation("UserOrders");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Component", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Component", b =>
                 {
                     b.Navigation("KitComponents");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.ComponentsType", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.ComponentsType", b =>
                 {
                     b.Navigation("Components");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Kit", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Kit", b =>
                 {
                     b.Navigation("KitComponents");
 
@@ -947,44 +947,44 @@ namespace KST.Api.Migrations
                     b.Navigation("Packages");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.KitsCategory", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.KitsCategory", b =>
                 {
                     b.Navigation("Kits");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Lab", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Lab", b =>
                 {
                     b.Navigation("LabSupports");
 
                     b.Navigation("PackageLabs");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Level", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Level", b =>
                 {
                     b.Navigation("Labs");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Method", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Method", b =>
                 {
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Package", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Package", b =>
                 {
                     b.Navigation("PackageLabs");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.Payment", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.Payment", b =>
                 {
                     b.Navigation("UserOrders");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.ShippingStatus", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.ShippingStatus", b =>
                 {
                     b.Navigation("UserOrders");
                 });
 
-            modelBuilder.Entity("KST.Api.Models.Domain.UserOrders", b =>
+            modelBuilder.Entity("KSH.Api.Models.Domain.UserOrders", b =>
                 {
                     b.Navigation("LabSupports");
                 });

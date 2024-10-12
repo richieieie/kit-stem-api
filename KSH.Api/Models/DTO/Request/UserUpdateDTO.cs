@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KST.Api.Models.DTO
+namespace KSH.Api.Models.DTO
 {
     public class UserUpdateDTO
     {
