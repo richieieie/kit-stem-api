@@ -10,10 +10,10 @@ namespace KST.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LabSupportController : ControllerBase
+    public class LabSupportsController : ControllerBase
     {
         private readonly ILabSupportService _labSupportService;
-        public LabSupportController(ILabSupportService labSupportService)
+        public LabSupportsController(ILabSupportService labSupportService)
         {
             _labSupportService = labSupportService;
         }

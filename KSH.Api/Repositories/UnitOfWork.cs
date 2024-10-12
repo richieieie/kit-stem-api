@@ -1,4 +1,5 @@
 ﻿using KSH.Api.Data;
+using KST.Api.Repositories;
 
 namespace KSH.Api.Repositories
 {

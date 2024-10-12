@@ -4,6 +4,8 @@ using KSH.Api.Models.Domain;
 using KSH.Api.Models.DTO;
 using KSH.Api.Models.DTO.Request;
 using KSH.Api.Models.DTO.Response;
+using KST.Api.Models.DTO.Request;
+using KST.Api.Models.DTO.Response;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace KSH.Api.Utils
@@ -78,7 +80,8 @@ namespace KSH.Api.Utils
             //Using for LabSupport
             CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
             CreateMap<LabSupport, LabSupportResponseDTO>()
-                .ForMember(dest => dest.RemainSupportTimes, opt => opt.MapFrom(src => src.OrderSupport.RemainSupportTimes));
+                .ForMember(dest => dest.RemainSupportTimes, opt => opt.MapFrom(src => src.OrderSupport.RemainSupportTimes))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.OrderSupport.Order.User.UserName));
            
 
         }

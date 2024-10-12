@@ -22,6 +22,7 @@ namespace KSH.Api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        #region Service methods
         public async Task<ServiceResponse> GetAsync(KitGetDTO kitGetDTO)
         {
             try
@@ -33,7 +34,7 @@ namespace KSH.Api.Services
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    query => query.Include(l => l.Category).Include(l => l.KitImages)
+                    query => query.Include(l => l.Category).Include(l => l.KitImages).Include(l => l.Packages)
                     );
                 if (Kits.Count() > 0)
                 {
@@ -271,9 +272,16 @@ namespace KSH.Api.Services
                 return -1;
             }
         }
+        #endregion
+        #region Methods that help service
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && 
+            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
+            (l.PurchaseCost >= kitGetDTO.MinPrice) &&
+            (l.PurchaseCost <= kitGetDTO.MaxPrice);
+            ;
         }
+        #endregion
     }
 }
