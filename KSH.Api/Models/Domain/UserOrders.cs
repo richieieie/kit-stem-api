@@ -18,7 +18,10 @@ namespace KSH.Api.Models.Domain
         public DateTimeOffset? DeliveredAt { get; set; }
 
         public string ShippingStatus { get; set; } = null!;
+
         public string ShippingAddress { get; set; } = null!;
+
+        public string PhoneNumber { get; set; } = null!;
 
         public bool IsLabDownloaded { get; set; }
 
