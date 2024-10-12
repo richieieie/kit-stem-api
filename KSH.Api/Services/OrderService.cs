@@ -7,6 +7,7 @@ using KSH.Api.Models.DTO.Request;
 using KSH.Api.Models.DTO.Response;
 using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
+using KSH.Api.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -143,7 +144,7 @@ namespace KSH.Api.Services
                 {
                     Id = orderId,
                     UserId = user.Id,
-                    CreatedAt = DateTimeOffset.Now,
+                    CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                     DeliveredAt = null,
                     ShippingStatus = "fail",
                     IsLabDownloaded = false,

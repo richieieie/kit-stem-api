@@ -42,7 +42,7 @@ namespace KSH.Api.Services
                 {
                     Id = Guid.NewGuid(),
                     MethodId = OrderFulfillmentConstants.PaymentVnPay,
-                    CreatedAt = GetCurrentVietNamTime(),
+                    CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                     Status = OrderFulfillmentConstants.PaymentFail,
                     Amount = order.TotalPrice,
                     OrderId = order.Id
