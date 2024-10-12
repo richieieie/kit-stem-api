@@ -184,8 +184,6 @@ public class Program
 
         app.UseStaticFiles();
 
-        app.UseStaticFiles();
-
         app.UseSwagger();
         app.UseSwaggerUI();
 

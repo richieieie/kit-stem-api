@@ -6,6 +6,7 @@ using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
 using KSH.Api.Utils;
 
+
 namespace KSH.Api.Services
 {
     public class VNPayService : IVNPayService
@@ -41,7 +42,7 @@ namespace KSH.Api.Services
                 {
                     Id = Guid.NewGuid(),
                     MethodId = OrderFulfillmentConstants.PaymentVnPay,
-                    CreatedAt = DateTimeOffset.Now,
+                    CreatedAt = GetCurrentVietNamTime(),
                     Status = OrderFulfillmentConstants.PaymentFail,
                     Amount = order.TotalPrice,
                     OrderId = order.Id
@@ -49,21 +50,20 @@ namespace KSH.Api.Services
                 await _unitOfWork.PaymentRepository.CreateAsync(payment);
 
                 //Build URL for VNPAY
-                var timeNow = DateTime.Now;
-                VnPayLibrary vnPay = new VnPayLibrary();
+                var vnPay = new VnPayLibrary();
                 vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
                 vnPay.AddRequestData("vnp_Command", "pay");
                 vnPay.AddRequestData("vnp_TmnCode", _configuration["VNPay:vnp_TmnCode"]!);
                 vnPay.AddRequestData("vnp_Amount", (payment.Amount * 100).ToString());
-                vnPay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
+                vnPay.AddRequestData("vnp_CreateDate", payment.CreatedAt.ToString("yyyyMMddHHmmss"));
                 vnPay.AddRequestData("vnp_CurrCode", _configuration["VNPay:vnp_CurrCode"]!);
                 vnPay.AddRequestData("vnp_IpAddr", Utils.Utils.GetIpAddress(_httpContextAccessor)!);
-                vnPay.AddRequestData("vnp_Locale", _configuration["VNPay:vnp_Locale"] ?? "vn");
+                vnPay.AddRequestData("vnp_Locale", _configuration.GetValue("VNPay:vnp_Locale", "vn") ?? "vn");
                 vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {payment.Id}");
                 vnPay.AddRequestData("vnp_OrderType", "250000");
                 vnPay.AddRequestData("vnp_ReturnUrl", _configuration["VNPay:vnp_ReturnUrl"]!);
                 vnPay.AddRequestData("vnp_TxnRef", $"{payment.Id}");
-                vnPay.AddRequestData("vnp_ExpireDate", timeNow.AddMinutes(_configuration.GetValue<int>("VNPay:vnp_ReturnUrl")).ToString("yyyyMMddHHmmss"));
+                vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(_configuration.GetValue("VNPay:vpn_TransactionTimeOut", 5)).ToString("yyyyMMddHHmmss"));
 
                 string paymentUrl = vnPay.CreateRequestUrl(_configuration["VNPay:vnp_Url"]!, _configuration["VNPay:vnp_HashSecret"]!);
 
@@ -154,6 +154,16 @@ namespace KSH.Api.Services
                         .AddDetail("message", "Tạo mới payment thất bại!")
                         .AddError("outOfService", "Không thể tạo một payment mới ngay lúc này!");
             }
+        }
+
+        private DateTimeOffset GetCurrentVietNamTime()
+        {
+            var createdAtUtc = DateTimeOffset.UtcNow;
+
+            var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var createdAtInVietnam = TimeZoneInfo.ConvertTime(createdAtUtc, vietnamTimeZone);
+
+            return createdAtInVietnam;
         }
     }
 }
