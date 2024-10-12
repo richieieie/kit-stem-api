@@ -1,9 +1,9 @@
-using KST.Api.Services.IServices;
+using KSH.Api.Services.IServices;
 using MimeKit.Text;
 using MimeKit;
 using MailKit.Net.Smtp;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class GmailService : IEmailService
     {

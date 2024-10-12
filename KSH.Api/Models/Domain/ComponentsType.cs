@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace KST.Api.Models.Domain
+namespace KSH.Api.Models.Domain
 {
 
     [Table("Type")]

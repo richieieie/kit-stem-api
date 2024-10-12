@@ -1,9 +1,9 @@
 using Google.Apis.Auth;
 using Google.Apis.Auth.OAuth2;
-using KST.Api.Models.DTO;
-using KST.Api.Services.IServices;
+using KSH.Api.Models.DTO;
+using KSH.Api.Services.IServices;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class GoogleService : IGoogleService
     {

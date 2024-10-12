@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace KST.Api.Models.Domain
+namespace KSH.Api.Models.Domain
 {
 
     [PrimaryKey("KitId", "ComponentId")]

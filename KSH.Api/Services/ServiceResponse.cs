@@ -1,4 +1,4 @@
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class ServiceResponse
     {

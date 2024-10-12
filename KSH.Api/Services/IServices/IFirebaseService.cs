@@ -1,4 +1,4 @@
-namespace KST.Api.Services.IServices
+namespace KSH.Api.Services.IServices
 {
     public interface IFirebaseService
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
     public partial class change_payment_amount_type : Migration
