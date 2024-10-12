@@ -1,9 +1,9 @@
-using KST.Api.Models.Domain;
+using KSH.Api.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace KST.Api.Data
+namespace KSH.Api.Data
 {
     public class KitStemDbContext : IdentityDbContext<ApplicationUser>
     {

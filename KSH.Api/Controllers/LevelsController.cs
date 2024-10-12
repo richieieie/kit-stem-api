@@ -1,11 +1,11 @@
-﻿using KST.Api.Models.DTO;
-using KST.Api.Services;
-using KST.Api.Services.IServices;
+﻿using KSH.Api.Models.DTO;
+using KSH.Api.Services;
+using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace KST.Api.Controllers
+namespace KSH.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

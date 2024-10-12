@@ -2,15 +2,15 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Google.Cloud.Storage.V1;
-using KST.Api.Configs;
-using KST.Api.Data;
-using KST.Api.Models.Domain;
-using KST.Api.Repositories;
-using KST.Api.Repositories.IRepositories;
-using KST.Api.Services;
-using KST.Api.Services.IServices;
-using KST.Api.Utils;
-using KST.Api.Utils.Interfaces;
+using KSH.Api.Configs;
+using KSH.Api.Data;
+using KSH.Api.Models.Domain;
+using KSH.Api.Repositories;
+using KSH.Api.Repositories.IRepositories;
+using KSH.Api.Services;
+using KSH.Api.Services.IServices;
+using KSH.Api.Utils;
+using KSH.Api.Utils.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace KST.Api;
+namespace KSH.Api;
 
 public class Program
 {
@@ -182,7 +182,7 @@ public class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        app.UseStaticFiles();
 
         app.UseSwagger();
         app.UseSwaggerUI();

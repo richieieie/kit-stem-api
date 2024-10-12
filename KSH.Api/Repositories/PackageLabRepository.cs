@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KST.Api.Data;
-using KST.Api.Models.Domain;
+using KSH.Api.Data;
+using KSH.Api.Models.Domain;
 
-namespace KST.Api.Repositories
+namespace KSH.Api.Repositories
 {
     public class PackageLabRepository : GenericRepository<PackageLab>
     {

@@ -1,4 +1,4 @@
-namespace KST.Api.Models.DTO.Response
+namespace KSH.Api.Models.DTO.Response
 {
     public class PackageOrderResponseDTO
     {

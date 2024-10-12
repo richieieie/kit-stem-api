@@ -1,10 +1,10 @@
 using AutoMapper;
 using KSH.Api.Tests.Utils;
-using KST.Api.Data;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Repositories.IRepositories;
-using KST.Api.Services;
+using KSH.Api.Data;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Repositories.IRepositories;
+using KSH.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KST.Api.Models.DTO.Request
+namespace KSH.Api.Models.DTO.Request
 {
     public class KitComponentDTO
     {

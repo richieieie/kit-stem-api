@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Google.Apis.Auth;
-using KST.Api.Constants;
-using KST.Api.Data;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Repositories.IRepositories;
-using KST.Api.Services.IServices;
+using KSH.Api.Constants;
+using KSH.Api.Data;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Repositories.IRepositories;
+using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class UserService : IUserService
     {

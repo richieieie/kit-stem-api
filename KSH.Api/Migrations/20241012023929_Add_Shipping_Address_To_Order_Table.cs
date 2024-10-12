@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Nullable_StaffId_LabSupport : Migration
+    public partial class Add_Shipping_Address_To_Order_Table : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,6 +13,13 @@ namespace KST.Api.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_LabSupport_AspNetUsers_StaffId",
                 table: "LabSupport");
+
+            migrationBuilder.AddColumn<string>(
+                name: "ShippingAddress",
+                table: "Order",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AlterColumn<string>(
                 name: "StaffId",
@@ -36,6 +43,10 @@ namespace KST.Api.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_LabSupport_AspNetUsers_StaffId",
                 table: "LabSupport");
+
+            migrationBuilder.DropColumn(
+                name: "ShippingAddress",
+                table: "Order");
 
             migrationBuilder.AlterColumn<string>(
                 name: "StaffId",
