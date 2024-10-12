@@ -26,7 +26,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
+        // Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
 
         builder.Services.AddHttpContextAccessor();
 
@@ -183,6 +183,8 @@ public class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
+
+        app.UseStaticFiles();
 
         app.UseSwagger();
         app.UseSwaggerUI();
