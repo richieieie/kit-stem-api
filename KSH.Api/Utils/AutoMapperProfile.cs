@@ -87,7 +87,6 @@ namespace KSH.Api.Utils
             //Using for LabSupport
             CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
             CreateMap<LabSupport, LabSupportResponseDTO>()
-                .ForMember(dest => dest.RemainSupportTimes, opt => opt.MapFrom(src => src.OrderSupport.RemainSupportTimes))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.OrderSupport.Order.User.UserName));
            
 
