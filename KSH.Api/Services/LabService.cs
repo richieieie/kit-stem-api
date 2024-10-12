@@ -1,13 +1,13 @@
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Services.IServices;
-using KST.Api.Repositories;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Services.IServices;
+using KSH.Api.Repositories;
 using System.Linq.Expressions;
 using AutoMapper;
-using KST.Api.Models.DTO.Response;
-using KST.Api.Constants;
+using KSH.Api.Models.DTO.Response;
+using KSH.Api.Constants;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class LabService : ILabService
     {

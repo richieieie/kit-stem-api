@@ -1,6 +1,6 @@
-﻿using KST.Api.Data;
+﻿using KSH.Api.Data;
 
-namespace KST.Api.Repositories
+namespace KSH.Api.Repositories
 {
         public class UnitOfWork
         {

@@ -1,13 +1,13 @@
 using AutoMapper;
-using KST.Api.Constants;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO.Request;
-using KST.Api.Models.DTO.Response;
-using KST.Api.Repositories;
-using KST.Api.Services.IServices;
-using KST.Api.Utils;
+using KSH.Api.Constants;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
+using KSH.Api.Repositories;
+using KSH.Api.Services.IServices;
+using KSH.Api.Utils;
 
-namespace KST.Api.Services
+
+namespace KSH.Api.Services
 {
     public class VNPayService : IVNPayService
     {
@@ -50,44 +50,23 @@ namespace KST.Api.Services
 
                 await _unitOfWork.PaymentRepository.CreateAsync(payment);
 
-                var vnp_ReturnUrl = _configuration["VNPay:vnp_ReturnUrl"]!; //URL nhan ket qua tra ve 
-                var vnp_Url = _configuration["VNPay:vnp_Url"]!; //URL thanh toan cua VNPAY 
-                var vnp_TmnCode = _configuration["VNPay:vnp_TmnCode"]!; //Ma website
-                var vnp_HashSecret = _configuration["VNPay:vnp_HashSecret"]!; //Chuoi bi mat
-                if (string.IsNullOrEmpty(vnp_TmnCode) || string.IsNullOrEmpty(vnp_HashSecret))
-                {
-                    return serviceResponse
-                            .SetSucceeded(false)
-                            .SetStatusCode(StatusCodes.Status500InternalServerError)
-                            .AddDetail("message", "Lấy url giao dịch thất bại!")
-                            .AddError("outOfService", "Không thể lấy được url giao dịch ngay lúc này, vui lòng liên hệ với nhà cung cấp để được hỗ trợ!");
-                }
-                var locale = _configuration["VNPay:vnp_Locale"]!;
-
                 //Build URL for VNPAY
-                VnPayLibrary vnPay = new VnPayLibrary();
+                var vnPay = new VnPayLibrary();
                 vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
                 vnPay.AddRequestData("vnp_Command", "pay");
-                vnPay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+                vnPay.AddRequestData("vnp_TmnCode", _configuration["VNPay:vnp_TmnCode"]!);
                 vnPay.AddRequestData("vnp_Amount", (payment.Amount * 100).ToString());
                 vnPay.AddRequestData("vnp_CreateDate", payment.CreatedAt.ToString("yyyyMMddHHmmss"));
                 vnPay.AddRequestData("vnp_CurrCode", _configuration["VNPay:vnp_CurrCode"]!);
                 vnPay.AddRequestData("vnp_IpAddr", Utils.Utils.GetIpAddress(_httpContextAccessor)!);
-                if (!string.IsNullOrEmpty(locale))
-                {
-                    vnPay.AddRequestData("vnp_Locale", locale);
-                }
-                else
-                {
-                    vnPay.AddRequestData("vnp_Locale", "vn");
-                }
+                vnPay.AddRequestData("vnp_Locale", _configuration.GetValue("VNPay:vnp_Locale", "vn") ?? "vn");
                 vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {payment.Id}");
                 vnPay.AddRequestData("vnp_OrderType", "250000");
-                vnPay.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
+                vnPay.AddRequestData("vnp_ReturnUrl", _configuration["VNPay:vnp_ReturnUrl"]!);
                 vnPay.AddRequestData("vnp_TxnRef", $"{payment.Id}");
-                vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(3).ToString("yyyyMMddHHmmss"));
+                vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(_configuration.GetValue("VNPay:vpn_TransactionTimeOut", 5)).ToString("yyyyMMddHHmmss"));
 
-                string paymentUrl = vnPay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+                string paymentUrl = vnPay.CreateRequestUrl(_configuration["VNPay:vnp_Url"]!, _configuration["VNPay:vnp_HashSecret"]!);
 
                 return serviceResponse
                             .AddDetail("message", "Lấy url giao dịch thành công!")

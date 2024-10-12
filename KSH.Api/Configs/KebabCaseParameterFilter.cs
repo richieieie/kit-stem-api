@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace KST.Api.Configs
+namespace KSH.Api.Configs
 {
     public class KebabCaseParameterFilter : IParameterFilter
     {

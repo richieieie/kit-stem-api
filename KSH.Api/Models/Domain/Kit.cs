@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace KST.Api.Models.Domain
+namespace KSH.Api.Models.Domain
 {
 
     [Table("Kit")]

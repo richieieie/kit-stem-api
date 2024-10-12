@@ -1,7 +1,7 @@
 using AutoMapper;
-using KST.Api.Data;
-using KST.Api.Models.Domain;
-using KST.Api.Repositories;
+using KSH.Api.Data;
+using KSH.Api.Models.Domain;
+using KSH.Api.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

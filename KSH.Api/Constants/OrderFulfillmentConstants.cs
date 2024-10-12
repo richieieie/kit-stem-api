@@ -1,4 +1,4 @@
-namespace KST.Api.Constants
+namespace KSH.Api.Constants
 {
     public static class OrderFulfillmentConstants
     {

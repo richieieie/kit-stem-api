@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KST.Api.Constants
+namespace KSH.Api.Constants
 {
     public static class FirebaseConstants
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
     public partial class Nullable_StaffId_LabSupport : Migration
