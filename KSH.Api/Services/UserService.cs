@@ -157,6 +157,11 @@ namespace KSH.Api.Services
                     Email = requestBody.Email,
                     Status = true
                 };
+                if (role == UserConstants.StaffRole)
+                {
+                    user.EmailConfirmed = true;
+                }
+
                 var identityResult = await _userManager.CreateAsync(user, requestBody.Password!);
                 if (!identityResult.Succeeded)
                 {
