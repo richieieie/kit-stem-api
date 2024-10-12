@@ -193,7 +193,7 @@ namespace KSH.Api.Services
                 null,
                 null,
                 null,
-                query => query.Include(l => l.Payment)
+                query => query.Include(l => l.Payment).Include(l => l.User)
                 );
                 if (orders == null)
                 {
@@ -228,6 +228,16 @@ namespace KSH.Api.Services
                             .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
                             .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                     }
+                }
+                // Cập nhật điểm cho khách hàng
+                var point = (double)(order.Payment.Amount / 100);
+                order.User.Points = (int)Math.Floor(point);
+                if (!await _unitOfWork.UserRepository.UpdateAsync(order.User))
+                {
+                    return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
+                            .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
                 // Tạo từng order support cho từng LabId có trong những package đã mua trong order 
                 var packageFilter = GetPackageOrderFilter(order.Id);

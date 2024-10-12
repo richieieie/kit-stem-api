@@ -55,91 +55,16 @@ namespace KST.Api.Services
                     .AddDetail("message", "Lấy danh sách thất bại");
             }
         }
-        public async Task<ServiceResponse> GetSupportsAsync(LabSupportGetDTO getDTO)
-        {
-            try
-            {
-                var (labSupports, totalPages) = await _unitOfWork.OrderSupportRepository.GetFilterAsync(
-                null,
-                null,
-                skip: sizePerPage * getDTO.Page,
-                take: sizePerPage,
-                query => query.Include(l => l.Order)
-                );
-                // Group by UserId and calculate the sum of RemainSupportTimes
-                var groupedLabSupports = labSupports
-                    .GroupBy(l => l.Order.UserId)
-                    .Select(g => new LabSupportRemainsDTO
-                    {
-                        UserId = g.Key,
-                        SumRemainSupportTimes = g.Sum(l => l.RemainSupportTimes),
-                        // Add other necessary fields from LabSupportRemainsDTO
-                    });
-                if (groupedLabSupports.Any())
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Lấy danh sách LabSupport thành công")
-                        .AddDetail("data", new { totalPages, curremtPage = (getDTO.Page + 1), labSupports = groupedLabSupports });
-                }
-                return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("invalidCredentials", "Thông tin không hợp lệ")
-                    .AddDetail("message", "Lấy danh sách thất bại");
-            }
-            catch
-            {
-                return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể lấy danh sách LabSupport lúc này")
-                    .AddDetail("message", "Lấy danh sách thất bại");
-            }
-        }
-
         public async Task<ServiceResponse> CreateAsync(Guid orderId)
         {
             try
             {
                  throw new NotImplementedException();
-                /*
-                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderSupportId);
-                if (orderSupport == null && orderSupport.RemainSupportTimes <= 0)
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("invalidCredentials", "Đơn hàng hỗ trợ đã hết lượt để tạo hỗ trợ")
-                        .AddDetail("message", "Tạo lượt hỗ trợ thất bại");
-                }
-                var labSupport = new LabSupport()
-                {
-                    Id = Guid.NewGuid(),
-                    OrderSupportId = orderSupportId,
-                    StaffId = null,
-                    Rating = 0,
-                    FeedBack = "",
-                    IsFinished = false,
-                    CreatedAt = DateTimeOffset.Now,
-                };
-                if (await _unitOfWork.LabSupportRepository.CreateAsync(labSupport))
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Tạo yêu cầu hỗ trợ thành công");
-                }
-                else
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("invalidCredentials", "Thông tin gửi không hợp lệ")
-                        .AddDetail("message", "Tạo yêu cầu thất bại");
-                }*/
             }
             catch
             {
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể tạo yêu cầu lúc này")
-                    .AddDetail("message", "Tạo yêu cầu thất bại");
+                    .SetSucceeded(false);
             }
 
         }
@@ -175,7 +100,6 @@ namespace KST.Api.Services
                     .AddDetail("message", "Hỗ trợ khách hàng thất bại");
             }
         }
-
         public async Task<ServiceResponse> UpdateFinishedAsync(Guid labSupportId)
         {
             try
@@ -239,7 +163,6 @@ namespace KST.Api.Services
             }
 
         }
-
         public async Task<ServiceResponse> UpdateReviewAsync(LabSupportReviewUpdateDTO DTO)
         {
             try
@@ -283,7 +206,6 @@ namespace KST.Api.Services
                     .AddDetail("message", "Cập nhật đánh giá thất bại");
             }
         }
-
         public async Task<ServiceResponse> GetByCustomerId(String userId)
         {
             try

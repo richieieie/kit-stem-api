@@ -69,7 +69,7 @@ namespace KSH.Api.Services
                     query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
 
-                if (Kits.FirstOrDefault() == null || !Kits.FirstOrDefault().Status)
+                if (Kits.FirstOrDefault() == null || !Kits.FirstOrDefault()!.Status)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
