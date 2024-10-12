@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace KST.Api.Models.DTO
+namespace KSH.Api.Models.DTO
 {
     public class PackageGetFilterDTO
     {

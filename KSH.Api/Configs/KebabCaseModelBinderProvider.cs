@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace KST.Api.Configs
+namespace KSH.Api.Configs
 {
     public class KebabCaseModelBinderProvider : IModelBinderProvider
     {

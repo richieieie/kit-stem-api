@@ -1,10 +1,10 @@
 using AutoMapper;
 using KSH.Api.Tests.Utils;
-using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
-using KST.Api.Models.DTO.Response;
-using KST.Api.Repositories;
-using KST.Api.Services;
+using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Response;
+using KSH.Api.Repositories;
+using KSH.Api.Services;
 using Moq;
 
 namespace KSH.Api.Tests

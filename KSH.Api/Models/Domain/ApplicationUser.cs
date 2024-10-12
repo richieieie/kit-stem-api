@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
-namespace KST.Api.Models.Domain
+namespace KSH.Api.Models.Domain
 {
     public class ApplicationUser : IdentityUser
     {

@@ -1,7 +1,7 @@
-﻿using KST.Api.Models.Domain;
-using KST.Api.Models.DTO;
+﻿using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO;
 
-namespace KST.Api.Services.IServices
+namespace KSH.Api.Services.IServices
 {
     public interface ICategoryService
     {

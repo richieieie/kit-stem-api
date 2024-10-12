@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KST.Api.Models.DTO
+namespace KSH.Api.Models.DTO
 {
     public class LabUpdateDTO
     {

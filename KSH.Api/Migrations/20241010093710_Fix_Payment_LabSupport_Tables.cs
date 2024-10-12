@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace KST.Api.Migrations
+namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
     public partial class Fix_Payment_LabSupport_Tables : Migration

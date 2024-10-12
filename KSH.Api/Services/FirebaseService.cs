@@ -1,7 +1,7 @@
 using Google.Cloud.Storage.V1;
-using KST.Api.Services.IServices;
+using KSH.Api.Services.IServices;
 
-namespace KST.Api.Services
+namespace KSH.Api.Services
 {
     public class FirebaseService : IFirebaseService
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace KST.Api.Models.Domain
+namespace KSH.Api.Models.Domain
 {
     [Table("Order")]
     public partial class UserOrders
@@ -18,6 +18,7 @@ namespace KST.Api.Models.Domain
         public DateTimeOffset? DeliveredAt { get; set; }
 
         public string ShippingStatus { get; set; } = null!;
+        public string ShippingAddress { get; set; } = null!;
 
         public bool IsLabDownloaded { get; set; }
 
