@@ -99,7 +99,7 @@ namespace KSH.Api.Services
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
-        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note)
+        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string shippingAddress, string note)
         {
             try
             {
@@ -128,15 +128,16 @@ namespace KSH.Api.Services
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
                         .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
-                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
 
+                shippingAddress ??= user.Address!;
+
+                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
                 int point = 0;
                 if (isUsePoint)
                 {
                     point = user.Points;
                     user.Points -= point;
                 }
-
                 int totalPrice = price - point;
 
                 var orderId = Guid.NewGuid();
@@ -147,6 +148,7 @@ namespace KSH.Api.Services
                     CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                     DeliveredAt = null,
                     ShippingStatus = "fail",
+                    ShippingAddress = shippingAddress,
                     IsLabDownloaded = false,
                     Price = price,
                     Discount = point,
