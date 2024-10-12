@@ -11,6 +11,8 @@ using KSH.Api.Services;
 using KSH.Api.Services.IServices;
 using KSH.Api.Utils;
 using KSH.Api.Utils.Interfaces;
+using KST.Api.Services;
+using KST.Api.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +53,8 @@ public class Program
         builder.Services.AddScoped<ICartService, CartService>();
         builder.Services.AddScoped<IPaymentService, PaymentService>();
         builder.Services.AddScoped<IVNPayService, VNPayService>();
+        builder.Services.AddScoped<ILabSupportService, LabSupportService>();
+        builder.Services.AddScoped<IOrderSupportService, OrderSupportService>();
 
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));

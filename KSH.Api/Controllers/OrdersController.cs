@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
+using KSH.Api.Constants;
 using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -102,5 +103,75 @@ namespace KSH.Api.Controllers
 
         //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         // }
+        [HttpPut]
+        [Route("{orderId:guid}/verified")]
+        // [Authorize(Roles = "staff")]
+        public async Task<IActionResult> UpdateVerifiedStatus(Guid orderId)
+        {
+            OrderShippingStatusUpdateDTO getDTO = new () { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderVerifiedStatus };
+            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Route("{orderId:guid}/delivering")]
+        // [Authorize(Roles = "staff")]
+        public async Task<IActionResult> UpdateDeliveringStatus(Guid orderId)
+        {
+            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderDeliveringStatus };
+            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Route("{orderId:guid}/success")]
+        // [Authorize(Roles = "staff")]
+        public async Task<IActionResult> UpdateSuccessStatus(Guid orderId)
+        {
+            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderSuccessStatus };
+            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Route("{orderId:guid}/fail")]
+        // [Authorize(Roles = "staff")]
+        public async Task<IActionResult> UpdateFailStatus(Guid orderId)
+        {
+            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
+            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Route("{orderId:guid}/paid")]
+        // [Authorize(Roles = "staff")]
+        public async Task<IActionResult> UpdatePaidStatus(Guid orderId)
+        {
+            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
+            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }
