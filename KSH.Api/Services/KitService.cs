@@ -22,6 +22,7 @@ namespace KSH.Api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        #region Service methods
         public async Task<ServiceResponse> GetAsync(KitGetDTO kitGetDTO)
         {
             try
@@ -96,8 +97,6 @@ namespace KSH.Api.Services
                     .AddError("outOfService", "Không thể lấy kit ngay lúc này!");
             }
         }
-
-
 
         public async Task<ServiceResponse> CreateAsync(KitCreateDTO DTO)
         {
@@ -273,9 +272,16 @@ namespace KSH.Api.Services
                 return -1;
             }
         }
+        #endregion
+        #region Methods that help service
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && 
+            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
+            (l.PurchaseCost >= kitGetDTO.MinPrice) &&
+            (l.PurchaseCost <= kitGetDTO.MaxPrice);
+            ;
         }
+        #endregion
     }
 }

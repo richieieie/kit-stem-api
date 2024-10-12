@@ -6,9 +6,9 @@ namespace KSH.Api.Models.DTO.Request
     public class KitGetDTO
     {
         public int Page { get; set; } = 0;
-        [FromQuery(Name = "kit-name")]
         public string KitName { get; set; } = "";
-        [FromQuery(Name = "category-name")]
         public string CategoryName { get; set; } = "";
+        public int FromPrice { get; set; } = 0;
+        public int ToPrice { get; set; } = int.MaxValue;
     }
 }
