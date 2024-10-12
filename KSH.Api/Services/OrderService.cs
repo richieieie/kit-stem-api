@@ -20,11 +20,13 @@ namespace KSH.Api.Services
         private readonly int pageSize = 20;
         private readonly UserManager<ApplicationUser> _userManager;
         private const int pointRate = 100;
-        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
+        private readonly ICartService _cartService;
+        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, ICartService cartService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _cartService = cartService;
         }
         #region Service methods
         public async Task<ServiceResponse> GetAsync(OrderStaffGetDTO orderStaffGetDTO)
@@ -99,7 +101,7 @@ namespace KSH.Api.Services
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
-        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string note)
+        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string shippingAddress, string phoneNumber, string note)
         {
             try
             {
@@ -128,15 +130,14 @@ namespace KSH.Api.Services
                         .AddDetail("message", "Tạo đơn hàng thất bại!")
                         .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
-                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
 
+                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
                 int point = 0;
                 if (isUsePoint)
                 {
                     point = user.Points;
                     user.Points -= point;
                 }
-
                 int totalPrice = price - point;
 
                 var orderId = Guid.NewGuid();
@@ -147,6 +148,8 @@ namespace KSH.Api.Services
                     CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                     DeliveredAt = null,
                     ShippingStatus = "fail",
+                    ShippingAddress = shippingAddress,
+                    PhoneNumber = phoneNumber,
                     IsLabDownloaded = false,
                     Price = price,
                     Discount = point,
@@ -163,6 +166,7 @@ namespace KSH.Api.Services
                 var order = _mapper.Map<UserOrders>(orderDTO);
 
                 await _unitOfWork.OrderRepository.CreateAsync(order);
+                await _cartService.RemoveAllAsync(userId);
                 await _userManager.UpdateAsync(user);
                 return (new ServiceResponse()
                     .SetSucceeded(true)
