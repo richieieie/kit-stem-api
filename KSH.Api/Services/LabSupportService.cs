@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories;
 using KSH.Api.Services;
 using KST.Api.Models.DTO.Request;
@@ -20,12 +21,14 @@ namespace KST.Api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        #region Service methods
         public async Task<ServiceResponse> GetAsync(LabSupportGetDTO getDTO)
         {
             try
             {
+                var filter = GetFilter(getDTO);
                 var (labSupports, totalPages) = await _unitOfWork.LabSupportRepository.GetFilterAsync(
-                null,
+                filter,
                 null,
                 skip: sizePerPage * getDTO.Page,
                 take: sizePerPage,
@@ -93,10 +96,12 @@ namespace KST.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> CreateAsync(Guid orderSupportId)
+        public async Task<ServiceResponse> CreateAsync(Guid orderId)
         {
             try
             {
+                 throw new NotImplementedException();
+                /*
                 var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderSupportId);
                 if (orderSupport == null && orderSupport.RemainSupportTimes <= 0)
                 {
@@ -127,7 +132,7 @@ namespace KST.Api.Services
                         .SetSucceeded(false)
                         .AddError("invalidCredentials", "Thông tin gửi không hợp lệ")
                         .AddDetail("message", "Tạo yêu cầu thất bại");
-                }
+                }*/
             }
             catch
             {
@@ -309,5 +314,12 @@ namespace KST.Api.Services
                     .AddDetail("message", "Lấy danh sách lab Support thất bại");
             }
         }
+        #endregion
+        #region Methods that help service
+        private Expression<Func<LabSupport, bool>> GetFilter(LabSupportGetDTO getDTO)
+        {
+            return (l) => l.IsFinished == getDTO.Supported;
+        }
+        #endregion
     }
 }

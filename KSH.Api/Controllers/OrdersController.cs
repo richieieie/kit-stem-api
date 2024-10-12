@@ -48,7 +48,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        [Authorize(Roles = "staff,customer")]
+        //[Authorize(Roles = "staff,customer")]
         [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
@@ -68,7 +68,7 @@ namespace KSH.Api.Controllers
         public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string shippingAddress, string phoneNumber, string? note)
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
-            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note);
+            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -149,20 +149,6 @@ namespace KSH.Api.Controllers
         [Route("{orderId:guid}/fail")]
         // [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateFailStatus(Guid orderId)
-        {
-            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
-            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
-        [HttpPut]
-        [Route("{orderId:guid}/paid")]
-        // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> UpdatePaidStatus(Guid orderId)
         {
             OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
             var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);

@@ -187,8 +187,9 @@ namespace KSH.Api.Services
         {
             try
             {
+                Expression<Func<UserOrders, bool>> orderFilter = (l) => l.Id.Equals(getDTO.Id);
                 var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(
-                null,
+                orderFilter,
                 null,
                 null,
                 null,
@@ -201,39 +202,52 @@ namespace KSH.Api.Services
                         .AddError("notFound", "Không tìm thấy đơn hàng này!")
                         .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
-                var checkPaid = orders.FirstOrDefault()!.Payment;
-                var orderDTO = _mapper.Map<UserOrders>(orders);
-                orderDTO.ShippingStatus = getDTO.ShippingStatus!;
+                var order = orders.FirstOrDefault();
+                order!.ShippingStatus = getDTO.ShippingStatus!;
 
-                if (await _unitOfWork.OrderRepository.UpdateAsync(orderDTO))
+                if (!await _unitOfWork.OrderRepository.UpdateAsync(order))
                 {
-                    if (orderDTO.ShippingStatus == OrderFulfillmentConstants.OrderSuccessStatus || checkPaid!.Status == OrderFulfillmentConstants.PaymentSuccess)
-                    {
-                        var user = _unitOfWork.UserRepository.GetByIdAsync(orderDTO.UserId);
-                        var userDTO = _mapper.Map<ApplicationUser>(user);
-                        userDTO.Points += pointRate;
-                        if (await _unitOfWork.UserRepository.UpdateAsync(userDTO))
-                        {
-                            return new ServiceResponse()
-                                .SetSucceeded(true)
-                                .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
-                        }
-                        else
-                        {
-                            return new ServiceResponse()
-                                .SetSucceeded(false)
-                                .AddError("outOfService", "Không thể hỗ trợ ngay lúc này")
-                                .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
-                        }
-                    }
                     return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
+                   .SetSucceeded(false)
+                   .AddError("invalidCredentials", "Thông tin nhập không hợp lệ")
+                   .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
+                if (order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus)
+                {
+                    return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
+                }
+                if (!order.Payment!.Status)
+                {
+                    order.Payment.Status = true;
+                    if (!await _unitOfWork.PaymentRepository.UpdateAsync(order.Payment))
+                    {
+                        return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
+                            .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                    }
+                }
+                // Tạo từng order support cho từng LabId có trong những package đã mua trong order 
+                var packageFilter = GetPackageOrderFilter(order.Id);
+                var (packageOrders, packageOrderTotalPages) = await _unitOfWork.PackageOrderRepository.GetFilterAsync(
+                    packageFilter,
+                    null,
+                    null,
+                    null
+                    );
+                foreach (var packageOrder in packageOrders)
+                {
+                    foreach(var lab in packageOrder.Package.PackageLabs)
+                    {
+                        _unitOfWork.OrderSupportRepository.Create(new OrderSupport() {Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes });
+                    }
+                }
+
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("invalidCredentials", "Thông tin nhập không hợp lệ")
-                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                            .SetSucceeded(true)
+                            .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
             }
             catch
             {
@@ -242,84 +256,8 @@ namespace KSH.Api.Services
                     .AddError("outOfService", "Không thể cập nhật ngay lúc này")
                     .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
             }
-            
+        }
 
-        }
-        public async Task<ServiceResponse> UpdatePaidStatus(Guid orderId)
-        {
-            try
-            {
-                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(
-               null,
-               null,
-               null,
-               null,
-               query => query.Include(l => l.Payment).Include(l => l.User)
-               );
-                if (orders == null)
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("notFound", "Không tìm thấy đơn hàng này!")
-                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
-                }
-                var paid = _mapper.Map<Payment>(orders.FirstOrDefault().Payment);
-                paid!.Status = OrderFulfillmentConstants.PaymentSuccess;
-                if (await _unitOfWork.PaymentRepository.UpdateAsync(paid))
-                {
-                    if (orders.FirstOrDefault().ShippingStatus == OrderFulfillmentConstants.OrderSuccessStatus)
-                    {
-                        try
-                        {
-                            var user = _mapper.Map<ApplicationUser>(orders.FirstOrDefault().User);
-                            if (user != null)
-                            {
-                                user.Points += pointRate;
-                                if (await _unitOfWork.UserRepository.UpdateAsync(user))
-                                {
-                                    return new ServiceResponse()
-                                        .SetSucceeded(true)
-                                        .AddDetail("message", "Thanh toán thành công và cộng điểm thành công");
-                                }
-                                else
-                                {
-                                    return new ServiceResponse()
-                                        .SetSucceeded(true)
-                                        .AddError("invalidCredentials", "thông tin nhập vào không hợp lệ")
-                                        .AddDetail("message", "Thanh toán thành công nhưng cộng điểm thất bại");
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            return new ServiceResponse()
-                                .SetSucceeded(true)
-                                .AddError("outOfService", "Không thể cập nhật thanh toán ngay lúc này")
-                                .AddDetail("message", "Cập nhật thanh toán thành công, nhưng cộng điểm thất bại");
-                        }
-                        
-                    }
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Thanh toán thành công");
-                }
-                else
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("invalidCredentials", "Thông tin nhập vào không hợp lệ")
-                        .AddDetail("message", "Thanh toán thất bại");
-                }
-            }
-            catch
-            {
-                return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể cập nhật thanh toán ngay lúc này")
-                    .AddDetail("message", "Cập nhật Thanh toán thất bại");
-            }
-            
-        }
         #endregion
 
         #region Methods that help service
@@ -339,6 +277,11 @@ namespace KSH.Api.Services
                         o.UserId == customerId &&
                         o.TotalPrice >= orderGetDTO.FromAmount &&
                         o.TotalPrice <= orderGetDTO.ToAmount;
+        }
+        private Expression<Func<PackageOrder, bool>> GetPackageOrderFilter(Guid orderId)
+        {
+            return (l) => l.OrderId.Equals(orderId);
+            ;
         }
         #endregion
     }

@@ -35,13 +35,6 @@ namespace KSH.Api.Services
                     take: sizePerPage,
                     false
                     );
-                //var (Kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
-                //    filter,
-                //    null,
-                //    skip: sizePerPage * kitGetDTO.Page,
-                //    take: sizePerPage,
-                //    query => query.Include(l => l.Category).Include(l => l.KitImages)
-                //    );
                 if (!kits.Any())
                 {
                     return new ServiceResponse()
@@ -136,7 +129,7 @@ namespace KSH.Api.Services
                 kit.CategoryId = DTO.CategoryId;
                 kit.Name = DTO.Name;
                 kit.Brief = DTO.Brief;
-                kit.Description = DTO.Description;
+                kit.Description = DTO.Description!;
                 kit.PurchaseCost = DTO.PurchaseCost;
                 kit.Status = true;
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
