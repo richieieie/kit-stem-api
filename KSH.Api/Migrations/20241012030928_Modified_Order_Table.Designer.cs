@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KSH.Api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    [Migration("20241011003836_Nullable_StaffId_LabSupport")]
-    partial class Nullable_StaffId_LabSupport
+    [Migration("20241012030928_Modified_Order_Table")]
+    partial class Modified_Order_Table
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -577,8 +577,16 @@ namespace KSH.Api.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShippingStatus")
                         .IsRequired()

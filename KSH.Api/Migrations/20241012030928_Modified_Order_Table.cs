@@ -5,7 +5,7 @@
 namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Nullable_StaffId_LabSupport : Migration
+    public partial class Modified_Order_Table : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,6 +13,20 @@ namespace KSH.Api.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_LabSupport_AspNetUsers_StaffId",
                 table: "LabSupport");
+
+            migrationBuilder.AddColumn<string>(
+                name: "PhoneNumber",
+                table: "Order",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "ShippingAddress",
+                table: "Order",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AlterColumn<string>(
                 name: "StaffId",
@@ -36,6 +50,14 @@ namespace KSH.Api.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_LabSupport_AspNetUsers_StaffId",
                 table: "LabSupport");
+
+            migrationBuilder.DropColumn(
+                name: "PhoneNumber",
+                table: "Order");
+
+            migrationBuilder.DropColumn(
+                name: "ShippingAddress",
+                table: "Order");
 
             migrationBuilder.AlterColumn<string>(
                 name: "StaffId",
