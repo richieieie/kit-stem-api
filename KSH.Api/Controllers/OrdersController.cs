@@ -64,7 +64,7 @@ namespace KSH.Api.Controllers
 
         [HttpPost]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string shippingAddress, string phoneNumber, string note)
+        public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string shippingAddress, string phoneNumber, string? note)
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
             var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note);
