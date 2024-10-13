@@ -159,19 +159,5 @@ namespace KSH.Api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
-        [HttpPut]
-        [Route("{orderId:guid}/paid")]
-        // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> UpdatePaidStatus(Guid orderId)
-        {
-            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
-            var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
     }
 }

@@ -87,7 +87,7 @@ namespace KSH.Api.Controllers
             int kitImageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
             var nameFiles = new Dictionary<string, IFormFile>();
             List<Guid> imageGuidList = new List<Guid>();
-            foreach (var image in DTO.KitImagesList)
+            foreach (var image in DTO.KitImagesList!)
             {
                 var imageIdTemp = Guid.NewGuid();
                 imageGuidList.Add(imageIdTemp);
