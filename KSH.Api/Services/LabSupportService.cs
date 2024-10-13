@@ -2,6 +2,7 @@
 using KSH.Api.Models.Domain;
 using KSH.Api.Repositories;
 using KSH.Api.Services;
+using KSH.Api.Utils;
 using KST.Api.Models.DTO.Request;
 using KST.Api.Models.DTO.Response;
 using KST.Api.Services.IServices;
@@ -93,48 +94,52 @@ namespace KST.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> CreateAsync(Guid orderSupportId)
+        public async Task<ServiceResponse> CreateAsync(Guid orderId, int packageId, Guid labId)
         {
             try
             {
-                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderSupportId);
-                if (orderSupport == null && orderSupport.RemainSupportTimes <= 0)
+                Guid id = Guid.NewGuid();
+                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderId);
+                if (orderSupport!.LabId != labId)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
-                        .AddError("invalidCredentials", "Đơn hàng hỗ trợ đã hết lượt để tạo hỗ trợ")
-                        .AddDetail("message", "Tạo lượt hỗ trợ thất bại");
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
+                        .AddError("notFound", "Không tìm thấy bài lab!");
                 }
+                if (orderSupport.RemainSupportTimes == 0)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status400BadRequest)
+                        .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
+                        .AddError("invalidCredentials", "Số lần hổ trợ hiện tại không đủ!");
+                }
+
                 var labSupport = new LabSupport()
                 {
-                    Id = Guid.NewGuid(),
-                    OrderSupportId = orderSupportId,
+                    Id = id,
+                    OrderSupportId = orderSupport.Id,
                     StaffId = null,
                     Rating = 0,
-                    FeedBack = "",
+                    FeedBack = null,
                     IsFinished = false,
-                    CreatedAt = DateTimeOffset.Now,
+                    CreatedAt = TimeConverter.GetCurrentVietNamTime()
                 };
-                if (await _unitOfWork.LabSupportRepository.CreateAsync(labSupport))
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Tạo yêu cầu hỗ trợ thành công");
-                }
-                else
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("invalidCredentials", "Thông tin gửi không hợp lệ")
-                        .AddDetail("message", "Tạo yêu cầu thất bại");
-                }
+                
+                await _unitOfWork.LabSupportRepository.CreateAsync(labSupport);
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Gửi yêu cầu hổ trợ thành công!");
             }
             catch
             {
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể tạo yêu cầu lúc này")
-                    .AddDetail("message", "Tạo yêu cầu thất bại");
+                       .SetSucceeded(false)
+                       .SetStatusCode(StatusCodes.Status500InternalServerError)
+                       .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
+                       .AddError("outOfService", "Không thể gửi yêu cầu hổ trợ ngay lúc này!");
             }
 
         }

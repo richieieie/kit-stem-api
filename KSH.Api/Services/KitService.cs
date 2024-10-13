@@ -276,10 +276,10 @@ namespace KSH.Api.Services
         #region Methods that help service
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && 
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
             l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
-            (l.PurchaseCost >= kitGetDTO.MinPrice) &&
-            (l.PurchaseCost <= kitGetDTO.MaxPrice);
+            (l.PurchaseCost >= kitGetDTO.FromPrice) &&
+            (l.PurchaseCost <= kitGetDTO.ToPrice);
             ;
         }
         #endregion
