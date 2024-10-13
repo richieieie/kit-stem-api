@@ -28,12 +28,12 @@ namespace KSH.Api.Services
             try
             {
                 var filter = GetFilter(kitGetDTO);
-                var (kits, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(
+                var (kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
                     filter,
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    false
+                    null
                     );
                 if (!kits.Any())
                 {
@@ -269,12 +269,10 @@ namespace KSH.Api.Services
         }
         #endregion
         #region Methods that help service
-        private Expression<Func<Package, bool>> GetFilter(KitGetDTO kitGetDTO)
+        private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Kit.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
-            l.Kit.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
-            (l.Price >= kitGetDTO.FromPrice) &&
-            (l.Price <= kitGetDTO.ToPrice);
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
+            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower())
             ;
         }
         #endregion
