@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories;
 using KSH.Api.Services;
 using KSH.Api.Utils;
@@ -8,6 +9,7 @@ using KST.Api.Models.DTO.Response;
 using KST.Api.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 
 namespace KST.Api.Services
 {
@@ -21,12 +23,14 @@ namespace KST.Api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        #region Service methods
         public async Task<ServiceResponse> GetAsync(LabSupportGetDTO getDTO)
         {
             try
             {
+                var filter = GetFilter(getDTO);
                 var (labSupports, totalPages) = await _unitOfWork.LabSupportRepository.GetFilterAsync(
-                null,
+                filter,
                 null,
                 skip: sizePerPage * getDTO.Page,
                 take: sizePerPage,
@@ -53,69 +57,32 @@ namespace KST.Api.Services
                     .AddDetail("message", "Lấy danh sách thất bại");
             }
         }
-        public async Task<ServiceResponse> GetSupportsAsync(LabSupportGetDTO getDTO)
-        {
-            try
-            {
-                var (labSupports, totalPages) = await _unitOfWork.OrderSupportRepository.GetFilterAsync(
-                null,
-                null,
-                skip: sizePerPage * getDTO.Page,
-                take: sizePerPage,
-                query => query.Include(l => l.Order)
-                );
-                // Group by UserId and calculate the sum of RemainSupportTimes
-                var groupedLabSupports = labSupports
-                    .GroupBy(l => l.Order.UserId)
-                    .Select(g => new LabSupportRemainsDTO
-                    {
-                        UserId = g.Key,
-                        SumRemainSupportTimes = g.Sum(l => l.RemainSupportTimes),
-                        // Add other necessary fields from LabSupportRemainsDTO
-                    });
-                if (groupedLabSupports.Any())
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Lấy danh sách LabSupport thành công")
-                        .AddDetail("data", new { totalPages, curremtPage = (getDTO.Page + 1), labSupports = groupedLabSupports });
-                }
-                return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("invalidCredentials", "Thông tin không hợp lệ")
-                    .AddDetail("message", "Lấy danh sách thất bại");
-            }
-            catch
-            {
-                return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể lấy danh sách LabSupport lúc này")
-                    .AddDetail("message", "Lấy danh sách thất bại");
-            }
-        }
 
-        public async Task<ServiceResponse> CreateAsync(Guid orderId, int packageId, Guid labId)
+        public async Task<ServiceResponse> CreateAsync(string orderId, int packageId, string labId)
         {
             try
             {
-                Guid id = Guid.NewGuid();
-                var orderSupport = await _unitOfWork.OrderSupportRepository.GetByIdAsync(orderId);
-                if (orderSupport!.LabId != labId)
+                var orderSupport = await _unitOfWork.OrderSupportRepository.GetFilterByIdAsync(Guid.Parse(orderId), packageId, Guid.Parse(labId));
+
+                if (orderSupport == null)
                 {
                     return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status404NotFound)
-                        .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
-                        .AddError("notFound", "Không tìm thấy bài lab!");
+                       .SetSucceeded(false)
+                       .SetStatusCode(StatusCodes.Status404NotFound)
+                       .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
+                       .AddError("notFound", "Không tìm thấy bài lab cần hổ trợ!");
                 }
+
                 if (orderSupport.RemainSupportTimes == 0)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
                         .SetStatusCode(StatusCodes.Status400BadRequest)
                         .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
-                        .AddError("invalidCredentials", "Số lần hổ trợ hiện tại không đủ!");
+                        .AddError("invalidCredentials", "Bạn đã hết lượt hổ trợ!");
                 }
+
+                var id = Guid.NewGuid();
 
                 var labSupport = new LabSupport()
                 {
@@ -125,13 +92,13 @@ namespace KST.Api.Services
                     Rating = 0,
                     FeedBack = null,
                     IsFinished = false,
-                    CreatedAt = TimeConverter.GetCurrentVietNamTime()
+                    CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                 };
-                
+
                 await _unitOfWork.LabSupportRepository.CreateAsync(labSupport);
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Gửi yêu cầu hổ trợ thành công!");
+                    .AddDetail("message", "Gửi yêu cầ hổ trợ thành công");
             }
             catch
             {
@@ -175,7 +142,6 @@ namespace KST.Api.Services
                     .AddDetail("message", "Hỗ trợ khách hàng thất bại");
             }
         }
-
         public async Task<ServiceResponse> UpdateFinishedAsync(Guid labSupportId)
         {
             try
@@ -239,7 +205,6 @@ namespace KST.Api.Services
             }
 
         }
-
         public async Task<ServiceResponse> UpdateReviewAsync(LabSupportReviewUpdateDTO DTO)
         {
             try
@@ -283,7 +248,6 @@ namespace KST.Api.Services
                     .AddDetail("message", "Cập nhật đánh giá thất bại");
             }
         }
-
         public async Task<ServiceResponse> GetByCustomerId(String userId)
         {
             try
@@ -314,5 +278,12 @@ namespace KST.Api.Services
                     .AddDetail("message", "Lấy danh sách lab Support thất bại");
             }
         }
+        #endregion
+        #region Methods that help service
+        private Expression<Func<LabSupport, bool>> GetFilter(LabSupportGetDTO getDTO)
+        {
+            return (l) => l.IsFinished == getDTO.Supported;
+        }
+        #endregion
     }
 }

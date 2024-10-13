@@ -4,7 +4,7 @@ namespace KSH.Api.Services.IServices
 {
     public interface IKitService
     {
-        //Task<ServiceResponse> GetAsync(KitGetDTO kitGetDTO);
+        Task<ServiceResponse> GetAsync(KitGetDTO kitGetDTO);
         Task<ServiceResponse> GetByIdAsync(int id);
         Task<int> GetMaxIdAsync();
         Task<ServiceResponse> CreateAsync(KitCreateDTO DTO);
