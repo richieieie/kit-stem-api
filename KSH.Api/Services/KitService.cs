@@ -22,33 +22,30 @@ namespace KSH.Api.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        #region Service methods
         public async Task<ServiceResponse> GetAsync(KitGetDTO kitGetDTO)
         {
             try
             {
                 var filter = GetFilter(kitGetDTO);
-
-                var (Kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
+                var (kits, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(
                     filter,
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    query => query.Include(l => l.Category).Include(l => l.KitImages)
+                    false
                     );
-                if (Kits.Count() > 0)
-                {
-                    var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(Kits);
-                    return new ServiceResponse()
-                         .SetSucceeded(true)
-                         .AddDetail("message", "Lấy danh sách kit thành công")
-                         .AddDetail("data", new { totalPages, currentPage = (kitGetDTO.Page + 1), kits = kitsDTO });
-                }
-                else
+                if (!kits.Any())
                 {
                     return new ServiceResponse()
                        .SetSucceeded(true)
                        .AddDetail("message", "Không tìm thấy bộ kit!!!!!");
                 }
+                var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
+                return new ServiceResponse()
+                     .SetSucceeded(true)
+                     .AddDetail("message", "Lấy danh sách kit thành công")
+                     .AddDetail("data", new { totalPages, currentPage = (kitGetDTO.Page + 1), kits = kitsDTO });
             }
             catch
             {
@@ -72,7 +69,7 @@ namespace KSH.Api.Services
                     query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
 
-                if (Kits.FirstOrDefault() == null || !Kits.FirstOrDefault().Status)
+                if (Kits.FirstOrDefault() == null || !Kits.FirstOrDefault()!.Status)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
@@ -96,8 +93,6 @@ namespace KSH.Api.Services
                     .AddError("outOfService", "Không thể lấy kit ngay lúc này!");
             }
         }
-
-
 
         public async Task<ServiceResponse> CreateAsync(KitCreateDTO DTO)
         {
@@ -134,7 +129,7 @@ namespace KSH.Api.Services
                 kit.CategoryId = DTO.CategoryId;
                 kit.Name = DTO.Name;
                 kit.Brief = DTO.Brief;
-                kit.Description = DTO.Description;
+                kit.Description = DTO.Description!;
                 kit.PurchaseCost = DTO.PurchaseCost;
                 kit.Status = true;
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
@@ -232,7 +227,6 @@ namespace KSH.Api.Services
 
             }
         }
-
         public async Task<ServiceResponse> GetLabByKitId(int id)
         {
             try
@@ -273,9 +267,16 @@ namespace KSH.Api.Services
                 return -1;
             }
         }
-        private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
+        #endregion
+        #region Methods that help service
+        private Expression<Func<Package, bool>> GetFilter(KitGetDTO kitGetDTO)
         {
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) && l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
+            return (l) => l.Kit.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
+            l.Kit.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
+            (l.Price >= kitGetDTO.FromPrice) &&
+            (l.Price <= kitGetDTO.ToPrice);
+            ;
         }
+        #endregion
     }
 }

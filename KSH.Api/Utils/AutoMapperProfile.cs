@@ -4,6 +4,8 @@ using KSH.Api.Models.Domain;
 using KSH.Api.Models.DTO;
 using KSH.Api.Models.DTO.Request;
 using KSH.Api.Models.DTO.Response;
+using KST.Api.Models.DTO.Request;
+using KST.Api.Models.DTO.Response;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace KSH.Api.Utils
@@ -58,9 +60,16 @@ namespace KSH.Api.Utils
             // Using for Kit
 
             CreateMap<Kit, KitCreateDTO>().ReverseMap();
-            CreateMap<Kit, KitResponseDTO>()
-                .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
-                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
+            CreateMap<Package, KitResponseDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Kit.Id))
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Kit.CategoryId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Kit.Name))
+                .ForMember(dest => dest.Brief, opt => opt.MapFrom(src => src.Kit.Brief))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Kit.Description))
+                .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.Kit.PurchaseCost))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Kit.Status))
+                .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Kit.Category))
+                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.Kit.KitImages));
             CreateMap<KitsCategory, CategoryDTO>();
             CreateMap<KitImage, KitImageDTO>();
             // Using for KitImage
@@ -74,6 +83,12 @@ namespace KSH.Api.Utils
 
             //Using for Type
             CreateMap<ComponentsType, ComponentTypeCreateDTO>().ReverseMap();
+
+            //Using for LabSupport
+            CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
+            CreateMap<LabSupport, LabSupportResponseDTO>()
+                .ForMember(dest => dest.LabId, opt => opt.MapFrom(src => src.OrderSupport.LabId));
+           
 
         }
     }
