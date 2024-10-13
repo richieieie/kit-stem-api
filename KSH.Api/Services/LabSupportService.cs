@@ -58,11 +58,11 @@ namespace KST.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> CreateAsync(string orderId, int packageId, string labId)
+        public async Task<ServiceResponse> CreateAsync(Guid orderId, Guid labId, int packageId)
         {
             try
             {
-                var orderSupport = await _unitOfWork.OrderSupportRepository.GetFilterByIdAsync(Guid.Parse(orderId), packageId, Guid.Parse(labId));
+                var orderSupport = await _unitOfWork.OrderSupportRepository.GetFilterByIdAsync(orderId, packageId, labId);
 
                 if (orderSupport == null)
                 {
@@ -80,6 +80,16 @@ namespace KST.Api.Services
                         .SetStatusCode(StatusCodes.Status400BadRequest)
                         .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
                         .AddError("invalidCredentials", "Bạn đã hết lượt hổ trợ!");
+                }
+
+                var allReadyLabSupport = await _unitOfWork.LabSupportRepository.GetByOrderSupportId(orderSupport.Id);
+                if (!allReadyLabSupport.IsFinished)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status400BadRequest)
+                        .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
+                        .AddError("invalidCredentials", "Bạn đã gửi yêu cầu hổ trợ cho bài lab này!");
                 }
 
                 var id = Guid.NewGuid();

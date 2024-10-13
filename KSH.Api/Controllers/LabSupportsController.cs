@@ -29,10 +29,11 @@ namespace KST.Api.Controllers
             return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpPost]
+        [Route("orders/{orderId:guid}/packages/{packageId:int}/labs/{labId:guid}")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult>CreateAsync(string orderId, int packageId, string labId)
+        public async Task<IActionResult>CreateAsync([FromRoute] Guid orderId, Guid labId, int packageId)
         {
-            var serviceResponse = await _labSupportService.CreateAsync(orderId, packageId, labId);
+            var serviceResponse = await _labSupportService.CreateAsync(orderId, labId, packageId);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details});
