@@ -25,7 +25,7 @@ namespace KST.Api.Controllers
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
             }
-            return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok( new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
     }
 }
