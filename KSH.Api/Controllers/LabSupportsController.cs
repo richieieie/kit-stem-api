@@ -28,33 +28,6 @@ namespace KST.Api.Controllers
             }
             return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
-        [HttpGet]
-        [Route("customer/support")]
-        [ActionName(nameof(GetSupportsAsync))]
-        // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> GetSupportsAsync([FromQuery] LabSupportGetDTO getDTO)
-        {
-            var serviceResponse = await _labSupportService.GetSupportsAsync(getDTO);
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
-            }
-            return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
-        }
-        [HttpGet]
-        [Route("customer")]
-        // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> GetByCustomIdAsync([FromQuery] String userId)
-        {
-            var serviceResponse = await _labSupportService.GetByCustomerId(userId);
-            if (!serviceResponse.Succeeded)
-            {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
-            }
-            return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
-        }
-
-
         [HttpPost]
         [Route("{orderSupportId:guid}")]
         // [Authorize(Roles = "customer")]
@@ -73,7 +46,7 @@ namespace KST.Api.Controllers
         public async Task<IActionResult> UpdateStaffIdAsync(Guid labSupportId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var serviceResponse = await _labSupportService.UpdateStaffAsync(userId.ToString(), labSupportId);
+            var serviceResponse = await _labSupportService.UpdateStaffAsync(userId!.ToString(), labSupportId);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

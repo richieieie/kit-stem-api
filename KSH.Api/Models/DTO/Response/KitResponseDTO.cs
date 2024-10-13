@@ -21,6 +21,6 @@ namespace KSH.Api.Models.DTO.Response
         public bool Status { get; set; }
         public virtual KitsCategory? KitsCategory { get; set; }
 
-        public virtual ICollection<KitImageDTO> KitImages { get; set; }
+        public virtual ICollection<KitImageDTO>? KitImages { get; set; }
     }
 }
