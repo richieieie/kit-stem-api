@@ -39,8 +39,8 @@ namespace KST.Api.Services
                 {
                     return new ServiceResponse()
                         .SetSucceeded(true)
-                        .AddDetail("message", "Lấy danh sách LabSupoet thành công")
-                        .AddDetail("data", new { totalPages, curremtPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
+                        .AddDetail("message", "Lấy danh sách LabSupport thành công")
+                        .AddDetail("data", new { totalPages, currentPage = getDTO.Page + 1, labSupports = labSupportsDTO });
                 }
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -59,7 +59,7 @@ namespace KST.Api.Services
         {
             try
             {
-                 throw new NotImplementedException();
+                throw new NotImplementedException();
             }
             catch
             {
