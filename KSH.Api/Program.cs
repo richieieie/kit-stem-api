@@ -28,7 +28,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
 
         builder.Services.AddHttpContextAccessor();
 
