@@ -27,13 +27,22 @@ namespace KSH.Api.Services
         {
             try
             {
-                var filter = GetFilter(kitGetDTO);
-                var (kits, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(
+                if(kitGetDTO.FromPrice > kitGetDTO.ToPrice)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddError("invalidCredentials", "Lỗi nhập tìm kiếm")
+                        .AddDetail("message", "Không tìm thấy bộ kits");
+                }
+                bool package = false;
+                if (kitGetDTO.FromPrice == 0 && kitGetDTO.ToPrice == int.MaxValue) { package = !package; }
+                var filter = GetFilter(kitGetDTO, package);
+                var (kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
                     filter,
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    false
+                    query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
                 if (!kits.Any())
                 {
@@ -269,12 +278,16 @@ namespace KSH.Api.Services
         }
         #endregion
         #region Methods that help service
-        private Expression<Func<Package, bool>> GetFilter(KitGetDTO kitGetDTO)
+        private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO, bool package)
         {
-            return (l) => l.Kit.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
-            l.Kit.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
-            (l.Price >= kitGetDTO.FromPrice) &&
-            (l.Price <= kitGetDTO.ToPrice);
+            if (package)
+            {
+                return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
+                l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
+            }
+            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
+            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
+            l.Packages!.Any(p => p.Price >= kitGetDTO.FromPrice && p.Price <= kitGetDTO.ToPrice);
             ;
         }
         #endregion
