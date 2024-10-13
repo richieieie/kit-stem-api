@@ -27,7 +27,16 @@ namespace KSH.Api.Services
         {
             try
             {
-                var filter = GetFilter(kitGetDTO);
+                if(kitGetDTO.FromPrice > kitGetDTO.ToPrice)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddError("invalidCredentials", "Lỗi nhập tìm kiếm")
+                        .AddDetail("message", "Không tìm thấy bộ kits");
+                }
+                bool package = false;
+                if (kitGetDTO.FromPrice == 0 && kitGetDTO.ToPrice == int.MaxValue) { package = !package; }
+                var filter = GetFilter(kitGetDTO, package);
                 var (kits, totalPages) = await _unitOfWork.KitRepository.GetFilterAsync(
                     filter,
                     null,
@@ -269,10 +278,16 @@ namespace KSH.Api.Services
         }
         #endregion
         #region Methods that help service
-        private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO)
+        private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO, bool package)
         {
+            if (package)
+            {
+                return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
+                l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
+            }
             return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
-            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower())
+            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
+            l.Packages!.Any(p => p.Price >= kitGetDTO.FromPrice && p.Price <= kitGetDTO.ToPrice);
             ;
         }
         #endregion
