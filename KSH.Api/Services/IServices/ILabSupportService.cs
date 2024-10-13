@@ -6,7 +6,6 @@ namespace KST.Api.Services.IServices
     public interface ILabSupportService
     {
         Task<ServiceResponse> GetAsync(LabSupportGetDTO getDTO);
-        Task<ServiceResponse> GetSupportsAsync(LabSupportGetDTO getDTO);
         Task<ServiceResponse> GetByCustomerId(String userId);
 
         Task<ServiceResponse> CreateAsync(Guid orderId);
