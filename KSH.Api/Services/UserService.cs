@@ -76,7 +76,7 @@ namespace KSH.Api.Services
                             .AddError("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
-            if (!user.Status)
+            if (!user.EmailConfirmed)
             {
                 return serviceResponse
                             .SetSucceeded(false)
