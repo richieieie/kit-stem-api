@@ -66,10 +66,11 @@ namespace KSH.Api.Services
 
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
+            var serviceResponse = new ServiceResponse();
             var user = await _userManager.FindByNameAsync(requestBody.Email!);
             if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password!))
             {
-                return new ServiceResponse()
+                return serviceResponse
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
@@ -77,7 +78,15 @@ namespace KSH.Api.Services
 
             if (!user.Status)
             {
-                return new ServiceResponse()
+                return serviceResponse
+                            .SetSucceeded(false)
+                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddError("invalidCredentials", "Vui lòng xác thực tài khoản của bạn thông qua email!");
+            }
+
+            if (!user.Status)
+            {
+                return serviceResponse
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 000000000 để được hỗ trợ!");
