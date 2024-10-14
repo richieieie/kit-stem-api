@@ -113,6 +113,7 @@ namespace KSH.Api.Services
                 {
                     UserName = email,
                     Email = email,
+                    EmailConfirmed = true,
                     Status = true
                 };
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -164,7 +165,7 @@ namespace KSH.Api.Services
                 {
                     UserName = requestBody.Email,
                     Email = requestBody.Email,
-                    Status = false
+                    Status = true
                 };
                 if (role == UserConstants.StaffRole)
                 {
