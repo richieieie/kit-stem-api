@@ -83,13 +83,16 @@ namespace KST.Api.Services
                 }
 
                 var allReadyLabSupport = await _unitOfWork.LabSupportRepository.GetByOrderSupportId(orderSupport.Id);
-                if (!allReadyLabSupport.IsFinished)
+                if (allReadyLabSupport != null)
                 {
-                    return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .SetStatusCode(StatusCodes.Status400BadRequest)
-                        .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
-                        .AddError("invalidCredentials", "Bạn đã gửi yêu cầu hổ trợ cho bài lab này!");
+                    if (!allReadyLabSupport.IsFinished)
+                    {
+                        return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status400BadRequest)
+                            .AddDetail("message", "Gửi yêu cầu hổ trợ thất bại!")
+                            .AddError("invalidCredentials", "Bạn đã gửi yêu cầu hổ trợ cho bài lab này!");
+                    }
                 }
 
                 var id = Guid.NewGuid();
