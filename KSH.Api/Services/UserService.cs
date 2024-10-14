@@ -164,7 +164,7 @@ namespace KSH.Api.Services
                 {
                     UserName = requestBody.Email,
                     Email = requestBody.Email,
-                    Status = true
+                    Status = false
                 };
                 if (role == UserConstants.StaffRole)
                 {
