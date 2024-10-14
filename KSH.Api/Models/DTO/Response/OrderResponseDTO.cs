@@ -3,7 +3,6 @@ namespace KSH.Api.Models.DTO.Response
     public class OrderResponseDTO
     {
         public Guid Id { get; set; }
-        public string? UserId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? DeliveredAt { get; set; }
         public string? ShippingStatus { get; set; }
@@ -14,6 +13,7 @@ namespace KSH.Api.Models.DTO.Response
         public int Discount { get; set; }
         public int TotalPrice { get; set; }
         public string? Note { get; set; }
+        public UserProfileDTO? User { get; set; }
         public ICollection<PackageOrderResponseDTO>? PackageOrders { get; set; }
     }
 }
