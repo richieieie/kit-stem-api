@@ -148,7 +148,7 @@ namespace KSH.Api.Services
                     UserId = user.Id,
                     CreatedAt = TimeConverter.GetCurrentVietNamTime(),
                     DeliveredAt = null,
-                    ShippingStatus = "fail",
+                    ShippingStatus = OrderFulfillmentConstants.OrderFailStatus,
                     ShippingAddress = shippingAddress,
                     PhoneNumber = phoneNumber,
                     IsLabDownloaded = false,
