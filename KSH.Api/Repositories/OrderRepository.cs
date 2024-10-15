@@ -20,8 +20,7 @@ namespace KSH.Api.Repositories
         )
         {
             Func<IQueryable<UserOrders>, IQueryable<UserOrders>> includeQuery = includeQuery => includeQuery
-                                                                                                .Include(o => o.User)
-                                                                                                .Include(o => o.PackageOrders);
+                                                                                                .Include(o => o.User);
             var (orders, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (orders, totalPages);
         }
@@ -31,10 +30,12 @@ namespace KSH.Api.Repositories
             return await _dbContext.UserOrders
                             .Include(p => p.PackageOrders)
                                 .ThenInclude(p => p.Package)
-                                    .ThenInclude(p => p.Kit)
+                            // .ThenInclude(p => p.Kit)
                             .Include(o => o.PackageOrders)
                                 .ThenInclude(po => po.Package)
-                                    .ThenInclude(p => p.Level)
+                            // .ThenInclude(p => p.Level)
+                            .Include(o => o.OrderSupports)
+                                .ThenInclude(os => os.Lab)
                             .FirstOrDefaultAsync(o => o.Id == id);
         }
     }

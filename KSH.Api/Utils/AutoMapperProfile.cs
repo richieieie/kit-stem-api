@@ -43,6 +43,8 @@ namespace KSH.Api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<OrderSupport, OrderSupportResponseDTO>();
+            CreateMap<UserOrders, IndividualOrderResponseDTO>();
             CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -88,7 +90,7 @@ namespace KSH.Api.Utils
             CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
             CreateMap<LabSupport, LabSupportResponseDTO>()
                 .ForMember(dest => dest.LabId, opt => opt.MapFrom(src => src.OrderSupport.LabId));
-           
+
 
         }
     }
