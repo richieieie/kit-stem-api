@@ -104,10 +104,6 @@ namespace KSH.Api.Utils
                 .ForPath(dest => dest.User!.Email, opt => opt.MapFrom(src => src.OrderSupport.Order.User.Email))
                 .ForPath(dest => dest.User!.Phone, opt => opt.MapFrom(src => src.OrderSupport.Order.User.PhoneNumber));
 
-            //Using for OrderSupport
-            CreateMap<OrderSupport, OrderSupportDTO>()
-                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Order.UserId))
-                ;
         }
     }
 }
