@@ -48,14 +48,14 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        // [Authorize(Roles = "staff,customer")]
+        [Authorize(Roles = "staff,customer")]
         [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
-            // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            // var role = User.FindFirstValue(ClaimTypes.Role);
-            var userId = "04609d52-585a-4ac7-b360-cafc9006bcd6";
-            var role = "customer";
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            // var userId = "04609d52-585a-4ac7-b360-cafc9006bcd6";
+            // var role = "customer";
             var serviceResponse = await _orderService.GetByIdAsync(id, userId!, role!);
             if (!serviceResponse.Succeeded)
             {
