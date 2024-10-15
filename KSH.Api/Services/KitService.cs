@@ -55,8 +55,9 @@ namespace KSH.Api.Services
                 else
                 {
                     return new ServiceResponse()
-                            .SetSucceeded(true)
-                            .AddDetail("message", "Không tìm thấy bộ kit!!!!!");
+                       .SetSucceeded(true)
+                       .AddDetail("message", "Không tìm thấy bộ kit!!!!!")
+                       .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page, kits = kits });
                 }
             }
             catch
@@ -225,7 +226,7 @@ namespace KSH.Api.Services
                 }
 
                 var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync((l) => (l.KitId == id), null, null, null, true);
-                var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
+                var packagesDTO = _mapper.Map<IEnumerable<PackageInKitDTO>>(packages);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin Package thành công!")
                             .AddDetail("data", new { totalPages, currentPage = 0, Packages = packagesDTO });
@@ -253,7 +254,7 @@ namespace KSH.Api.Services
                 }
 
                 var (labs, totalPages) = await _unitOfWork.LabRepository.GetByKitIdAsync(id);
-                var labDTOs = _mapper.Map<IEnumerable<LabResponseDTO>>(labs);
+                var labDTOs = _mapper.Map<IEnumerable<LabInKitDTO>>(labs);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy thông tin bài lab thành công!")

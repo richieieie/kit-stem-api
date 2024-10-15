@@ -14,6 +14,7 @@ namespace KSH.Api.Services
 {
     public class UserService : IUserService
     {
+        private readonly int pageSize = 3;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
         private readonly IMapper _mapper;
@@ -278,13 +279,17 @@ namespace KSH.Api.Services
 
         public async Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO)
         {
-            var users = await _userManager.Users.Where(u => u.Email!.Length > 0).ToListAsync();
-            var userDTOs = _mapper.Map<IEnumerable<UserProfileDTO>>(users);
+
+            var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!)).Where(u => u.Email!.Length > 0);
+            var totalUsers = usersInRole.Count();
+            var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+            var usersInPage = usersInRole.Skip(userManagerGetDTO.Page * pageSize).Take(pageSize).ToList();
+            var userDTOs = _mapper.Map<IEnumerable<UserProfileDTO>>(usersInPage);
 
             return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy thông tin tài khoản thành công!")
-                    .AddDetail("data", new { users = userDTOs });
+                    .AddDetail("data", new { totalPages, currentPage = userManagerGetDTO.Page, users = userDTOs });
         }
 
         public async Task<ServiceResponse> RemoveByEmailAsync(string userName)

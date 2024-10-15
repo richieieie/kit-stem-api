@@ -121,7 +121,6 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        [Route("Customers")]
         // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] UserManagerGetDTO userManagerGetDTO)
         {

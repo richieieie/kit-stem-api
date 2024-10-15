@@ -33,21 +33,22 @@ namespace KST.Api.Services
                 filter,
                 null,
                 skip: sizePerPage * getDTO.Page,
-                take: sizePerPage,
-                query => query.Include(l => l.Staff).Include(l => l.OrderSupport)
+                take: sizePerPage
                 );
                 var labSupportsDTO = _mapper.Map<IEnumerable<LabSupportResponseDTO>>(labSupports);
                 if (labSupports.Count() > 0)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(true)
-                        .AddDetail("message", "Lấy danh sách LabSupport thành công")
-                        .AddDetail("data", new { totalPages, currentPage = getDTO.Page + 1, labSupports = labSupportsDTO });
+                        .AddDetail("message", "Lấy danh sách LabSupoet thành công")
+                        .AddDetail("data", new { totalPages, currentPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
                 }
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("invalidCredentials", "Thông tin không hợp lệ")
-                    .AddDetail("message", "Lấy danh sách thất bại");
+                    .SetSucceeded(true)
+                    .SetStatusCode(StatusCodes.Status404NotFound)
+                    .AddError("notFound", "Không tìm thấy danh sách Lab Support")
+                    .AddDetail("message", "Lấy danh sách thành công")
+                    .AddDetail("data", new { totalPages, currentPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
             }
             catch
             {
