@@ -2,7 +2,7 @@
 
 namespace KSH.Api.Models.DTO.Response
 {
-    public class PackageInLabDTO
+    public class PackageInKitDTO
     {
         public int Id { get; set; }
         public string? Name { get; set; }

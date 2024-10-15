@@ -45,6 +45,7 @@ namespace KST.Api.Services
                 }
                 return new ServiceResponse()
                     .SetSucceeded(true)
+                    .SetStatusCode(StatusCodes.Status404NotFound)
                     .AddError("notFound", "Không tìm thấy danh sách Lab Support")
                     .AddDetail("message", "Lấy danh sách thành công")
                     .AddDetail("data", new { totalPages, currentPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
