@@ -1,6 +1,6 @@
 namespace KSH.Api.Models.DTO.Response
 {
-    public class OrderResponseDTO
+    public class IndividualOrderResponseDTO
     {
         public Guid Id { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
@@ -14,5 +14,6 @@ namespace KSH.Api.Models.DTO.Response
         public int TotalPrice { get; set; }
         public string? Note { get; set; }
         public UserProfileDTO? User { get; set; }
+        public List<OrderSupportResponseDTO>? OrderSupports { get; set; }
     }
 }

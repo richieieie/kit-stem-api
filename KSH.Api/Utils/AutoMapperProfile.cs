@@ -43,6 +43,8 @@ namespace KSH.Api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<OrderSupport, OrderSupportResponseDTO>();
+            CreateMap<UserOrders, IndividualOrderResponseDTO>();
             CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
