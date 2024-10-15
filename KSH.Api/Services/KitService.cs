@@ -48,7 +48,8 @@ namespace KSH.Api.Services
                 {
                     return new ServiceResponse()
                        .SetSucceeded(true)
-                       .AddDetail("message", "Không tìm thấy bộ kit!!!!!");
+                       .AddDetail("message", "Không tìm thấy bộ kit!!!!!")
+                       .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page, kits = kits});
                 }
                 var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
                 return new ServiceResponse()
@@ -222,7 +223,7 @@ namespace KSH.Api.Services
                 }
 
                 var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync((l) => (l.KitId == id), null, null, null, true);
-                var packagesDTO = _mapper.Map<IEnumerable<PackageResponseDTO>>(packages);
+                var packagesDTO = _mapper.Map<IEnumerable<PackageInLabDTO>>(packages);
                 return new ServiceResponse()
                             .AddDetail("message", "Lấy thông tin Package thành công!")
                             .AddDetail("data", new { totalPages, currentPage = 0, Packages = packagesDTO });

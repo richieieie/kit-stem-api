@@ -1,4 +1,7 @@
-﻿namespace KST.Api.Models.DTO.Response
+﻿using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Response;
+
+namespace KST.Api.Models.DTO.Response
 {
     public class LabSupportResponseDTO
     {
@@ -9,6 +12,11 @@
         public int Rating { get; set; }
         public string? FeedBack { get; set; }
         public bool IsFinished { get; set; }
+        public virtual UserStaffInLabSupportDTO? Staff { get; set; }
+        public virtual UserInLabSupportDTO? User {  get; set; }
+        public virtual Lab? Lab { get; set; }
+        public virtual Package? Package { get; set; }
+        public virtual UserOrders? UserOrders { get; set; }
 
     }
 }
