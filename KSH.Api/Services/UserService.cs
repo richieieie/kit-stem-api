@@ -14,7 +14,7 @@ namespace KSH.Api.Services
 {
     public class UserService : IUserService
     {
-        private readonly int pageSize = 3;
+        private readonly int pageSize = 20;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
         private readonly IMapper _mapper;
