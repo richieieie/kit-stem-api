@@ -4,7 +4,7 @@
     {
         // public string? UserName { get; set; }    
         private string? userName = null;
-        public string UserName
+        public string? UserName
         {
             get
             {
@@ -12,7 +12,14 @@
             }
             set
             {
-                userName = value.Split('@')[0];
+                if (value != null)
+                {
+                    userName = value.Split('@')[0];
+                }
+                else
+                {
+                    userName = null;
+                }
             }
         }
         public string? Email { get; set; }

@@ -16,7 +16,6 @@ namespace KST.Api.Models.DTO.Response
         public virtual UserInLabSupportDTO? User {  get; set; }
         public virtual Lab? Lab { get; set; }
         public virtual Package? Package { get; set; }
-        public virtual UserOrders? UserOrders { get; set; }
 
     }
 }
