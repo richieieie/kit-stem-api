@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace KSH.Api.Models.DTO.Request
 {
     public class OrderGetDTO

@@ -30,7 +30,6 @@ namespace KSH.Api.Services
                 var package = _mapper.Map<Package>(packageCreateDTO);
 
                 package = await TryCreatePackageLabsAsync(packageCreateDTO, package);
-
                 if (package == null)
                 {
                     return (serviceResponse
@@ -41,7 +40,9 @@ namespace KSH.Api.Services
                             0);
                 }
 
+                // Try to create package
                 await _unitOfWork.PackageRepository.CreateAsync(package);
+
 
                 return (serviceResponse
                             .AddDetail("message", "Thêm mới gói kit thành công!"),
@@ -214,6 +215,12 @@ namespace KSH.Api.Services
         }
         private async Task<Package?> TryCreatePackageLabsAsync(PackageCreateDTO packageCreateDTO, Package package)
         {
+            var kit = await _unitOfWork.KitRepository.GetByIdAsync(packageCreateDTO.KitId);
+            if (kit == null)
+            {
+                return null;
+            }
+
             if (packageCreateDTO.LabIds == null || packageCreateDTO.LabIds.Count == 0)
             {
                 return package;
@@ -228,6 +235,22 @@ namespace KSH.Api.Services
 
             var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
             package.PackageLabs = packageLabs.ToList();
+            package.Kit = kit;
+
+            // Check price of the package then assign to the Kit
+            if (kit.MinPackagePrice == 0 && kit.MaxPackagePrice == 0)
+            {
+                kit.MinPackagePrice = packageCreateDTO.Price;
+                kit.MaxPackagePrice = packageCreateDTO.Price;
+            }
+            else if (packageCreateDTO.Price < kit.MinPackagePrice)
+            {
+                kit.MinPackagePrice = packageCreateDTO.Price;
+            }
+            else if (packageCreateDTO.Price > kit.MaxPackagePrice)
+            {
+                kit.MaxPackagePrice = packageCreateDTO.Price;
+            }
 
             return package;
         }

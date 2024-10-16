@@ -192,6 +192,12 @@ namespace KSH.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("MaxPackagePrice")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MinPackagePrice")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)

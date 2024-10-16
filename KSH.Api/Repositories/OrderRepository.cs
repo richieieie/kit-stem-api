@@ -40,6 +40,8 @@ namespace KSH.Api.Repositories
                                     .ThenInclude(p => p.Level)
                             .Include(o => o.OrderSupports)
                                 .ThenInclude(os => os.Lab)
+                            .Include(o => o.OrderSupports)
+                                .ThenInclude(os => os.Package)
                             .FirstOrDefaultAsync(o => o.Id == id);
         }
     }

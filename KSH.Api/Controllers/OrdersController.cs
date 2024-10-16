@@ -54,8 +54,6 @@ namespace KSH.Api.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var role = User.FindFirstValue(ClaimTypes.Role);
-            // var userId = "04609d52-585a-4ac7-b360-cafc9006bcd6";
-            // var role = "customer";
             var serviceResponse = await _orderService.GetByIdAsync(id, userId!, role!);
             if (!serviceResponse.Succeeded)
             {
@@ -70,7 +68,7 @@ namespace KSH.Api.Controllers
         public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string shippingAddress, string phoneNumber, string? note)
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
-            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note);
+            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note ?? "");
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
