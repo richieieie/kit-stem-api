@@ -16,7 +16,7 @@ namespace KSH.Api.Models.DTO.Response
 
         public string Description { get; set; } = null!;
 
-        public int PurchaseCost { get; set; }
+        // public int PurchaseCost { get; set; }
 
         public bool Status { get; set; }
         public virtual KitsCategory? KitsCategory { get; set; }
