@@ -67,7 +67,7 @@ namespace KSH.Api.Utils
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Brief, opt => opt.MapFrom(src => src.Brief))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.PurchaseCost))
+                // .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.PurchaseCost))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
