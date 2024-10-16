@@ -9,5 +9,6 @@ namespace KSH.Api.Models.DTO.Request
         public long ToAmount { get; set; } = long.MaxValue;
         public DateTimeOffset CreatedFrom { get; set; } = DateTimeOffset.MinValue;
         public DateTimeOffset CreatedTo { get; set; } = DateTimeOffset.MaxValue;
+        public string? ShippingStatus { get; set; }
     }
 }

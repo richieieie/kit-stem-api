@@ -277,7 +277,8 @@ namespace KSH.Api.Services
                         o.CreatedAt <= orderStaffGetDTO.CreatedTo &&
                         o.User.Email!.Contains(orderStaffGetDTO.CustomerEmail ?? "") &&
                         o.TotalPrice >= orderStaffGetDTO.FromAmount &&
-                        o.TotalPrice <= orderStaffGetDTO.ToAmount;
+                        o.TotalPrice <= orderStaffGetDTO.ToAmount &&
+                        o.ShippingStatus.Contains(orderStaffGetDTO.ShippingStatus ?? "");
         }
 
         private Expression<Func<UserOrders, bool>>? GetByCustomerIdFilter(OrderGetDTO orderGetDTO, string customerId)
@@ -286,7 +287,8 @@ namespace KSH.Api.Services
                         o.CreatedAt <= orderGetDTO.CreatedTo &&
                         o.UserId == customerId &&
                         o.TotalPrice >= orderGetDTO.FromAmount &&
-                        o.TotalPrice <= orderGetDTO.ToAmount;
+                        o.TotalPrice <= orderGetDTO.ToAmount &&
+                        o.ShippingStatus.Contains(orderGetDTO.ShippingStatus ?? "");
         }
         private Expression<Func<PackageOrder, bool>> GetPackageOrderFilter(Guid orderId)
         {

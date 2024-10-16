@@ -6,6 +6,6 @@ namespace KSH.Api.Services.IServices
     public interface IVNPayService
     {
         Task<ServiceResponse> CreatePaymentUrl(PaymentVnPayCreateDTO paymentVnPayCreateDTO);
-        Task<(ServiceResponse, OrderResponseDTO?)> PaymentExecute(IQueryCollection vnPayData);
+        Task<(ServiceResponse, OrderResponseDTO)> PaymentExecute(IQueryCollection vnPayData);
     }
 }
