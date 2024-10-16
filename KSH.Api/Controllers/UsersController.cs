@@ -38,8 +38,9 @@ namespace KSH.Api.Controllers
             }
 
             var subject = "Chào mừng bạn đến với shop!";
-            // var clientBaseUrl = Request.Scheme == "https" ? "https://kit-stem-hub-fe-customer.vercel.app" : "http://localhost:5173";
-            var clientBaseUrl = "http://localhost:5173";
+            var clientBaseUrl = Request.Scheme == "https" ? "https://kit-stem-hub-fe-customer.vercel.app" : "http://localhost:5173";
+            // Console.WriteLine(Request.Scheme);
+            // var clientBaseUrl = "http://localhost:5173";
             var verifyUrl = $"{clientBaseUrl}/verify?email={Uri.EscapeDataString(requestBody.Email!)}&token={Uri.EscapeDataString(token!)}";
             var body = _emailTemplateProvider.GetRegisterTemplate(requestBody.Email!, "KitStemHub", verifyUrl!);
             await _emailService.SendEmail(requestBody.Email!, subject, body);
