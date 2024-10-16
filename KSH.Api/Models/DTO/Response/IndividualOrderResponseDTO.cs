@@ -15,5 +15,6 @@ namespace KSH.Api.Models.DTO.Response
         public string? Note { get; set; }
         public UserProfileDTO? User { get; set; }
         public List<OrderSupportResponseDTO>? OrderSupports { get; set; }
+        public List<PackageOrderResponseDTO>? PackageOrders { get; set; }
     }
 }

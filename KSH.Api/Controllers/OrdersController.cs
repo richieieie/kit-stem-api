@@ -34,7 +34,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("Customers")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult> GetByCurrentCurrentCustomerAsync([FromQuery] OrderGetDTO orderGetDTO)
+        public async Task<IActionResult> GetByCurrentCustomerAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var serviceResponse = await _orderService.GetByCustomerIdAsync(userId!, orderGetDTO);
