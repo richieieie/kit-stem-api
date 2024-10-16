@@ -137,6 +137,7 @@ namespace KSH.Api.Services
                 if (isUsePoint)
                 {
                     point = user.Points;
+                    if (point > price) { point -= price; }
                     user.Points -= point;
                 }
                 int totalPrice = price - point;
