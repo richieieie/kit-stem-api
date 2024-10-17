@@ -220,6 +220,7 @@ namespace KSH.Api.Services
             {
                 return null;
             }
+            package.Kit = kit;
 
             if (packageCreateDTO.LabIds == null || packageCreateDTO.LabIds.Count == 0)
             {
@@ -227,32 +228,31 @@ namespace KSH.Api.Services
             }
 
             var (labs, _) = await _unitOfWork.LabRepository.GetByKitIdAsync(packageCreateDTO.KitId);
-            var validLabIds = labs.Select(l => l.Id);
-            if (!packageCreateDTO.LabIds.All(id => validLabIds.Contains(id)))
+            var validLabIds = labs.Select(l => l.Id).ToHashSet();
+            if (packageCreateDTO.LabIds.Except(validLabIds).Any())
             {
                 return null;
             }
 
             var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
             package.PackageLabs = packageLabs.ToList();
-            package.Kit = kit;
 
-            // Check price of the package then assign to the Kit
-            if (kit.MinPackagePrice == 0 && kit.MaxPackagePrice == 0)
-            {
-                kit.MinPackagePrice = packageCreateDTO.Price;
-                kit.MaxPackagePrice = packageCreateDTO.Price;
-            }
-            else if (packageCreateDTO.Price < kit.MinPackagePrice)
-            {
-                kit.MinPackagePrice = packageCreateDTO.Price;
-            }
-            else if (packageCreateDTO.Price > kit.MaxPackagePrice)
-            {
-                kit.MaxPackagePrice = packageCreateDTO.Price;
-            }
+            // Adjust kit's price range based on the package price
+            UpdateKitPriceRange(kit, packageCreateDTO.Price);
 
             return package;
+        }
+        private void UpdateKitPriceRange(Kit kit, long packagePrice)
+        {
+            if (kit.MinPackagePrice == 0 && kit.MaxPackagePrice == 0)
+            {
+                kit.MinPackagePrice = kit.MaxPackagePrice = packagePrice;
+            }
+            else
+            {
+                kit.MinPackagePrice = Math.Min(kit.MinPackagePrice, packagePrice);
+                kit.MaxPackagePrice = Math.Max(kit.MaxPackagePrice, packagePrice);
+            }
         }
         #endregion
     }
