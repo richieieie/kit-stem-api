@@ -23,6 +23,8 @@ namespace KSH.Api.Models.Domain
         public string Brief { get; set; } = null!;
 
         public string Description { get; set; } = null!;
+        public long MinPackagePrice { get; set; }
+        public long MaxPackagePrice { get; set; }
 
         public int PurchaseCost { get; set; }
 

@@ -2,6 +2,7 @@ using AutoMapper;
 using KSH.Api.Constants;
 using KSH.Api.Models.Domain;
 using KSH.Api.Models.DTO.Request;
+using KSH.Api.Models.DTO.Response;
 using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
 using KSH.Api.Utils;
@@ -47,7 +48,6 @@ namespace KSH.Api.Services
                     Amount = order.TotalPrice,
                     OrderId = order.Id
                 };
-
                 await _unitOfWork.PaymentRepository.CreateAsync(payment);
 
                 //Build URL for VNPAY
@@ -81,18 +81,18 @@ namespace KSH.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> PaymentExecute(IQueryCollection vnPayData)
+        public async Task<(ServiceResponse, OrderResponseDTO?)> PaymentExecute(IQueryCollection vnPayData)
         {
             var serviceResponse = new ServiceResponse();
             try
             {
                 if (vnPayData.Count == 0)
                 {
-                    return serviceResponse
+                    return (serviceResponse
                                 .SetSucceeded(false)
                                 .SetStatusCode(StatusCodes.Status404NotFound)
                                 .AddDetail("message", "Thực hiện giao dịch thất bại!")
-                                .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
+                                .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!"), null);
                 }
 
                 string vnp_HashSecret = _configuration["VNPay:vnp_HashSecret"]!;
@@ -114,28 +114,28 @@ namespace KSH.Api.Services
                 var checkSignature = vnPay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
                 if (!checkSignature)
                 {
-                    return serviceResponse
+                    return (serviceResponse
                             .SetSucceeded(false)
                             .SetStatusCode(StatusCodes.Status404NotFound)
                             .AddDetail("message", "Thực hiện giao dịch thất bại!")
-                            .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
+                            .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!"), null);
                 }
                 var payment = await _unitOfWork.PaymentRepository.GetByIdAsync(paymentId);
                 if (payment == null || payment.Amount != vnp_Amount)
                 {
-                    return serviceResponse
+                    return (serviceResponse
                             .SetSucceeded(false)
                             .SetStatusCode(StatusCodes.Status404NotFound)
                             .AddDetail("message", "Thực hiện giao dịch thất bại!")
-                            .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!");
+                            .AddError("invalidCredentials", "Thông tin giao dịch cung cấp không chính xác, vui lòng kiểm tra lại!"), null);
                 }
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(payment.OrderId);
                 if (vnp_ResponseCode != "00" || vnp_TransactionStatus != "00")
                 {
-                    return serviceResponse
+                    return (serviceResponse
                         .SetSucceeded(false)
                         .SetStatusCode(StatusCodes.Status500InternalServerError)
-                        .AddDetail("message", "Giao dịch thất bại!");
+                        .AddDetail("message", "Giao dịch thất bại!"), null);
                 }
 
                 // Update payment status
@@ -144,17 +144,30 @@ namespace KSH.Api.Services
                 // Update order status
                 order!.ShippingStatus = OrderFulfillmentConstants.OrderVerifyingStatus;
                 await _unitOfWork.OrderRepository.UpdateAsync(order);
+                await _unitOfWork._dbContext.Entry(order).Reference(o => o.User).LoadAsync();
 
-                return serviceResponse
-                        .AddDetail("message", "Giao dịch thành công!");
+                var orderDTO = _mapper.Map<OrderResponseDTO>(order);
+
+                return (serviceResponse
+                        .AddDetail("message", "Giao dịch thành công!"), orderDTO);
             }
             catch
             {
-                return serviceResponse
+                return (serviceResponse
                         .SetSucceeded(false)
                         .AddDetail("message", "Tạo mới payment thất bại!")
-                        .AddError("outOfService", "Không thể tạo một payment mới ngay lúc này!");
+                        .AddError("outOfService", "Không thể tạo một payment mới ngay lúc này!"), null);
             }
+        }
+
+        private DateTimeOffset GetCurrentVietNamTime()
+        {
+            var createdAtUtc = DateTimeOffset.UtcNow;
+
+            var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var createdAtInVietnam = TimeZoneInfo.ConvertTime(createdAtUtc, vietnamTimeZone);
+
+            return createdAtInVietnam;
         }
     }
 }

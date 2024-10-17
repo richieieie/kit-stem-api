@@ -65,7 +65,7 @@ namespace KSH.Api.Services
                             .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
                 }
 
-                var orderDTO = _mapper.Map<OrderResponseDTO>(order);
+                var orderDTO = _mapper.Map<IndividualOrderResponseDTO>(order);
 
                 return new ServiceResponse()
                         .AddDetail("message", "Lấy thông tin order thành công!")
@@ -249,9 +249,9 @@ namespace KSH.Api.Services
                     );
                 foreach (var packageOrder in packageOrders)
                 {
-                    foreach(var lab in packageOrder.Package.PackageLabs)
+                    foreach (var lab in packageOrder.Package.PackageLabs)
                     {
-                        _unitOfWork.OrderSupportRepository.Create(new OrderSupport() {Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes });
+                        _unitOfWork.OrderSupportRepository.Create(new OrderSupport() { Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes });
                     }
                 }
 
@@ -277,7 +277,8 @@ namespace KSH.Api.Services
                         o.CreatedAt <= orderStaffGetDTO.CreatedTo &&
                         o.User.Email!.Contains(orderStaffGetDTO.CustomerEmail ?? "") &&
                         o.TotalPrice >= orderStaffGetDTO.FromAmount &&
-                        o.TotalPrice <= orderStaffGetDTO.ToAmount;
+                        o.TotalPrice <= orderStaffGetDTO.ToAmount &&
+                        o.ShippingStatus.Contains(orderStaffGetDTO.ShippingStatus ?? "");
         }
 
         private Expression<Func<UserOrders, bool>>? GetByCustomerIdFilter(OrderGetDTO orderGetDTO, string customerId)
@@ -286,7 +287,8 @@ namespace KSH.Api.Services
                         o.CreatedAt <= orderGetDTO.CreatedTo &&
                         o.UserId == customerId &&
                         o.TotalPrice >= orderGetDTO.FromAmount &&
-                        o.TotalPrice <= orderGetDTO.ToAmount;
+                        o.TotalPrice <= orderGetDTO.ToAmount &&
+                        o.ShippingStatus.Contains(orderGetDTO.ShippingStatus ?? "");
         }
         private Expression<Func<PackageOrder, bool>> GetPackageOrderFilter(Guid orderId)
         {

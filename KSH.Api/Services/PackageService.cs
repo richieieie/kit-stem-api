@@ -30,7 +30,6 @@ namespace KSH.Api.Services
                 var package = _mapper.Map<Package>(packageCreateDTO);
 
                 package = await TryCreatePackageLabsAsync(packageCreateDTO, package);
-
                 if (package == null)
                 {
                     return (serviceResponse
@@ -41,7 +40,9 @@ namespace KSH.Api.Services
                             0);
                 }
 
+                // Try to create package
                 await _unitOfWork.PackageRepository.CreateAsync(package);
+
 
                 return (serviceResponse
                             .AddDetail("message", "Thêm mới gói kit thành công!"),
@@ -214,14 +215,21 @@ namespace KSH.Api.Services
         }
         private async Task<Package?> TryCreatePackageLabsAsync(PackageCreateDTO packageCreateDTO, Package package)
         {
+            var kit = await _unitOfWork.KitRepository.GetByIdAsync(packageCreateDTO.KitId);
+            if (kit == null)
+            {
+                return null;
+            }
+            package.Kit = kit;
+
             if (packageCreateDTO.LabIds == null || packageCreateDTO.LabIds.Count == 0)
             {
                 return package;
             }
 
             var (labs, _) = await _unitOfWork.LabRepository.GetByKitIdAsync(packageCreateDTO.KitId);
-            var validLabIds = labs.Select(l => l.Id);
-            if (!packageCreateDTO.LabIds.All(id => validLabIds.Contains(id)))
+            var validLabIds = labs.Select(l => l.Id).ToHashSet();
+            if (packageCreateDTO.LabIds.Except(validLabIds).Any())
             {
                 return null;
             }
@@ -229,7 +237,22 @@ namespace KSH.Api.Services
             var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
             package.PackageLabs = packageLabs.ToList();
 
+            // Adjust kit's price range based on the package price
+            UpdateKitPriceRange(kit, packageCreateDTO.Price);
+
             return package;
+        }
+        private void UpdateKitPriceRange(Kit kit, long packagePrice)
+        {
+            if (kit.MinPackagePrice == 0 && kit.MaxPackagePrice == 0)
+            {
+                kit.MinPackagePrice = kit.MaxPackagePrice = packagePrice;
+            }
+            else
+            {
+                kit.MinPackagePrice = Math.Min(kit.MinPackagePrice, packagePrice);
+                kit.MaxPackagePrice = Math.Max(kit.MaxPackagePrice, packagePrice);
+            }
         }
         #endregion
     }
