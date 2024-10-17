@@ -1,6 +1,4 @@
-using System.Drawing;
 using System.Linq.Expressions;
-using System.Runtime.Intrinsics.Wasm;
 using AutoMapper;
 using KSH.Api.Constants;
 using KSH.Api.Models.Domain;
@@ -35,7 +33,8 @@ namespace KSH.Api.Services
             try
             {
                 var filter = GetFilter(orderStaffGetDTO);
-                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, null, skip: pageSize * orderStaffGetDTO.Page, take: pageSize);
+                var sort = GetOrderOrderBy(orderStaffGetDTO);
+                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, sort, skip: pageSize * orderStaffGetDTO.Page, take: pageSize);
                 var orderDTOs = _mapper.Map<IEnumerable<OrderResponseDTO>>(orders);
 
                 return new ServiceResponse()
@@ -76,7 +75,7 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                         .SetSucceeded(false)
                         .SetStatusCode(500)
-                        .AddDetail("message", "Lấy dữ liệu orders thất bại!bại")
+                        .AddDetail("message", "Lấy dữ liệu orders thất bại!")
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
@@ -86,7 +85,8 @@ namespace KSH.Api.Services
             try
             {
                 var filter = GetByCustomerIdFilter(orderGetDTO, customerId);
-                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, null, skip: pageSize * orderGetDTO.Page, take: pageSize);
+                var sort = GetOrderOrderBy(orderGetDTO);
+                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(filter, sort, skip: pageSize * orderGetDTO.Page, take: pageSize);
                 var orderDTOs = _mapper.Map<IEnumerable<OrderResponseDTO>>(orders);
 
                 return new ServiceResponse()
@@ -294,6 +294,54 @@ namespace KSH.Api.Services
         {
             return (l) => l.OrderId.Equals(orderId);
             ;
+        }
+
+        private Func<IQueryable<UserOrders>, IOrderedQueryable<UserOrders>> GetOrderOrderBy(OrderGetDTO orderGetDTO)
+        {
+            return query =>
+            {
+                if (orderGetDTO.SortFields == null || orderGetDTO.SortOrders == null)
+                {
+                    return query.OrderByDescending(o => o.CreatedAt);
+                }
+
+                var fields = orderGetDTO.SortFields.Split(",");
+                var fieldOrders = orderGetDTO.SortOrders.Split(",");
+                if (fields.Length == 0 || fieldOrders.Length == 0 || fields.Length != fieldOrders.Length)
+                {
+                    return query.OrderByDescending(o => o.CreatedAt);
+                }
+
+                IOrderedQueryable<UserOrders>? orderByQuery = null;
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    var field = fields[i].ToLower();
+                    var fieldOrder = fieldOrders[i].ToLower();
+                    orderByQuery = orderByQuery == null ? ApplyOrderBy(query, field, fieldOrder) : ApplyThenOrderBy(orderByQuery, field, fieldOrder);
+                }
+
+                return orderByQuery ?? query.OrderByDescending(o => o.CreatedAt);
+            };
+        }
+
+        private IOrderedQueryable<UserOrders>? ApplyOrderBy(IQueryable<UserOrders> query, string field, string fieldOrder)
+        {
+            return (field, fieldOrder) switch
+            {
+                ("createdat", "asc") => query.OrderBy(o => o.CreatedAt),
+                ("createdat", "desc") => query.OrderByDescending(o => o.CreatedAt),
+                _ => null,
+            };
+        }
+
+        private IOrderedQueryable<UserOrders>? ApplyThenOrderBy(IOrderedQueryable<UserOrders> orderByQuery, string field, string fieldOrder)
+        {
+            return (field, fieldOrder) switch
+            {
+                ("createdat", "asc") => orderByQuery.ThenBy(o => o.CreatedAt),
+                ("createdat", "desc") => orderByQuery.ThenByDescending(o => o.CreatedAt),
+                _ => orderByQuery,
+            };
         }
         #endregion
     }
