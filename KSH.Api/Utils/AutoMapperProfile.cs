@@ -33,7 +33,6 @@ namespace KSH.Api.Utils
             CreateMap<Package, PackageCartResponseDTO>()
                 .ForMember(dest => dest.PackageId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Labs, opt => opt.MapFrom(src => src.PackageLabs)).ReverseMap();
-            
 
             // Using for getting labs
             CreateMap<Lab, LabResponseDTO>();
@@ -44,6 +43,8 @@ namespace KSH.Api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<OrderSupport, OrderSupportResponseDTO>();
+            CreateMap<UserOrders, IndividualOrderResponseDTO>();
             CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -66,7 +67,7 @@ namespace KSH.Api.Utils
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Brief, opt => opt.MapFrom(src => src.Brief))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.PurchaseCost))
+                // .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.PurchaseCost))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));

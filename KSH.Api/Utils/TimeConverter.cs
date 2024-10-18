@@ -16,5 +16,14 @@ namespace KSH.Api.Utils
 
             return createdAtInVietnam;
         }
+
+        public static DateTimeOffset ToVietNamTime(DateTimeOffset time)
+        {
+
+            var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var timeAtVietNam = TimeZoneInfo.ConvertTime(time, vietnamTimeZone);
+
+            return timeAtVietNam;
+        }
     }
 }

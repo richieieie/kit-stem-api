@@ -27,7 +27,7 @@ namespace KSH.Api.Services
         {
             try
             {
-                if(kitGetDTO.FromPrice > kitGetDTO.ToPrice)
+                if (kitGetDTO.FromPrice > kitGetDTO.ToPrice)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
@@ -44,18 +44,21 @@ namespace KSH.Api.Services
                     take: sizePerPage,
                     query => query.Include(l => l.Category).Include(l => l.KitImages)
                     );
-                if (!kits.Any())
+                if (kits.Count() > 0)
+                {
+                    var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
+                    return new ServiceResponse()
+                         .SetSucceeded(true)
+                         .AddDetail("message", "Lấy danh sách kit thành công")
+                         .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page + 1, kits = kitsDTO });
+                }
+                else
                 {
                     return new ServiceResponse()
                        .SetSucceeded(true)
                        .AddDetail("message", "Không tìm thấy bộ kit!!!!!")
-                       .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page, kits = kits});
+                       .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page, kits = kits });
                 }
-                var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
-                return new ServiceResponse()
-                     .SetSucceeded(true)
-                     .AddDetail("message", "Lấy danh sách kit thành công")
-                     .AddDetail("data", new { totalPages, currentPage = (kitGetDTO.Page + 1), kits = kitsDTO });
             }
             catch
             {

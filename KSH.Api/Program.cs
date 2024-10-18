@@ -144,7 +144,8 @@ public class Program
                 {
                     policy.AllowAnyOrigin()
                             .AllowAnyHeader()
-                            .AllowAnyMethod();
+                            .AllowAnyMethod()
+                            .WithExposedHeaders("Location");
                 });
             });
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
