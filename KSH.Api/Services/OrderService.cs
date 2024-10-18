@@ -1,3 +1,4 @@
+using System.Data;
 using System.Drawing;
 using System.Linq.Expressions;
 using System.Runtime.Intrinsics.Wasm;
@@ -188,7 +189,7 @@ namespace KSH.Api.Services
             try
             {
                 Expression<Func<UserOrders, bool>> orderFilter = (l) => l.Id.Equals(getDTO.Id);
-                var (orders, totalPages) = await _unitOfWork.OrderRepository.GetFilterAsync(
+                var (orders, totalOrderPages) = await _unitOfWork.OrderRepository.GetFilterAsync(
                 orderFilter,
                 null,
                 null,
@@ -202,8 +203,10 @@ namespace KSH.Api.Services
                         .AddError("notFound", "Không tìm thấy đơn hàng này!")
                         .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
+
                 var order = orders.FirstOrDefault();
                 order!.ShippingStatus = getDTO.ShippingStatus!;
+                order!.DeliveredAt = TimeConverter.GetCurrentVietNamTime();
 
                 if (!await _unitOfWork.OrderRepository.UpdateAsync(order))
                 {
@@ -212,47 +215,95 @@ namespace KSH.Api.Services
                    .AddError("invalidCredentials", "Thông tin nhập không hợp lệ")
                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
+
                 if (order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus)
                 {
                     return new ServiceResponse()
                             .SetSucceeded(true)
                             .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
                 }
-                if (!order.Payment!.Status)
+                // cập nhật trạng thái thanh toán của order
+                try
                 {
-                    order.Payment.Status = true;
-                    if (!await _unitOfWork.PaymentRepository.UpdateAsync(order.Payment))
+                    if (!order.Payment!.Status)
                     {
-                        return new ServiceResponse()
-                            .SetSucceeded(false)
-                            .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
-                            .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                        order.Payment.Status = true;
+                        if (!await _unitOfWork.PaymentRepository.UpdateAsync(order.Payment))
+                        {
+                            return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
+                                .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                        }
                     }
-                }
-                // Cập nhật điểm cho khách hàng
-                var point = (double)(order.Payment.Amount / 100);
-                order.User.Points = (int)Math.Floor(point);
-                if (!await _unitOfWork.UserRepository.UpdateAsync(order.User))
+                } 
+                catch
                 {
                     return new ServiceResponse()
-                            .SetSucceeded(false)
-                            .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
-                            .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                        .SetSucceeded(false)
+                        .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                        .AddError("erorr", "Cập nhật trạng thái giao hàng thất bại")
+                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
-                // Tạo từng order support cho từng LabId có trong những package đã mua trong order 
-                var packageFilter = GetPackageOrderFilter(order.Id);
-                var (packageOrders, packageOrderTotalPages) = await _unitOfWork.PackageOrderRepository.GetFilterAsync(
-                    packageFilter,
-                    null,
-                    null,
-                    null
-                    );
-                foreach (var packageOrder in packageOrders)
+                
+                // Cập nhật điểm cho khách hàng
+                try
                 {
-                    foreach (var lab in packageOrder.Package.PackageLabs)
+                    var point = (double)(order.Payment.Amount / 100);
+                    order.User.Points += (int)Math.Floor(point);
+                    if (!await _unitOfWork.UserRepository.UpdateAsync(order.User))
                     {
-                        _unitOfWork.OrderSupportRepository.Create(new OrderSupport() { Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes });
+                        return new ServiceResponse()
+                                .SetSucceeded(false)
+                                .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
+                                .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                     }
+                }
+                catch
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                        .AddError("error", "Cập nhật điểm cho khách hàng thất bại")
+                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                }
+                
+                // Tạo từng order support cho từng LabId có trong những package đã mua trong order 
+                try
+                {
+                    var packageFilter = GetPackageOrderFilter(order.Id);
+                    var (packageOrders, packageOrderTotalPages) = await _unitOfWork.PackageOrderRepository.GetFilterAsync(
+                        packageFilter,
+                        null,
+                        null,
+                        null
+                        );
+                    foreach (var packageOrder in packageOrders)
+                    {
+                        foreach (var lab in packageOrder.Package.PackageLabs)
+                        {
+                            var orderSupportFilter = GetOrderSupportFilter(order.Id, lab.LabId, lab.PackageId);
+                            var (checkOrderSupportExited, totalOrderSupportPages) = await _unitOfWork.OrderSupportRepository.GetFilterAsync(
+                                orderSupportFilter,
+                                null,
+                                null,
+                                null
+                                );
+                            if (checkOrderSupportExited.Count() == 0)
+                            {
+                                _unitOfWork.OrderSupportRepository.Create(new OrderSupport() { Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes });
+                            }
+                            
+                        }
+                    }
+                }
+                catch
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                        .AddError("error", "Tạo OrderSupport thất bại")
+                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
 
                 return new ServiceResponse()
@@ -295,6 +346,13 @@ namespace KSH.Api.Services
             return (l) => l.OrderId.Equals(orderId);
             ;
         }
+        private Expression<Func<OrderSupport, bool>> GetOrderSupportFilter(Guid orderId, Guid labId, int packageId)
+        {
+            return (l) => l.OrderId.Equals(orderId) &&
+                          l.LabId.Equals(labId) &&
+                          l.PackageId.Equals(packageId);
+        }
+
         #endregion
     }
 }
