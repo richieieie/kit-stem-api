@@ -250,7 +250,7 @@ namespace KSH.Api.Services
                 try
                 {
                     var point = (double)(order.Payment.Amount / 100);
-                    order.User.Points = (int)Math.Floor(point);
+                    order.User.Points += (int)Math.Floor(point);
                     if (!await _unitOfWork.UserRepository.UpdateAsync(order.User))
                     {
                         return new ServiceResponse()
