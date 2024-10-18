@@ -8,6 +8,8 @@ namespace KSH.Api.Services.IServices
     {
         Task<(ServiceResponse, string?)> RegisterAsync(UserRegisterDTO requestBody, string role);
         Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody);
+        Task<(ServiceResponse, string?)> GeneratePasswordResetTokenAsync(string email);
+        Task<ServiceResponse> ResetPasswordAsync(PasswordResetDTO passwordResetDTO);
         Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO);
         Task<ServiceResponse> GetAsync(string userName);
         Task<ServiceResponse> UpdateAsync(string userName, UserUpdateDTO userUpdateDTO);

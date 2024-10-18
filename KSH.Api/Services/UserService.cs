@@ -8,7 +8,6 @@ using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories.IRepositories;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace KSH.Api.Services
 {
@@ -380,6 +379,48 @@ namespace KSH.Api.Services
                         .AddDetail("message", "Xác thực tài khoản thất bại")
                         .AddError("outOutService", "Không thể xác thực tài khoản ngay lúc này!");
             }
+        }
+
+        public async Task<(ServiceResponse, string?)> GeneratePasswordResetTokenAsync(string email)
+        {
+            var serviceResponse = new ServiceResponse();
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return (serviceResponse
+                        .AddDetail("message", "Không thể cài đặt lại mật khẩu!")
+                        .AddError("notFound", "Không tìm thấy tài khoản của bạn trong hệ thống, vui lòng đăng ký!"),
+                        null);
+            }
+
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            return (serviceResponse
+                    .AddDetail("message", "Tạo mã cài đặt mật khẩu thành công!"),
+                    resetToken);
+        }
+
+        public async Task<ServiceResponse> ResetPasswordAsync(PasswordResetDTO passwordResetDTO)
+        {
+            var serviceResponse = new ServiceResponse();
+            var user = await _userManager.FindByEmailAsync(passwordResetDTO.Email!);
+            if (user == null)
+            {
+                return serviceResponse
+                    .AddDetail("message", "Không thể đặt lại mật khẩu.")
+                    .AddError("unavailable", "Đặt lại mật khẩu không thành công. Vui lòng kiểm tra lại token và thử lại.");
+            }
+
+            var identityResult = await _userManager.ResetPasswordAsync(user, passwordResetDTO.Token!, passwordResetDTO.NewPassword!);
+            if (!identityResult.Succeeded)
+            {
+                return serviceResponse
+                   .AddDetail("message", "Không thể đặt lại mật khẩu.")
+                   .AddError("unavailable", "Đặt lại mật khẩu không thành công. Vui lòng kiểm tra lại token và thử lại.");
+            }
+
+            return serviceResponse
+                    .AddDetail("message", "Đặt lại mật khẩu thành công. Bạn có thể sử dụng mật khẩu mới để đăng nhập.");
         }
     }
 }

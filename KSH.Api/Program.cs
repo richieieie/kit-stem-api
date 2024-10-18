@@ -160,6 +160,7 @@ public class Program
                         .AddDefaultTokenProviders()
                         .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("KitStemHub")
                         .AddEntityFrameworkStores<KitStemDbContext>();
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromMinutes(5));
         builder.Services.AddAuthentication(options =>
                         {
                             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

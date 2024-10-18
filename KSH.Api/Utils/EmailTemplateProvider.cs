@@ -11,6 +11,23 @@ namespace KSH.Api.Utils
             _webHostEnvironment = webHostEnvironment;
         }
 
+        public string GetPasswordResetTemplate(string username, string shopName, string passwordResetUrl)
+        {
+            string body = string.Empty;
+            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Assets", "Templates", "PasswordReset.html");
+
+            using (StreamReader reader = new StreamReader(path))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            body = body.Replace("[UserName]", username);
+            body = body.Replace("[ShopName]", shopName);
+            body = body.Replace("[ResetPasswordUrl]", passwordResetUrl);
+
+            return body;
+        }
+
         public string GetOrderConfirmationTemplate(string shopName, OrderResponseDTO orderDTO)
         {
             string body = string.Empty;
