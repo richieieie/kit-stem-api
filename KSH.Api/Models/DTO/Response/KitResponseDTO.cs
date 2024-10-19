@@ -17,7 +17,7 @@ namespace KSH.Api.Models.DTO.Response
         public long MinPackagePrice { get; set; }
         public long MaxPackagePrice { get; set; }
 
-        // public int PurchaseCost { get; set; }
+        public int PurchaseCost { get; set; }
 
         public bool Status { get; set; }
         public virtual KitsCategory? KitsCategory { get; set; }

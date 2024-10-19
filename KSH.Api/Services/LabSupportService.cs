@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using KSH.Api.Models.Domain;
-using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories;
 using KSH.Api.Services;
 using KSH.Api.Utils;
@@ -9,7 +8,6 @@ using KST.Api.Models.DTO.Response;
 using KST.Api.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Security.Cryptography;
 
 namespace KST.Api.Services
 {
@@ -36,19 +34,38 @@ namespace KST.Api.Services
                 take: sizePerPage
                 );
                 var labSupportsDTO = _mapper.Map<IEnumerable<LabSupportResponseDTO>>(labSupports);
-                if (labSupports.Count() > 0)
-                {
-                    return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Lấy danh sách LabSupoet thành công")
-                        .AddDetail("data", new { totalPages, currentPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
-                }
+
+                return new ServiceResponse()
+                            .SetSucceeded(true)
+                             .AddDetail("message", "Lấy danh sách hỗ trợ bài lab thành công")
+                            .AddDetail("data", new { totalPages, currentPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .AddError("outOfService", "Không thể lấy danh sách LabSupport lúc này")
+                    .AddDetail("message", "Lấy danh sách thất bại");
+            }
+        }
+
+        public async Task<ServiceResponse> GetByCustomerIdAsync(string customerId, LabSupportGetDTO getDTO)
+        {
+            try
+            {
+                var filter = GetByCustomerIdFilter(customerId, getDTO);
+                var (labSupports, totalPages) = await _unitOfWork.LabSupportRepository.GetByUserIdFilterAsync(
+                filter,
+                null,
+                skip: sizePerPage * getDTO.Page,
+                take: sizePerPage
+                );
+                var labSupportDTOs = _mapper.Map<IEnumerable<LabSupportResponseDTO>>(labSupports);
+
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .SetStatusCode(StatusCodes.Status404NotFound)
-                    .AddError("notFound", "Không tìm thấy danh sách Lab Support")
-                    .AddDetail("message", "Lấy danh sách thành công")
-                    .AddDetail("data", new { totalPages, currentPage = (getDTO.Page + 1), labSupports = labSupportsDTO });
+                    .AddDetail("message", "Lấy danh sách hỗ trợ bài lab thành công")
+                    .AddDetail("data", new { totalPages, currentPage = getDTO.Page + 1, labSupports = labSupportDTOs });
             }
             catch
             {
@@ -294,9 +311,14 @@ namespace KST.Api.Services
         }
         #endregion
         #region Methods that help service
-        private Expression<Func<LabSupport, bool>> GetFilter(LabSupportGetDTO getDTO)
+        private static Expression<Func<LabSupport, bool>> GetFilter(LabSupportGetDTO getDTO)
         {
             return (l) => l.IsFinished == getDTO.Supported;
+        }
+        private static Expression<Func<LabSupport, bool>> GetByCustomerIdFilter(string customerId, LabSupportGetDTO getDTO)
+        {
+            return (l) => l.IsFinished == getDTO.Supported &&
+                        l.OrderSupport.Order.UserId == customerId;
         }
         #endregion
     }

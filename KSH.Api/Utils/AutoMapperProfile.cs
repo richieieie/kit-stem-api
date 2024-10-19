@@ -75,6 +75,8 @@ namespace KSH.Api.Utils
             CreateMap<KitImage, KitImageDTO>();
             CreateMap<Package, PackageInKitDTO>();
             CreateMap<Lab, LabInKitDTO>();
+            CreateMap<Lab, LabInLabSupportResponseDTO>();
+
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
 
@@ -93,6 +95,7 @@ namespace KSH.Api.Utils
                 .ForMember(dest => dest.LabId, opt => opt.MapFrom(src => src.OrderSupport.LabId))
                 .ForMember(dest => dest.Lab, opt => opt.MapFrom(src => src.OrderSupport.Lab))
                 .ForMember(dest => dest.Package, opt => opt.MapFrom(src => src.OrderSupport.Package))
+                .ForPath(dest => dest.Package!.Kit, opt => opt.MapFrom(src => src.OrderSupport.Package.Kit))
                 .ForPath(dest => dest.Staff!.UserName, opt => opt.MapFrom(src => src.Staff.UserName))
                 .ForPath(dest => dest.Staff!.FirstName, opt => opt.MapFrom(src => src.Staff.FirstName))
                 .ForPath(dest => dest.Staff!.LastName, opt => opt.MapFrom(src => src.Staff.LastName))
