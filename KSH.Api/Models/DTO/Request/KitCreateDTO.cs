@@ -18,6 +18,10 @@ namespace KSH.Api.Models.DTO.Request
         [Required]
         public bool Status { get; set; }
         [Required]
+        public List<int>? ComponentId { get; set; }
+        [Required]
+        public List<int>? ComponentQuantity { get; set; }
         public List<IFormFile>? KitImagesList { get; set; }
+        
     }
 }

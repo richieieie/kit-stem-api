@@ -22,6 +22,7 @@ namespace KSH.Api.Repositories
                 public virtual OrderSupportRepository OrderSupportRepository { get; set; }
                 public virtual LabSupportRepository LabSupportRepository { get; set; }
                 public virtual PackageOrderRepository PackageOrderRepository { get; set; }
+                public virtual KitComponentRepository KitComponentRepository { get; set; }
 
                 public UnitOfWork(KitStemDbContext dbContext)
                 {
@@ -42,6 +43,7 @@ namespace KSH.Api.Repositories
                         OrderSupportRepository = new OrderSupportRepository(_dbContext);
                         LabSupportRepository = new LabSupportRepository(_dbContext);
                         PackageOrderRepository = new PackageOrderRepository(_dbContext);
+                        KitComponentRepository = new KitComponentRepository(_dbContext);
                 }
         }
 }
