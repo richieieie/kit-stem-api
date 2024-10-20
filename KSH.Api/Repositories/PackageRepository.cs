@@ -51,21 +51,5 @@ namespace KSH.Api.Repositories
             var package = await _dbContext.Packages.FirstOrDefaultAsync(p => p.Id == packageId);
             return package!.KitId;
         }
-
-
-
-        //public async Task<List<PackageOrderDTO>> GetPackageOrder(List<Guid> listOrderId)
-        //{
-        //    var PackageOrderDTO = await _dbContext.PackageOrders
-        //    .Where(p => listOrderId.Contains(p.OrderId))
-        //    .GroupBy(p => p.PackageId)
-        //    .Select(g => new PackageOrderDTO
-        //    {
-        //        PackageId = g.Key,
-        //        PackageQuantity = g.Sum(p => p.PackageQuantity),
-        //    })
-        //    .ToListAsync();
-        //    return PackageOrderDTO;
-        //}
     }
 }

@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using KSH.Api.Data;
 using KSH.Api.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace KSH.Api.Repositories
 {
@@ -12,6 +9,12 @@ namespace KSH.Api.Repositories
         public PackageLabRepository(KitStemDbContext dbContext) : base(dbContext)
         {
 
+        }
+
+        public async Task<Guid> GetByPackageId(int packageId)
+        {
+            var packageLab = await _dbContext.PackageLabs.FirstOrDefaultAsync(pl => pl.PackageId == packageId);
+            return packageLab!.LabId;
         }
     }
 }

@@ -6,6 +6,7 @@ using KSH.Api.Utils;
 using Org.BouncyCastle.Bcpg;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Runtime.ConstrainedExecution;
 
 namespace KSH.Api.Services
@@ -67,10 +68,39 @@ namespace KSH.Api.Services
 
                 var sumOfKit = listKit.Sum(k => k.PurchaseCost * k.Quantity);
 
+                var listLabInPackage = new List<PackageLabDTO>();
+                foreach(var packageLab in listPackageOrder)
+                {
+                    var labId = await _unitOfWork.PackageLabRepository.GetByPackageId(packageLab.PackageId);
+                    PackageLabDTO packageLabDTO = new PackageLabDTO()
+                    {
+                        Id = labId,
+                        Quantity = packageLab.PackageQuantity,
+                    };
+                    listLabInPackage!.Add(packageLabDTO);
+                }
+
+                var listLab = new List<LabDTO>();
+
+                foreach (var lab in listLabInPackage)
+                {
+                    var purchaseCost = await _unitOfWork.LabRepository.GetPurchaseCostById(lab.Id);
+                    LabDTO labDTO = new LabDTO()
+                    {
+                        Id = lab.Id,
+                        PurchaseCost = purchaseCost,
+                        Quantity = lab.Quantity,
+                    };
+                    listLab.Add(labDTO);
+                }
+
+                var sumOfLab = listLab.Sum(l => l.PurchaseCost * l.Quantity);
+
+                var total = sumOfKit + sumOfLab;
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy dữ liệu giá vốn thành công!")
-                    .AddDetail("data", new { sumOfKit });
+                    .AddDetail("data", new { total });
             }
             catch
             {
