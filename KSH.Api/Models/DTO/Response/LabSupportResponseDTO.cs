@@ -12,9 +12,10 @@ namespace KST.Api.Models.DTO.Response
         public int Rating { get; set; }
         public string? FeedBack { get; set; }
         public bool IsFinished { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
         public virtual UserStaffInLabSupportDTO? Staff { get; set; }
-        public virtual UserInLabSupportDTO? User {  get; set; }
-        public virtual Lab? Lab { get; set; }
+        public virtual UserInLabSupportDTO? User { get; set; }
+        public virtual LabInLabSupportResponseDTO? Lab { get; set; }
         public virtual Package? Package { get; set; }
 
     }

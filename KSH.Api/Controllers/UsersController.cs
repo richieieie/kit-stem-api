@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Google.Apis.Auth;
 using KSH.Api.Constants;
@@ -39,8 +40,6 @@ namespace KSH.Api.Controllers
 
             var subject = "Chào mừng bạn đến với shop!";
             var clientBaseUrl = Request.Scheme == "https" ? "https://kit-stem-hub-fe-customer.vercel.app" : "http://localhost:5173";
-            // Console.WriteLine(Request.Scheme);
-            // var clientBaseUrl = "http://localhost:5173";
             var verifyUrl = $"{clientBaseUrl}/verify?email={Uri.EscapeDataString(requestBody.Email!)}&token={Uri.EscapeDataString(token!)}";
             var body = _emailTemplateProvider.GetRegisterTemplate(requestBody.Email!, "KitStemHub", verifyUrl!);
             await _emailService.SendEmail(requestBody.Email!, subject, body);
@@ -98,6 +97,41 @@ namespace KSH.Api.Controllers
             }
 
             serviceResponse = await _userService.LoginWithGoogleAsync((GoogleJsonWebSignature.Payload)serviceResponse.Details![ServiceResponse.ToKebabCase("payload")]);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
+        [Route("SendPasswordResetToken")]
+        public async Task<IActionResult> SendPasswordResetTokenAsync([FromBody] SendPasswordResetTokenDTO sendPasswordResetTokenDTO)
+        {
+            var (serviceResponse, token) = await _userService.GeneratePasswordResetTokenAsync(sendPasswordResetTokenDTO.Email!);
+            if (!serviceResponse.Succeeded)
+            {
+                return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var subject = "Cài đặt lại mật khẩu!";
+            var clientBaseUrl = Request.Scheme == "https" ? "https://kit-stem-hub-fe-customer.vercel.app" : "http://localhost:5173";
+            var passwordResetUrl = $"{clientBaseUrl}/password/reset?email={Uri.EscapeDataString(sendPasswordResetTokenDTO.Email!)}&token={Uri.EscapeDataString(token!)}";
+            var body = _emailTemplateProvider.GetPasswordResetTemplate(sendPasswordResetTokenDTO.Email!, "KitStemHub", passwordResetUrl!);
+            await _emailService.SendEmail(sendPasswordResetTokenDTO.Email!, subject, body);
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] PasswordResetDTO passwordResetDTO)
+        {
+            passwordResetDTO.Email = Uri.UnescapeDataString(passwordResetDTO.Email!);
+            passwordResetDTO.Token = Uri.UnescapeDataString(passwordResetDTO.Token!);
+
+            var serviceResponse = await _userService.ResetPasswordAsync(passwordResetDTO);
             if (!serviceResponse.Succeeded)
             {
                 return Unauthorized(new { status = serviceResponse.Status, details = serviceResponse.Details });
