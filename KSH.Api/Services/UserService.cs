@@ -278,8 +278,12 @@ namespace KSH.Api.Services
 
         public async Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO)
         {
-
-            var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!)).Where(u => u.Email!.Length > 0);
+            var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!))
+                                    .Where(u => u.Email!.Length > 0 &&
+                                    (userManagerGetDTO.FirstName == null || (u.FirstName != null && u.FirstName.Contains(userManagerGetDTO.FirstName ?? ""))) &&
+                                    (userManagerGetDTO.FirstName == null || (u.LastName != null && u.LastName.Contains(userManagerGetDTO.LastName ?? ""))) &&
+                                    (userManagerGetDTO.PhoneNumber == null || (u.PhoneNumber != null && u.PhoneNumber.Contains(userManagerGetDTO.PhoneNumber ?? "")))
+                                );
             var totalUsers = usersInRole.Count();
             var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
             var usersInPage = usersInRole.Skip(userManagerGetDTO.Page * pageSize).Take(pageSize).ToList();

@@ -1,3 +1,4 @@
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("Orders")]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetOrdersAnalyticsAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate, [FromQuery] string? shippingStatus)
+        public async Task<IActionResult> GetOrdersAnalyticsAsync([FromQuery] AnalyticOrderDTO analyticOrderDTO)
         {
-            ServiceResponse serviceResponse = await _analyticService.GetOrderData(fromDate, toDate, shippingStatus);
+            ServiceResponse serviceResponse = await _analyticService.GetOrderData(analyticOrderDTO);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

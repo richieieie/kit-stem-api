@@ -1,5 +1,7 @@
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
+using KSH.Api.Utils;
 
 namespace KSH.Api.Services
 {
@@ -10,9 +12,25 @@ namespace KSH.Api.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public Task<ServiceResponse> GetOrderData(DateTimeOffset fromDate, DateTimeOffset toDate, string? shippingStatus)
+        public async Task<ServiceResponse> GetOrderData(AnalyticOrderDTO analyticOrderDTO)
         {
-            throw new NotImplementedException();
+            var serviceResponse = new ServiceResponse();
+            try
+            {
+                var fromDate = TimeConverter.ToVietNamTime(analyticOrderDTO.FromDate);
+                var toDate = TimeConverter.ToVietNamTime(analyticOrderDTO.ToDate);
+                var shippingStatus = analyticOrderDTO.ShippingStatus;
+                var numberOfOrders = await _unitOfWork.OrderRepository.CountTotalOrders(fromDate, toDate, shippingStatus);
+                return serviceResponse
+                        .AddDetail("message", "")
+                        .AddDetail("data", new { numberOfOrders });
+            }
+            catch
+            {
+                return serviceResponse
+                        .AddDetail("message", "")
+                        .AddError("outOfService", "");
+            }
         }
     }
 }
