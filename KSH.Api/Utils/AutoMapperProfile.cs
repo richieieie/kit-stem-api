@@ -61,20 +61,21 @@ namespace KSH.Api.Utils
 
             // Using for Kit
             CreateMap<Kit, KitCreateDTO>().ReverseMap();
-            CreateMap<Kit, KitResponseDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Brief, opt => opt.MapFrom(src => src.Brief))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                // .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.PurchaseCost))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            CreateMap<Kit, KitResponseByIdDTO>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id))
                 .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
-                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
+                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages))
+                ;
+            CreateMap<Kit, KitResponseDTO>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id))
+                .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages))
+                ;
             CreateMap<KitsCategory, CategoryDTO>();
             CreateMap<KitImage, KitImageDTO>();
             CreateMap<Package, PackageInKitDTO>();
             CreateMap<Lab, LabInKitDTO>();
+
             CreateMap<Lab, LabInLabSupportResponseDTO>();
 
             // Using for KitImage
@@ -95,6 +96,7 @@ namespace KSH.Api.Utils
                 .ForMember(dest => dest.LabId, opt => opt.MapFrom(src => src.OrderSupport.LabId))
                 .ForMember(dest => dest.Lab, opt => opt.MapFrom(src => src.OrderSupport.Lab))
                 .ForMember(dest => dest.Package, opt => opt.MapFrom(src => src.OrderSupport.Package))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForPath(dest => dest.Package!.Kit, opt => opt.MapFrom(src => src.OrderSupport.Package.Kit))
                 .ForPath(dest => dest.Staff!.UserName, opt => opt.MapFrom(src => src.Staff.UserName))
                 .ForPath(dest => dest.Staff!.FirstName, opt => opt.MapFrom(src => src.Staff.FirstName))
