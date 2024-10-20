@@ -83,7 +83,7 @@ namespace KSH.Api.Services
                     query => query
                                 .Include(kc => kc.Category)
                                 .Include(kc => kc.KitImages)
-                                .Include(kc => kc.KitComponents)
+                                .Include(kc => kc.KitComponents!)
                                     .ThenInclude(kc => kc.Component)
                     );
                 if (kits == null)
@@ -97,18 +97,17 @@ namespace KSH.Api.Services
                 var kitsDTO = _mapper.Map<IEnumerable<KitResponseByIdDTO>>(kits);
                 var kit = kits.FirstOrDefault();
                 var kitDTO = kitsDTO.FirstOrDefault();
-                if (kit.KitComponents.Count > 0)
+                if (kit!.KitComponents!.Count > 0)
                 {
                     for (int i = 0; i < kit.KitComponents.Count(); i++)
-                    {
-                        string conponentName = kit.KitComponents.ElementAt(i).Component.Name;
-                        int conponentQuantity = kit.KitComponents.ElementAt(i).ComponentQuantity;
+                    { 
                         var conponent = new KitComponentInKitDTO()
                         {
-                            ComponentName = conponentName,
-                            ComponentQuantity = conponentQuantity
+                            ComponentId = kit.KitComponents.ElementAt(i).Component.Id,
+                            ComponentName = kit.KitComponents.ElementAt(i).Component.Name,
+                            ComponentQuantity = kit.KitComponents.ElementAt(i).ComponentQuantity
                         };
-                        kitDTO.Components.Add(conponent);
+                        kitDTO!.Components.Add(conponent);
                     }
                 } 
                 return new ServiceResponse()
@@ -129,7 +128,7 @@ namespace KSH.Api.Services
         {
             try
             {
-                if (DTO.ComponentId.Count != DTO.ComponentQuantity.Count)
+                if (DTO.ComponentId!.Count != DTO.ComponentQuantity!.Count)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)
@@ -137,7 +136,7 @@ namespace KSH.Api.Services
                         .AddError("error", "Lỗi nhập thiếu dữ liệu");
                 }
                 var kit = _mapper.Map<Kit>(DTO);
-                var kitId = await _unitOfWork.KitRepository.CreateAsync(kit);
+                var kitId = await _unitOfWork.KitRepository.CreateReturnIdAsync(kit);
                 if (DTO.ComponentId!.Count == 0 || DTO.ComponentQuantity!.Count == 0)
                 {
                     return new ServiceResponse()
@@ -171,7 +170,7 @@ namespace KSH.Api.Services
         {
             try
             {
-                if (DTO.ComponentId.Count != DTO.ComponentQuantity.Count)
+                if (DTO.ComponentId!.Count != DTO.ComponentQuantity!.Count)
                 {
                     return new ServiceResponse()
                         .SetSucceeded(false)

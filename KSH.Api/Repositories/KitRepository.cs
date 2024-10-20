@@ -10,7 +10,7 @@ namespace KSH.Api.Repositories
         {
 
         }
-        public virtual async Task<int> CreateAsync(Kit entity)
+        public async Task<int> CreateReturnIdAsync(Kit entity)
         {
             _dbContext.Add(entity);
             if (await _dbContext.SaveChangesAsync() > 0)
