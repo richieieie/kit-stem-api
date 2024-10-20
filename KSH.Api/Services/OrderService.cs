@@ -354,14 +354,6 @@ namespace KSH.Api.Services
                           l.PackageId.Equals(packageId);
         }
 
-        private Expression<Func<OrderSupport, bool>> GetOrderSupportFilter(Guid orderId, Guid labId, int packageId)
-        {
-            return (l) => l.OrderId.Equals(orderId) &&
-                          l.LabId.Equals(labId) &&
-                          l.PackageId.Equals(packageId);
-        }
-
-
         private Func<IQueryable<UserOrders>, IOrderedQueryable<UserOrders>> GetOrderOrderBy(OrderGetDTO orderGetDTO)
         {
             return query =>
