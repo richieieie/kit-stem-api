@@ -10,6 +10,18 @@ namespace KSH.Api.Repositories
         {
 
         }
+        public async Task<int> CreateReturnIdAsync(Kit entity)
+        {
+            _dbContext.Add(entity);
+            if (await _dbContext.SaveChangesAsync() > 0)
+            {
+                return entity.Id;
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
         public async Task<int> GetMaxIdAsync()
         {

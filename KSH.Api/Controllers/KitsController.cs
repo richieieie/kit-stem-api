@@ -23,7 +23,7 @@ namespace KSH.Api.Controllers
             _kitImageService = kitImageService;
             _firebaseService = firebaseService;
         }
-
+        #region Controller methods
         [HttpGet]
         // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
@@ -81,7 +81,11 @@ namespace KSH.Api.Controllers
 
             if (!serviceResponse.Succeeded)
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-
+            if (DTO.KitImagesList == null || DTO.KitImagesList!.Count == 0)
+            {
+                return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            }
+            // phần upload ảnh
             var kitId = await _kitService.GetMaxIdAsync(); // lấy kitId cuối cùng
             var kitIdString = kitId.ToString(); // đổi tử int to string
             int kitImageCount = 1; // dùng để đếm số image gửi xuống và đồng thời dùng để đặt tên cho file name image
@@ -202,5 +206,6 @@ namespace KSH.Api.Controllers
 
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
+        #endregion
     }
 }
