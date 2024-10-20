@@ -78,6 +78,7 @@ namespace KSH.Api.Utils
 
             CreateMap<Lab, LabInLabSupportResponseDTO>();
 
+
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
 

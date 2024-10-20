@@ -51,9 +51,9 @@ namespace KST.Api.Controllers
             var serviceResponse = await _labSupportService.CreateAsync(orderId, labId, packageId);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detailss = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, detailss = serviceResponse.Details });
         }
 
         [HttpPut]
