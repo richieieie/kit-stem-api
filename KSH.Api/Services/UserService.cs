@@ -279,7 +279,7 @@ namespace KSH.Api.Services
         public async Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO)
         {
             var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!))
-                                    .Where(u => u.Email!.Length > 0 &&
+                                    .Where(u => u.Email != null && u.Email.Contains(userManagerGetDTO.Email ?? "") &&
                                     (userManagerGetDTO.FirstName == null || (u.FirstName != null && u.FirstName.Contains(userManagerGetDTO.FirstName ?? ""))) &&
                                     (userManagerGetDTO.FirstName == null || (u.LastName != null && u.LastName.Contains(userManagerGetDTO.LastName ?? ""))) &&
                                     (userManagerGetDTO.PhoneNumber == null || (u.PhoneNumber != null && u.PhoneNumber.Contains(userManagerGetDTO.PhoneNumber ?? "")))
