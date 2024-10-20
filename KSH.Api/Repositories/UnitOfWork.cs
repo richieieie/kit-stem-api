@@ -45,5 +45,5 @@ namespace KSH.Api.Repositories
                         PackageOrderRepository = new PackageOrderRepository(_dbContext);
                         KitComponentRepository = new KitComponentRepository(_dbContext);
                 }
-        }
+    }
 }

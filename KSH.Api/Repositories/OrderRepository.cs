@@ -1,4 +1,6 @@
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using KSH.Api.Constants;
 using KSH.Api.Data;
 using KSH.Api.Models.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +50,22 @@ namespace KSH.Api.Repositories
         public async Task<int> CountTotalOrders(DateTimeOffset? fromDate, DateTimeOffset? toDate, string? shippingStatus)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> SumTotalOrder(DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        {
+            return await _dbContext.UserOrders.Where(o => 
+            o.DeliveredAt >= fromDate &&
+            o.DeliveredAt <= toDate &&
+            o.ShippingStatus.Equals(OrderFulfillmentConstants.OrderSuccessStatus)).SumAsync(o => o.TotalPrice);
+        }
+
+        public async Task<List<Guid>> GetOrderId(DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        {
+            return await _dbContext.UserOrders.Where(o =>
+            o.DeliveredAt >= fromDate &&
+            o.DeliveredAt <= toDate &&
+            o.ShippingStatus.Equals(OrderFulfillmentConstants.OrderSuccessStatus)).Select(o => o.Id).ToListAsync();
         }
     }
 }
