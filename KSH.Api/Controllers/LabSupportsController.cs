@@ -19,26 +19,41 @@ namespace KST.Api.Controllers
         }
         [HttpGet]
         // [Authorize(Roles = "staff")]
-        public async Task<IActionResult> GetAsync([FromQuery]LabSupportGetDTO getDTO)
+        public async Task<IActionResult> GetAsync([FromQuery] LabSupportGetDTO getDTO)
         {
             var serviceResponse = await _labSupportService.GetAsync(getDTO);
             if (!serviceResponse.Succeeded)
             {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("customers")]
+        [Authorize(Roles = "customer")]
+        public async Task<IActionResult> GetByIdCustomerAsync([FromQuery] LabSupportGetDTO getDTO)
+        {
+            var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var serviceResponse = await _labSupportService.GetByCustomerIdAsync(customerId!, getDTO);
+            if (!serviceResponse.Succeeded)
+            {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
             }
-            return Ok( new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
+
         [HttpPost]
         [Route("orders/{orderId:guid}/packages/{packageId:int}/labs/{labId:guid}")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult>CreateAsync([FromRoute] Guid orderId, Guid labId, int packageId)
+        public async Task<IActionResult> CreateAsync([FromRoute] Guid orderId, Guid labId, int packageId)
         {
             var serviceResponse = await _labSupportService.CreateAsync(orderId, labId, packageId);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details});
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detailss = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, detailss = serviceResponse.Details });
         }
 
         [HttpPut]
@@ -59,7 +74,7 @@ namespace KST.Api.Controllers
         [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateFinishedAsync(Guid labSupportId)
         {
-            
+
             var serviceResponse = await _labSupportService.UpdateFinishedAsync(labSupportId);
             if (!serviceResponse.Succeeded)
             {

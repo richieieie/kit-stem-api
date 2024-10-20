@@ -34,7 +34,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("Customers")]
         [Authorize(Roles = "customer")]
-        public async Task<IActionResult> GetByCurrentCurrentCustomerAsync([FromQuery] OrderGetDTO orderGetDTO)
+        public async Task<IActionResult> GetByCurrentCustomerAsync([FromQuery] OrderGetDTO orderGetDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var serviceResponse = await _orderService.GetByCustomerIdAsync(userId!, orderGetDTO);
@@ -68,7 +68,7 @@ namespace KSH.Api.Controllers
         public async Task<IActionResult> CreateByCustomerIdAsync(bool isUsePoint, string shippingAddress, string phoneNumber, string? note)
         {
             var userId = User.FindFirstValue(ClaimTypes.Email);
-            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note!);
+            var (serviceResponse, guid) = await _orderService.CreateByCustomerIdAsync(userId!, isUsePoint, shippingAddress, phoneNumber, note ?? "");
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -108,7 +108,7 @@ namespace KSH.Api.Controllers
         // [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateVerifiedStatus(Guid orderId)
         {
-            OrderShippingStatusUpdateDTO getDTO = new () { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderVerifiedStatus };
+            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderVerifiedStatus };
             var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
             if (!serviceResponse.Succeeded)
             {

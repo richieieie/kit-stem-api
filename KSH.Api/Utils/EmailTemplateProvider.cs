@@ -1,3 +1,4 @@
+using KSH.Api.Models.DTO.Response;
 using KSH.Api.Utils.Interfaces;
 
 namespace KSH.Api.Utils
@@ -8,6 +9,45 @@ namespace KSH.Api.Utils
         public EmailTemplateProvider(IWebHostEnvironment webHostEnvironment)
         {
             _webHostEnvironment = webHostEnvironment;
+        }
+
+        public string GetPasswordResetTemplate(string username, string shopName, string passwordResetUrl)
+        {
+            string body = string.Empty;
+            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Assets", "Templates", "PasswordReset.html");
+
+            using (StreamReader reader = new StreamReader(path))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            body = body.Replace("[UserName]", username);
+            body = body.Replace("[ShopName]", shopName);
+            body = body.Replace("[ResetPasswordUrl]", passwordResetUrl);
+
+            return body;
+        }
+
+        public string GetOrderConfirmationTemplate(string shopName, OrderResponseDTO orderDTO)
+        {
+            string body = string.Empty;
+            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Assets", "Templates", "OrderConfirmation.html");
+
+            using (StreamReader reader = new StreamReader(path))
+            {
+                body = reader.ReadToEnd();
+            }
+
+            body = body.Replace("[UserName]", orderDTO.User!.UserName);
+            body = body.Replace("[OrderId]", orderDTO.Id.ToString());
+            body = body.Replace("[CreatedAt]", TimeConverter.ToVietNamTime(orderDTO.CreatedAt).ToString());
+            body = body.Replace("[TotalPrice]", orderDTO.TotalPrice.ToString());
+            body = body.Replace("[ShippingAddress]", orderDTO.ShippingAddress!.ToString());
+            body = body.Replace("[PhoneNumber]", orderDTO.PhoneNumber!.ToString());
+            body = body.Replace("[ShippingStatus]", orderDTO.ShippingStatus!.ToString());
+            body = body.Replace("[ShopName]", shopName);
+
+            return body;
         }
 
         public string GetRegisterTemplate(string userName, string shopName, string verifyUrl)

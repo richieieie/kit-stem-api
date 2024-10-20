@@ -8,12 +8,12 @@ using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories.IRepositories;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace KSH.Api.Services
 {
     public class UserService : IUserService
     {
+        private readonly int pageSize = 20;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenRepository _tokenRepository;
         private readonly IMapper _mapper;
@@ -66,18 +66,27 @@ namespace KSH.Api.Services
 
         public async Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody)
         {
+            var serviceResponse = new ServiceResponse();
             var user = await _userManager.FindByNameAsync(requestBody.Email!);
             if (user == null || !await _userManager.CheckPasswordAsync(user, requestBody.Password!))
             {
-                return new ServiceResponse()
+                return serviceResponse
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
+            if (!user.EmailConfirmed)
+            {
+                return serviceResponse
+                            .SetSucceeded(false)
+                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddError("invalidCredentials", "Vui lòng xác thực tài khoản của bạn thông qua email!");
+            }
+
             if (!user.Status)
             {
-                return new ServiceResponse()
+                return serviceResponse
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 000000000 để được hỗ trợ!");
@@ -104,6 +113,7 @@ namespace KSH.Api.Services
                 {
                     UserName = email,
                     Email = email,
+                    EmailConfirmed = true,
                     Status = true
                 };
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -157,6 +167,11 @@ namespace KSH.Api.Services
                     Email = requestBody.Email,
                     Status = true
                 };
+                if (role == UserConstants.StaffRole)
+                {
+                    user.EmailConfirmed = true;
+                }
+
                 var identityResult = await _userManager.CreateAsync(user, requestBody.Password!);
                 if (!identityResult.Succeeded)
                 {
@@ -263,13 +278,17 @@ namespace KSH.Api.Services
 
         public async Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO)
         {
-            var users = await _userManager.Users.Where(u => u.Email!.Length > 0).ToListAsync();
-            var userDTOs = _mapper.Map<IEnumerable<UserProfileDTO>>(users);
+
+            var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!)).Where(u => u.Email!.Length > 0);
+            var totalUsers = usersInRole.Count();
+            var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+            var usersInPage = usersInRole.Skip(userManagerGetDTO.Page * pageSize).Take(pageSize).ToList();
+            var userDTOs = _mapper.Map<IEnumerable<UserProfileDTO>>(usersInPage);
 
             return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy thông tin tài khoản thành công!")
-                    .AddDetail("data", new { users = userDTOs });
+                    .AddDetail("data", new { totalPages, currentPage = userManagerGetDTO.Page, users = userDTOs });
         }
 
         public async Task<ServiceResponse> RemoveByEmailAsync(string userName)
@@ -360,6 +379,48 @@ namespace KSH.Api.Services
                         .AddDetail("message", "Xác thực tài khoản thất bại")
                         .AddError("outOutService", "Không thể xác thực tài khoản ngay lúc này!");
             }
+        }
+
+        public async Task<(ServiceResponse, string?)> GeneratePasswordResetTokenAsync(string email)
+        {
+            var serviceResponse = new ServiceResponse();
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return (serviceResponse
+                        .AddDetail("message", "Không thể cài đặt lại mật khẩu!")
+                        .AddError("notFound", "Không tìm thấy tài khoản của bạn trong hệ thống, vui lòng đăng ký!"),
+                        null);
+            }
+
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            return (serviceResponse
+                    .AddDetail("message", "Tạo mã cài đặt mật khẩu thành công!"),
+                    resetToken);
+        }
+
+        public async Task<ServiceResponse> ResetPasswordAsync(PasswordResetDTO passwordResetDTO)
+        {
+            var serviceResponse = new ServiceResponse();
+            var user = await _userManager.FindByEmailAsync(passwordResetDTO.Email!);
+            if (user == null)
+            {
+                return serviceResponse
+                    .AddDetail("message", "Không thể đặt lại mật khẩu.")
+                    .AddError("unavailable", "Đặt lại mật khẩu không thành công. Vui lòng kiểm tra lại token và thử lại.");
+            }
+
+            var identityResult = await _userManager.ResetPasswordAsync(user, passwordResetDTO.Token!, passwordResetDTO.NewPassword!);
+            if (!identityResult.Succeeded)
+            {
+                return serviceResponse
+                   .AddDetail("message", "Không thể đặt lại mật khẩu.")
+                   .AddError("unavailable", "Đặt lại mật khẩu không thành công. Vui lòng kiểm tra lại token và thử lại.");
+            }
+
+            return serviceResponse
+                    .AddDetail("message", "Đặt lại mật khẩu thành công. Bạn có thể sử dụng mật khẩu mới để đăng nhập.");
         }
     }
 }

@@ -43,6 +43,8 @@ namespace KSH.Api.Utils
 
             // Using for Order
             CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<OrderSupport, OrderSupportResponseDTO>();
+            CreateMap<UserOrders, IndividualOrderResponseDTO>();
             CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -58,20 +60,25 @@ namespace KSH.Api.Utils
             CreateMap<Cart, CartResponseDTO>().ReverseMap();
 
             // Using for Kit
-
             CreateMap<Kit, KitCreateDTO>().ReverseMap();
-            CreateMap<Kit, KitResponseDTO>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(dest => dest.Brief, opt => opt.MapFrom(src => src.Brief))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.PurchaseCost, opt => opt.MapFrom(src => src.PurchaseCost))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            CreateMap<Kit, KitResponseByIdDTO>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id))
                 .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
-                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
+                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages))
+                ;
+            CreateMap<Kit, KitResponseDTO>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id))
+                .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
+                .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages))
+                ;
             CreateMap<KitsCategory, CategoryDTO>();
             CreateMap<KitImage, KitImageDTO>();
+            CreateMap<Package, PackageInKitDTO>();
+            CreateMap<Lab, LabInKitDTO>();
+
+            CreateMap<Lab, LabInLabSupportResponseDTO>();
+
+
             // Using for KitImage
             CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
 
@@ -87,8 +94,22 @@ namespace KSH.Api.Utils
             //Using for LabSupport
             CreateMap<LabSupport, LabSupportUpdateStaffDTO>().ReverseMap();
             CreateMap<LabSupport, LabSupportResponseDTO>()
-                .ForMember(dest => dest.LabId, opt => opt.MapFrom(src => src.OrderSupport.LabId));
-           
+                .ForMember(dest => dest.LabId, opt => opt.MapFrom(src => src.OrderSupport.LabId))
+                .ForMember(dest => dest.Lab, opt => opt.MapFrom(src => src.OrderSupport.Lab))
+                .ForMember(dest => dest.Package, opt => opt.MapFrom(src => src.OrderSupport.Package))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForPath(dest => dest.Package!.Kit, opt => opt.MapFrom(src => src.OrderSupport.Package.Kit))
+                .ForPath(dest => dest.Staff!.UserName, opt => opt.MapFrom(src => src.Staff.UserName))
+                .ForPath(dest => dest.Staff!.FirstName, opt => opt.MapFrom(src => src.Staff.FirstName))
+                .ForPath(dest => dest.Staff!.LastName, opt => opt.MapFrom(src => src.Staff.LastName))
+                .ForPath(dest => dest.Staff!.Email, opt => opt.MapFrom(src => src.Staff.Email))
+                .ForPath(dest => dest.Staff!.Phone, opt => opt.MapFrom(src => src.Staff.PhoneNumber))
+                .ForPath(dest => dest.User!.UserId, opt => opt.MapFrom(src => src.OrderSupport.Order.User.Id))
+                .ForPath(dest => dest.User!.UserName, opt => opt.MapFrom(src => src.OrderSupport.Order.User.UserName))
+                .ForPath(dest => dest.User!.FirstName, opt => opt.MapFrom(src => src.OrderSupport.Order.User.FirstName))
+                .ForPath(dest => dest.User!.LastName, opt => opt.MapFrom(src => src.OrderSupport.Order.User.LastName))
+                .ForPath(dest => dest.User!.Email, opt => opt.MapFrom(src => src.OrderSupport.Order.User.Email))
+                .ForPath(dest => dest.User!.Phone, opt => opt.MapFrom(src => src.OrderSupport.Order.User.PhoneNumber));
 
         }
     }

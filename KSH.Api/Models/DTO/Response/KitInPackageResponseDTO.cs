@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KSH.Api.Models.Domain;
+﻿using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 
 namespace KSH.Api.Models.DTO.Response
 {
@@ -14,6 +11,7 @@ namespace KSH.Api.Models.DTO.Response
         public string Description { get; set; } = null!;
         public int PurchaseCost { get; set; }
         public bool Status { get; set; }
-        public virtual KitsCategory Category { get; set; } = null!;
+        public virtual KitsCategory? Category { get; set; }
+        public virtual ICollection<KitImageDTO>? KitImages { get; set; }
     }
 }

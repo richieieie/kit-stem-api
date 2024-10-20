@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
-namespace KSH.Api.Models.DTO.Request
+﻿namespace KSH.Api.Models.DTO.Request
 {
     public class KitImageDTO
     {

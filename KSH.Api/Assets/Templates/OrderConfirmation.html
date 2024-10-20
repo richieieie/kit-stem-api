@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt hàng thành công</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f6f9fc;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <tr>
+            <td align="center" bgcolor="#3498db" style="padding: 40px 0; border-radius: 8px 8px 0 0;">
+                <h1 style="color: #ffffff; font-size: 28px; margin: 0;"><i class="fas fa-check-circle"></i> Đơn hàng của bạn đã được xác nhận!</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 40px 30px;">
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    <i class="fas fa-user"></i> Kính gửi [UserName],
+                </p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    Cảm ơn bạn đã đặt hàng tại [ShopName]. Chúng tôi rất vui mừng thông báo rằng đơn hàng của bạn đã được xác nhận và đang được xử lý.
+                </p>
+                <h2 style="color: #3498db; font-size: 20px; margin-top: 30px; margin-bottom: 15px;"><i class="fas fa-box"></i> Chi tiết đơn hàng:</h2>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 20px;">
+                    <tr>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                            <strong><i class="fas fa-receipt"></i> Mã đơn hàng:</strong>
+                        </td>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;" align="right">
+                            [OrderId]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                            <strong><i class="fas fa-calendar-alt"></i> Ngày đặt hàng:</strong>
+                        </td>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;" align="right">
+                            [CreatedAt]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                            <strong><i class="fas fa-money-bill-wave"></i> Tổng tiền:</strong>
+                        </td>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;" align="right">
+                            [TotalPrice] VNĐ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;">
+                            <strong><i class="fas fa-map-marker-alt"></i> Địa chỉ giao hàng:</strong>
+                        </td>
+                        <td style="padding: 10px 0; border-bottom: 1px solid #eeeeee;" align="right">
+                            [ShippingAddress]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0;">
+                            <strong><i class="fas fa-phone-alt"></i> Số điện thoại:</strong>
+                        </td>
+                        <td style="padding: 10px 0;" align="right">
+                            [PhoneNumber]
+                        </td>
+                    </tr>
+                </table>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    <i class="fas fa-info-circle"></i> Trạng thái đơn hàng: <strong>[ShippingStatus]</strong>
+                </p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    Chúng tôi sẽ thông báo cho bạn khi đơn hàng được gửi đi. Bạn có thể theo dõi trạng thái đơn hàng của mình bằng cách đăng nhập vào tài khoản trên website của chúng tôi.
+                </p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                    Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ, vui lòng liên hệ với chúng tôi qua email hoặc hotline.
+                </p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+                    Một lần nữa, cảm ơn bạn đã lựa chọn [ShopName]!
+                </p>
+                <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+                    Trân trọng,<br>
+                    Đội ngũ [ShopName]
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px 30px; background-color: #f8f8f8; border-radius: 0 0 8px 8px;">
+                <p style="color: #666666; font-size: 14px; line-height: 1.6; margin-bottom: 10px;">
+                    <i class="fas fa-envelope"></i> Đây là email tự động, vui lòng không trả lời.
+                </p>
+                <p style="color: #666666; font-size: 14px; line-height: 1.6;">
+                    Để biết thêm thông tin hoặc kiểm tra trạng thái đơn hàng, vui lòng truy cập website của chúng tôi tại <a href="[ShopName]" style="color: #3498db; text-decoration: none;"><i class="fas fa-globe"></i> www.[ShopName].com</a>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" bgcolor="#f8f8f8" style="padding: 20px 0;">
+                <p style="color: #888888; font-size: 14px; margin: 0;">
+                    © 2024 [ShopName]. All rights reserved.
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
