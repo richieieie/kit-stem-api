@@ -69,15 +69,18 @@ namespace KSH.Api.Services
                 var sumOfKit = listKit.Sum(k => k.PurchaseCost * k.Quantity);
 
                 var listLabInPackage = new List<PackageLabDTO>();
-                foreach(var packageLab in listPackageOrder)
+                foreach (var packageLab in listPackageOrder)
                 {
-                    var labId = await _unitOfWork.PackageLabRepository.GetByPackageId(packageLab.PackageId);
-                    PackageLabDTO packageLabDTO = new PackageLabDTO()
+                    var labIds = await _unitOfWork.PackageLabRepository.GetByPackageId(packageLab.PackageId);
+                    foreach (var labId in labIds)
                     {
-                        Id = labId,
-                        Quantity = packageLab.PackageQuantity,
-                    };
-                    listLabInPackage!.Add(packageLabDTO);
+                        PackageLabDTO packageLabDTO = new PackageLabDTO()
+                        {
+                            Id = labId,
+                            Quantity = packageLab.PackageQuantity,
+                        };
+                        listLabInPackage!.Add(packageLabDTO);
+                    }
                 }
 
                 var listLab = new List<LabDTO>();

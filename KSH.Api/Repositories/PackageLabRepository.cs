@@ -11,10 +11,13 @@ namespace KSH.Api.Repositories
 
         }
 
-        public async Task<Guid> GetByPackageId(int packageId)
+        public async Task<List<Guid>> GetByPackageId(int packageId)
         {
-            var packageLab = await _dbContext.PackageLabs.FirstOrDefaultAsync(pl => pl.PackageId == packageId);
-            return packageLab!.LabId;
+            var packageLabs = await _dbContext.PackageLabs
+                .Where(pl => pl.PackageId == packageId)
+                .Select(pl => pl.LabId)
+                .ToListAsync();
+            return packageLabs;
         }
     }
 }
