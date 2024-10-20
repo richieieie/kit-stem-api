@@ -44,5 +44,10 @@ namespace KSH.Api.Repositories
                                 .ThenInclude(os => os.Package)
                             .FirstOrDefaultAsync(o => o.Id == id);
         }
+
+        public async Task<int> CountTotalOrders(DateTimeOffset? fromDate, DateTimeOffset? toDate, string? shippingStatus)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
