@@ -33,7 +33,15 @@ namespace KST.Api.Repositories
             var (labSupports, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (labSupports, totalPages);
         }
-
+        public override async Task<LabSupport?> GetByIdAsync(Guid labSupportId)
+        {
+            return await _dbContext.Set<LabSupport>()
+                                        .Include(l => l.OrderSupport.Lab)
+                                        .Include(p => p.OrderSupport.Package)
+                                        .Include(s => s.Staff)
+                                        .Include(c => c.OrderSupport.Order.User)
+                                        .FirstOrDefaultAsync(l => l.Id.Equals(labSupportId));
+        }
         public async Task<(IEnumerable<LabSupport>, int)> GetByUserIdFilterAsync(
             Expression<Func<LabSupport, bool>>? filter = null,
             Func<IQueryable<LabSupport>, IOrderedQueryable<LabSupport>>? orderBy = null,
