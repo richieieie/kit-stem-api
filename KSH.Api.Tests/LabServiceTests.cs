@@ -6,6 +6,7 @@ using KSH.Api.Models.DTO.Response;
 using KSH.Api.Repositories;
 using KSH.Api.Services;
 using Moq;
+using Allure.Xunit.Attributes;
 
 namespace KSH.Api.Tests
 {
@@ -23,6 +24,8 @@ namespace KSH.Api.Tests
         }
 
         [Fact]
+        [AllureOwner("Trung Nguyen")]
+        [AllureDescription("This is the test for creating a new lab with valid information and returning success result")]
         public async Task CreateAsync_ValidCredentials_ReturnTrue()
         {
             //Arrange
