@@ -35,6 +35,7 @@ namespace KSH.Api.Repositories
                             .Include(p => p.PackageOrders)
                                 .ThenInclude(p => p.Package)
                                     .ThenInclude(p => p.PackageLabs)
+                                        .ThenInclude(pl => pl.Lab)
                             .Include(o => o.PackageOrders)
                                 .ThenInclude(po => po.Package)
                                     .ThenInclude(p => p.Level)

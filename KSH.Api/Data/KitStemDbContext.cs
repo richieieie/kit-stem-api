@@ -25,6 +25,7 @@ namespace KSH.Api.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<LabSupport> LabSupports { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<ShippingFee> ShippingFees { get; set; }
         public KitStemDbContext(DbContextOptions<KitStemDbContext> options) : base(options)
         {
 
@@ -195,6 +196,8 @@ namespace KSH.Api.Data
                 entity.HasOne(o => o.Payment)
                         .WithOne(p => p.UserOrders)
                         .HasForeignKey<Payment>(p => p.OrderId);
+                entity.HasOne(o => o.ShippingFee)
+                        .WithOne();
 
             });
             modelBuilder.Entity<LabSupport>(entity =>
@@ -230,6 +233,7 @@ namespace KSH.Api.Data
                     .HasConstraintName("FK__Cart__PackageId__POSI3213AAL");
             });
             modelBuilder.Entity<IdentityRole>().HasData(SeedingRoles());
+            modelBuilder.Entity<ShippingFee>().HasData(SeedingShippingFees());
         }
 
         private ICollection<IdentityRole> SeedingRoles()
@@ -261,6 +265,62 @@ namespace KSH.Api.Data
                     ConcurrencyStamp = "827dae5f-ef37-4606-a6a0-49721ce0e93e"
                 }
             };
+        }
+
+        private List<ShippingFee> SeedingShippingFees()
+        {
+            return new List<ShippingFee>
+        {
+            new ShippingFee
+            {
+                Id = 1,
+                FromDistance = 0,
+                ToDistance = 5,
+                Price = 20000 // Price in VND
+            },
+            new ShippingFee
+            {
+                Id = 2,
+                FromDistance = 6,
+                ToDistance = 10,
+                Price = 30000 // Price in VND
+            },
+            new ShippingFee
+            {
+                Id = 3,
+                FromDistance = 11,
+                ToDistance = 20,
+                Price = 40000 // Price in VND
+            },
+            new ShippingFee
+            {
+                Id = 4,
+                FromDistance = 21,
+                ToDistance = 30,
+                Price = 60000 // Price in VND
+            },
+            new ShippingFee
+            {
+                Id = 5,
+                FromDistance = 31,
+                ToDistance = 50,
+                Price = 80000 // Price in VND
+            },
+            new ShippingFee
+            {
+                Id = 6,
+                FromDistance = 51,
+                ToDistance = 100,
+                Price = 120000 // Price in VND
+            },
+            new ShippingFee
+            {
+                Id = 7,
+                FromDistance = 101,
+                ToDistance = int.MaxValue,
+                Price = 180000 // Price in VND
+            }
+        };
         }
     }
 }
