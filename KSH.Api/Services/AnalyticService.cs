@@ -127,14 +127,14 @@ namespace KSH.Api.Services
                     .AddError("outOfService", "Không thể lấy dữ liệu doanh thu ngay lúc này!");
             }
         }
-            public async Task<ServiceResponse> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
+        public async Task<ServiceResponse> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
         {
             try
             {
                 var packages = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO);
                 return new ServiceResponse()
                                 .SetSucceeded(true)
-                                .AddDetail("data", new {packages = packages});
+                                .AddDetail("data", new { packages = packages });
             }
             catch
             {

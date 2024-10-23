@@ -69,41 +69,41 @@ namespace KSH.Api.Repositories
             .ToListAsync();
             return PackageOrderDTO;
         }
-    }
-    public async Task<IEnumerable<PackageTopSaleDTO>> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
-    {
-        var baseQuery = _dbContext.PackageOrders
-                                    .Where(po => po.Order.ShippingStatus == packageSaleGetDTO.ShippingStatus)
-                                    .Where(po => po.Order.DeliveredAt >= packageSaleGetDTO.FromDate && po.Order.DeliveredAt <= packageSaleGetDTO.ToDate)
-                                    .GroupBy(po => new
-                                    {
-                                        po.PackageId,
-                                        KitID = po.Package.KitId,
-                                        KitName = po.Package.Kit.Name
-                                    })
-                                        .Select(g => new PackageTopSaleDTO
-                                    {
-                                        PackageId = g.Key.PackageId,
-                                        TotalPackagePrice = g.Sum(po => po.Package.Price),
-                                        TotalProfit = g.Sum(po => po.Package.Price) - g.Sum(po => po.Package.Kit.PurchaseCost),
-                                        KitId = g.Key.KitID,
-                                        KitName = g.Key.KitName
-                                    });
-        List<PackageTopSaleDTO>? results = null;
-        if (packageSaleGetDTO.BySale)
+        public async Task<IEnumerable<PackageTopSaleDTO>> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
         {
-            results = await baseQuery
-                                .OrderByDescending(p => p.TotalPackagePrice)
-                                .Take(packageSaleGetDTO.PackageTop)
-                                .ToListAsync();
-        } 
-        else
-        {
-            results = await baseQuery
-                                .OrderByDescending(p => p.TotalProfit)
-                                .Take(packageSaleGetDTO.PackageTop)
-                                .ToListAsync();
+            var baseQuery = _dbContext.PackageOrders
+                                        .Where(po => po.Order.ShippingStatus == packageSaleGetDTO.ShippingStatus)
+                                        .Where(po => po.Order.DeliveredAt >= packageSaleGetDTO.FromDate && po.Order.DeliveredAt <= packageSaleGetDTO.ToDate)
+                                        .GroupBy(po => new
+                                        {
+                                            po.PackageId,
+                                            KitID = po.Package.KitId,
+                                            KitName = po.Package.Kit.Name
+                                        })
+                                            .Select(g => new PackageTopSaleDTO
+                                            {
+                                                PackageId = g.Key.PackageId,
+                                                TotalPackagePrice = g.Sum(po => po.Package.Price),
+                                                TotalProfit = g.Sum(po => po.Package.Price) - g.Sum(po => po.Package.Kit.PurchaseCost),
+                                                KitId = g.Key.KitID,
+                                                KitName = g.Key.KitName
+                                            });
+            List<PackageTopSaleDTO>? results = null;
+            if (packageSaleGetDTO.BySale)
+            {
+                results = await baseQuery
+                                    .OrderByDescending(p => p.TotalPackagePrice)
+                                    .Take(packageSaleGetDTO.PackageTop)
+                                    .ToListAsync();
+            }
+            else
+            {
+                results = await baseQuery
+                                    .OrderByDescending(p => p.TotalProfit)
+                                    .Take(packageSaleGetDTO.PackageTop)
+                                    .ToListAsync();
+            }
+            return results;
         }
-        return results;
     }
 }
