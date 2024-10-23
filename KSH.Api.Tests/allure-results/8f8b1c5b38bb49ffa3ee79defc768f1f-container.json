@@ -1,0 +1,12 @@
+{
+  "uuid": "97325f78-b04d-4704-8daf-fd8b0a7a89fe",
+  "name": "KSH.Api.Tests.UserServiceTests",
+  "children": [
+    "7637175c-57e0-4984-8fa8-1c47d4ed918d"
+  ],
+  "befores": [],
+  "afters": [],
+  "links": [],
+  "start": 1729512910831,
+  "stop": 1729512910843
+}

@@ -1,0 +1,56 @@
+{
+  "uuid": "7d6a0b94-fba6-4bc5-a0af-8fc352dc3064",
+  "historyId": "bd024c9797ab1472ed56d3f4f6c082e1",
+  "testCaseId": "629276c094fdd544845e791a00999e31",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.LabServiceTests.CreateAsync_ValidCredentials_ReturnTrue()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "Trungs-MacBook-Pro-2"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.LabServiceTests.CreateAsync_ValidCredentials_ReturnTrue"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    },
+    {
+      "name": "owner",
+      "value": "Trung Nguyen"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.LabServiceTests.CreateAsync_ValidCredentials_ReturnTrue",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "description": "This is the test for creating a new lab with valid information and returning success result",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729512910801,
+  "stop": 1729512910811
+}
