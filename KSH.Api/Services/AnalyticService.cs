@@ -14,5 +14,10 @@ namespace KSH.Api.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<ServiceResponse> GetTopKitSale(DateTimeOffset fromDate, DateTimeOffset toDate, string? shippinStatus)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -347,7 +347,7 @@ namespace KST.Api.Services
                 l.OrderSupport.Order == null || 
                 l.OrderSupport.Order.User == null || 
                 l.OrderSupport.Order.User.Email == null || 
-                l.OrderSupport.Order.User.Email.ToLower().Contains(getDTO.Email.ToLower())
+                l.OrderSupport.Order.User.Email.ToLower().Contains(getDTO.CustomerEmail.ToLower())
             ) &&
             (!isLabSupportIdValid || l.Id.Equals(labSupportGuid));
         }
