@@ -1,3 +1,4 @@
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
 
@@ -15,9 +16,28 @@ namespace KSH.Api.Services
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse> GetTopKitSale(DateTimeOffset fromDate, DateTimeOffset toDate, string? shippinStatus)
+        public async Task<ServiceResponse> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
         {
-            throw new NotImplementedException();
+            try
+            {
+                int sizePerPage = 20;
+                var (packages, totalPages) = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO, sizePerPage);
+                if (packages == null)
+                {
+                    int i = 0;
+                }
+                return new ServiceResponse()
+                                .SetSucceeded(true)
+                                .AddDetail("data", new { totalPages, currentPage = (packageSaleGetDTO.Page + 1), packages = packages});
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                    .AddError("outOfService", "Không thể lấy danh sách package lúc này")
+                    .AddDetail("message", "Lấy danh sách top thất bại");
+            }
         }
     }
 }
