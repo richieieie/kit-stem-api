@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using KSH.Api.Data;
 using KSH.Api.Models.Domain;
 using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Repositories;
-using KSH.Api.Repositories.IRepositories;
 using KSH.Api.Services.IServices;
+using System.Linq.Expressions;
 
 namespace KSH.Api.Services
 {
     public class ComponentService : IComponentService
     {
-
+        private readonly int sizePerPage = 20;
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public ComponentService(UnitOfWork unitOfWork, IMapper mapper)
@@ -99,16 +99,18 @@ namespace KSH.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> GetAllAsync()
+        public async Task<ServiceResponse> GetAsync(ComponentGetDTO  componentGetDTO)
         {
             try
             {
-                var componentsModel = await _unitOfWork.ComponentRepository.GetAllAsync();
-                var components = _mapper.Map<List<Component>, List<ComponentDTO>>(componentsModel);
+                Expression<Func<Component, bool>> filter = GetFilter(componentGetDTO);
+                var (componentModels, totalPages) = await _unitOfWork.ComponentRepository.GetFilterAsync(filter, null, sizePerPage * componentGetDTO.Page, sizePerPage);
+                
+                var components = _mapper.Map<IEnumerable<ComponentDTO>>(componentModels);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy danh sách linh kiện thành công!")
-                    .AddDetail("data", new { components });
+                    .AddDetail("data", new { totalPages, currentPage = componentGetDTO.Page, componentModels = components });
             }
             catch
             {
@@ -178,6 +180,11 @@ namespace KSH.Api.Services
                     .AddDetail("message", "Lấy thông tin linh kiện thất bại")
                     .AddError("outOfService", "Không thể lấy thông tin linh kiện ngay lúc này!");
             }
+        }
+
+        private Expression<Func<Component, bool>> GetFilter(ComponentGetDTO componentGetDTO)
+        {
+            return (c) => c.Name.Contains(componentGetDTO.Name ?? "");
         }
     }
 }

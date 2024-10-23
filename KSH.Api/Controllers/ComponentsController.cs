@@ -1,4 +1,5 @@
 ﻿using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -20,9 +21,9 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAsync([FromQuery] ComponentGetDTO componentGetDTO)
         {
-            var serviceResponse = await _componentService.GetAllAsync();
+            var serviceResponse = await _componentService.GetAsync(componentGetDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
