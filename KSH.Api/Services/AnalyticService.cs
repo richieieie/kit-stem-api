@@ -22,10 +22,6 @@ namespace KSH.Api.Services
             {
                 int sizePerPage = 20;
                 var (packages, totalPages) = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO, sizePerPage);
-                if (packages == null)
-                {
-                    int i = 0;
-                }
                 return new ServiceResponse()
                                 .SetSucceeded(true)
                                 .AddDetail("data", new { totalPages, currentPage = (packageSaleGetDTO.Page + 1), packages = packages});
@@ -45,10 +41,6 @@ namespace KSH.Api.Services
             {
                 int sizePerPage = 20;
                 var (packages, totalPages) = await _unitOfWork.PackageOrderRepository.GetTopPackageProfit(packageSaleGetDTO, sizePerPage);
-                if (packages == null)
-                {
-                    int i = 0;
-                }
                 return new ServiceResponse()
                                 .SetSucceeded(true)
                                 .AddDetail("data", new { totalPages, currentPage = (packageSaleGetDTO.Page + 1), packages = packages });
