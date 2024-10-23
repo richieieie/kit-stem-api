@@ -4,11 +4,11 @@
     "net8.0": {
       "Allure.Xunit": {
         "type": "Direct",
-        "requested": "[2.12.0, )",
-        "resolved": "2.12.0",
-        "contentHash": "wb76EM+W5cMgYxEVctre+93P2Lm+9CtIB4BhPWLJFRJaRi8FFFmIHhVSWEZxrTnsbZRRkhQ8zBSYmEq9meDziA==",
+        "requested": "[2.12.1, )",
+        "resolved": "2.12.1",
+        "contentHash": "6zq6BoXRd7PAet8+ot0qds1BudzxbrRnqc16yAsboiz06tAEH9L7pzhhZrzlwr0Zj8pkxyeT4ozJRefZ28tZKA==",
         "dependencies": {
-          "Allure.Net.Commons": "2.12.0",
+          "Allure.Net.Commons": "2.12.1",
           "Lib.Harmony": "2.3.3",
           "xunit.assert": "2.4.1",
           "xunit.core": "2.4.1",
@@ -59,8 +59,8 @@
       },
       "Allure.Net.Commons": {
         "type": "Transitive",
-        "resolved": "2.12.0",
-        "contentHash": "izKB1++18H13MzLokgdgfOiCVBSWbHzY2f36Fnp/2KCVucNmitEu/aBZnJAnJZfPQ80jDQJLgXtUWyfFwRETgA==",
+        "resolved": "2.12.1",
+        "contentHash": "cix1b/xp/1nUIFUR8MpERt1Rrv9PM2C+VB3pat1g+IEB/h4Ul+7PihCDTE3VfecRob8wz5e8fQ0aHI9atf//gA==",
         "dependencies": {
           "AspectInjector": "2.8.1",
           "MimeTypesMap": "1.0.8",

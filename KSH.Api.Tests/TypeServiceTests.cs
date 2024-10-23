@@ -5,15 +5,20 @@ using KSH.Api.Models.DTO;
 using KSH.Api.Repositories;
 using KSH.Api.Services;
 using Moq;
-
+using Allure.XUnit;
+using Xunit;
+using Allure.Xunit.Attributes;
+using Allure.Xunit.Attributes.Steps;
 namespace KSH.Api.Tests
 {
+    [AllureFeature("Type API")]
     public class TypeServiceTests
     {
         private Mock<UnitOfWork> _unitOfWorkMock;
         private Mock<IMapper> _mapperMock;
         private ComponentTypeService _typeService;
 
+        [AllureBefore("Setup API connection")]
         public TypeServiceTests()
         {
             _unitOfWorkMock = MockSetUpFactory.GetUnitOfWorkMock();
@@ -22,6 +27,7 @@ namespace KSH.Api.Tests
         }
 
         [Fact]
+        [AllureTag("create")]
         public async Task CreateAsync_ValidCredentials_ReturnTrue()
         {
             //Arrange
@@ -39,6 +45,7 @@ namespace KSH.Api.Tests
         }
 
         [Fact]
+        [AllureTag("remove")]
         public async Task RemoveAsync_ValidCredentials_ReturnTrue()
         {
             // Arrange
@@ -57,6 +64,7 @@ namespace KSH.Api.Tests
         }
 
         [Fact]
+        [AllureTag("update")]
         public async Task UpdateAsync_ValidCredentials_ReturnTrue()
         {
             // Arrange

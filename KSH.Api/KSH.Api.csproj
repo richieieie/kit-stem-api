@@ -28,4 +28,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettingsStructure.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

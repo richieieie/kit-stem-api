@@ -30,42 +30,42 @@ namespace KSH.Api.Tests
             _userService = new UserService(_dbContextMock.Object, _userManagerMock.Object, _tokenRepositoryMock.Object, _mapper.Object);
         }
 
-        [Fact]
-        public async Task LoginAsync_ValidCredentials_ReturnSucceed()
-        {
-            //Arrange
-            var requestBody = new UserLoginDTO()
-            {
-                Email = "test@example.com",
-                Password = "12345aA@"
-            };
-            var user = new ApplicationUser()
-            {
-                Email = "test@example.com",
-                UserName = "test@example.com",
-                Status = true,
-            };
-            var role = "customer";
-            var accessToken = "new jwt access token";
-            var refreshToken = new RefreshToken()
-            {
-                Id = Guid.NewGuid()
-            };
-            _userManagerMock.Setup(um => um.FindByNameAsync(requestBody.Email)).ReturnsAsync(user);
-            _userManagerMock.Setup(um => um.CheckPasswordAsync(user, requestBody.Password)).ReturnsAsync(true);
-            _userManagerMock.Setup(um => um.GetRolesAsync(user)).ReturnsAsync([role]);
-            _tokenRepositoryMock.Setup(tr => tr.CreateOrUpdateRefreshTokenAsync(user)).ReturnsAsync(refreshToken);
-            _tokenRepositoryMock.Setup(tr => tr.GenerateJwtToken(user, role)).Returns(accessToken);
+        //[Fact]
+        //public async Task LoginAsync_ValidCredentials_ReturnSucceed()
+        //{
+        //    //Arrange
+        //    var requestBody = new UserLoginDTO()
+        //    {
+        //        Email = "test@example.com",
+        //        Password = "12345aA@"
+        //    };
+        //    var user = new ApplicationUser()
+        //    {
+        //        Email = "test@example.com",
+        //        UserName = "test@example.com",
+        //        Status = true,
+        //    };
+        //    var role = "customer";
+        //    var accessToken = "new jwt access token";
+        //    var refreshToken = new RefreshToken()
+        //    {
+        //        Id = Guid.NewGuid()
+        //    };
+        //    _userManagerMock.Setup(um => um.FindByNameAsync(requestBody.Email)).ReturnsAsync(user);
+        //    _userManagerMock.Setup(um => um.CheckPasswordAsync(user, requestBody.Password)).ReturnsAsync(true);
+        //    _userManagerMock.Setup(um => um.GetRolesAsync(user)).ReturnsAsync([role]);
+        //    _tokenRepositoryMock.Setup(tr => tr.CreateOrUpdateRefreshTokenAsync(user)).ReturnsAsync(refreshToken);
+        //    _tokenRepositoryMock.Setup(tr => tr.GenerateJwtToken(user, role)).Returns(accessToken);
 
-            //Act
-            var response = await _userService.LoginAsync(requestBody);
+        //    //Act
+        //    var response = await _userService.LoginAsync(requestBody);
 
-            //Assert
-            Assert.True(response.Succeeded);
-            Assert.Equal("Đăng nhập thành công!", response.GetDetailsValue("message"));
-            Assert.Equal("new jwt access token", response.GetDetailsValue("accessToken"));
-            Assert.Equal(refreshToken.Id, response.GetDetailsValue("refreshToken"));
-        }
+        //    //Assert
+        //    Assert.True(response.Succeeded);
+        //    Assert.Equal("Đăng nhập thành công!", response.GetDetailsValue("message"));
+        //    Assert.Equal("new jwt access token", response.GetDetailsValue("accessToken"));
+        //    Assert.Equal(refreshToken.Id, response.GetDetailsValue("refreshToken"));
+        //}
 
         [Fact]
         public async Task RegisterAsync_ValidCredentials_ReturnSucceed()

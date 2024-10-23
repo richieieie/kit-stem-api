@@ -44,11 +44,37 @@ namespace KST.Api.Services
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể lấy danh sách LabSupport lúc này")
+                    .AddError("outOfService", "Không thể lấy danh sách hỗ trợ bài lab lúc này")
                     .AddDetail("message", "Lấy danh sách thất bại");
             }
         }
-
+        public async Task<ServiceResponse> GetByIdAsync(Guid labSupportId)
+        {
+            try
+            {
+                var labSupport = await _unitOfWork.LabSupportRepository.GetByIdAsync(labSupportId);
+                var labSupportDTO = _mapper.Map<LabSupportResponseDTO>(labSupport);
+                if (labSupport == null)
+                {
+                    return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("message", "Không tìm thấy hỗ trợ bài lap")
+                            .AddDetail("data", new { labSupport = labSupportDTO });
+                }
+                return new ServiceResponse()
+                            .SetSucceeded(true)
+                            .AddDetail("message", "Lấy hỗ trợ bài lab thành công")
+                            .AddDetail("data", new { labSupport = labSupportDTO });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                    .AddError("outOfService", "Không thể lấy hỗ trợ bài lab lúc này")
+                    .AddDetail("message", "Lấy thất bại");
+            }
+        }
         public async Task<ServiceResponse> GetByCustomerIdAsync(string customerId, LabSupportGetDTO getDTO)
         {
             try
@@ -75,7 +101,6 @@ namespace KST.Api.Services
                     .AddDetail("message", "Lấy danh sách thất bại");
             }
         }
-
         public async Task<ServiceResponse> CreateAsync(Guid orderId, Guid labId, int packageId)
         {
             try
@@ -313,7 +338,18 @@ namespace KST.Api.Services
         #region Methods that help service
         private static Expression<Func<LabSupport, bool>> GetFilter(LabSupportGetDTO getDTO)
         {
-            return (l) => l.IsFinished == getDTO.Supported;
+            Guid labSupportGuid;
+            bool isLabSupportIdValid = Guid.TryParse(getDTO.LabSupportId, out labSupportGuid);
+
+            return (l) => l.IsFinished == getDTO.Supported && 
+            (
+                l.OrderSupport == null || 
+                l.OrderSupport.Order == null || 
+                l.OrderSupport.Order.User == null || 
+                l.OrderSupport.Order.User.Email == null || 
+                l.OrderSupport.Order.User.Email.ToLower().Contains(getDTO.CustomerEmail.ToLower())
+            ) &&
+            (!isLabSupportIdValid || l.Id.Equals(labSupportGuid));
         }
         private static Expression<Func<LabSupport, bool>> GetByCustomerIdFilter(string customerId, LabSupportGetDTO getDTO)
         {

@@ -1,0 +1,51 @@
+{
+  "uuid": "fa0a95a8-c342-4c9f-9374-b8f0acdec4b1",
+  "historyId": "5e3626a3eba814980ec8de7d6f876005",
+  "testCaseId": "60078cd6d4b6aa5b3ec8f9b5aa9056f3",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.LabServiceTests.GetByIdAsync_IdExists_ReturnTrue()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "LAPTOP-09181QFB"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.LabServiceTests.GetByIdAsync_IdExists_ReturnTrue"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.LabServiceTests.GetByIdAsync_IdExists_ReturnTrue",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729561587082,
+  "stop": 1729561587085
+}

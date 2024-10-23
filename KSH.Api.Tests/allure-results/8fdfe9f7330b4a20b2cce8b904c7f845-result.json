@@ -1,0 +1,51 @@
+{
+  "uuid": "812d3bbb-d71d-45c2-961e-cb177b5676ec",
+  "historyId": "90f36fb41ab9b9466a35a18102123e68",
+  "testCaseId": "db3d468db0135cba273cea3127e3d33d",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.LabServiceTests.UpdateAsync_InValidCredentials_ReturnFalse()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "LAPTOP-09181QFB"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.LabServiceTests.UpdateAsync_InValidCredentials_ReturnFalse"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.LabServiceTests.UpdateAsync_InValidCredentials_ReturnFalse",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729561587103,
+  "stop": 1729561587105
+}
