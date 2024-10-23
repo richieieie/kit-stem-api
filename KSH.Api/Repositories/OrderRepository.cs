@@ -49,7 +49,10 @@ namespace KSH.Api.Repositories
 
         public async Task<int> CountTotalOrders(DateTimeOffset? fromDate, DateTimeOffset? toDate, string? shippingStatus)
         {
-            throw new NotImplementedException();
+            var count = await _dbContext.UserOrders
+                                .Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.ShippingStatus.Contains(shippingStatus ?? ""))
+                                .CountAsync();
+            return count;
         }
 
         public async Task<int> SumTotalOrder(DateTimeOffset? fromDate, DateTimeOffset? toDate)
