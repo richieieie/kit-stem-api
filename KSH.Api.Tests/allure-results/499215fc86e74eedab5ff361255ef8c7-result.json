@@ -1,0 +1,51 @@
+{
+  "uuid": "1f956930-2792-4534-8b1b-d909dc5ad99d",
+  "historyId": "49abb6493b3f1a79b76dda8f458e4db1",
+  "testCaseId": "c4fbaa8b429bf43da1ca70cc62515b15",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.UserServiceTests.RegisterAsync_InValidCredentials_ReturnFalse()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "LAPTOP-09181QFB"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.UserServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.UserServiceTests.RegisterAsync_InValidCredentials_ReturnFalse"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.UserServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.UserServiceTests.RegisterAsync_InValidCredentials_ReturnFalse",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729561623592,
+  "stop": 1729561623594
+}

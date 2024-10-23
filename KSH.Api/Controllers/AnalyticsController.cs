@@ -40,10 +40,10 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        [Route("PurchaseCosts")]
-        public async Task<IActionResult> GetPurchaseCostAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate)
+        [Route("Profits")]
+        public async Task<IActionResult> GetProfitAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate)
         {
-            ServiceResponse serviceResponse = await _analyticService.GetPurchaseCost(fromDate, toDate);
+            ServiceResponse serviceResponse = await _analyticService.GetProfit(fromDate, toDate);
             if (!serviceResponse.Succeeded)
             {
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });

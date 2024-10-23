@@ -23,7 +23,7 @@ namespace KSH.Api.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse> GetPurchaseCost(DateTimeOffset fromDate, DateTimeOffset toDate)
+        public async Task<ServiceResponse> GetProfit(DateTimeOffset fromDate, DateTimeOffset toDate)
         {
             try
             {
@@ -33,85 +33,26 @@ namespace KSH.Api.Services
                     return new ServiceResponse()
                     .SetSucceeded(false)
                     .SetStatusCode(StatusCodes.Status400BadRequest)
-                    .AddDetail("message", "Lấy dữ liệu giá vốn thất bại!")
+                    .AddDetail("message", "Lấy dữ liệu lợi nhuận thất bại!")
                     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
                 }
 
-                var listOrderId = await _unitOfWork.OrderRepository.GetOrderId(fromDate, toDate);
-                var listPackageOrder = await _unitOfWork.PackageOrderRepository.GetPackageOrder(listOrderId);
-                List<PackageDTO> listKitInPackage = new List<PackageDTO>();
+                var purchaseCost = await GetPurchaseCostHelper(fromDate, toDate);
+                var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDate, toDate);
+                var profit = revenue - purchaseCost;
 
-                foreach (var packageOrder in listPackageOrder)
-                {
-                    var kitId = await _unitOfWork.PackageRepository.GetByPackageId(packageOrder.PackageId);
-                    PackageDTO packageDTO = new PackageDTO()
-                    {
-                        KitId = kitId,
-                        Quantity = packageOrder.PackageQuantity,
-                    };
-                    listKitInPackage!.Add(packageDTO);
-                }
-
-                List<KitDTO> listKit = new List<KitDTO>();
-
-                foreach (var kit in listKitInPackage)
-                {
-                    var purchaseCost = await _unitOfWork.KitRepository.GetPurchaseCostById(kit.KitId);
-                    KitDTO kitDTO = new KitDTO()
-                    {
-                        Id = kit.KitId,
-                        PurchaseCost = purchaseCost,
-                        Quantity = kit.Quantity,
-                    };
-                    listKit.Add(kitDTO);
-                }
-
-                var sumOfKit = listKit.Sum(k => k.PurchaseCost * k.Quantity);
-
-                var listLabInPackage = new List<PackageLabDTO>();
-                foreach (var packageLab in listPackageOrder)
-                {
-                    var labIds = await _unitOfWork.PackageLabRepository.GetByPackageId(packageLab.PackageId);
-                    foreach (var labId in labIds)
-                    {
-                        PackageLabDTO packageLabDTO = new PackageLabDTO()
-                        {
-                            Id = labId,
-                            Quantity = packageLab.PackageQuantity,
-                        };
-                        listLabInPackage!.Add(packageLabDTO);
-                    }
-                }
-
-                var listLab = new List<LabDTO>();
-
-                foreach (var lab in listLabInPackage)
-                {
-                    var purchaseCost = await _unitOfWork.LabRepository.GetPurchaseCostById(lab.Id);
-                    LabDTO labDTO = new LabDTO()
-                    {
-                        Id = lab.Id,
-                        PurchaseCost = purchaseCost,
-                        Quantity = lab.Quantity,
-                    };
-                    listLab.Add(labDTO);
-                }
-
-                var sumOfLab = listLab.Sum(l => l.PurchaseCost * l.Quantity);
-
-                var total = sumOfKit + sumOfLab;
                 return new ServiceResponse()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Lấy dữ liệu giá vốn thành công!")
-                    .AddDetail("data", new { total });
+                    .AddDetail("message", "Lấy dữ liệu lợi nhuận thành công!")
+                    .AddDetail("data", new { profit });
             }
             catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
                     .SetStatusCode(StatusCodes.Status500InternalServerError)
-                    .AddDetail("message", "Lấy dữ liệu giá vốn thất bại!")
-                    .AddError("outOfService", "Không thể lấy dữ liệu giá vốn ngay lúc này!");
+                    .AddDetail("message", "Lấy dữ liệu lợi nhuận thất bại!")
+                    .AddError("outOfService", "Không thể lấy dữ liệu lợi nhuận ngay lúc này!");
             }
         }
 
@@ -145,5 +86,74 @@ namespace KSH.Api.Services
             }
         }
 
+        #region Helper
+        private async Task<int> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)
+        {
+            var listOrderId = await _unitOfWork.OrderRepository.GetOrderId(fromDate, toDate);
+            var listPackageOrder = await _unitOfWork.PackageOrderRepository.GetPackageOrder(listOrderId);
+            List<PackageDTO> listKitInPackage = new List<PackageDTO>();
+
+            foreach (var packageOrder in listPackageOrder)
+            {
+                var kitId = await _unitOfWork.PackageRepository.GetByPackageId(packageOrder.PackageId);
+                PackageDTO packageDTO = new PackageDTO()
+                {
+                    KitId = kitId,
+                    Quantity = packageOrder.PackageQuantity,
+                };
+                listKitInPackage!.Add(packageDTO);
+            }
+
+            List<KitDTO> listKit = new List<KitDTO>();
+
+            foreach (var kit in listKitInPackage)
+            {
+                var purchaseCost = await _unitOfWork.KitRepository.GetPurchaseCostById(kit.KitId);
+                KitDTO kitDTO = new KitDTO()
+                {
+                    Id = kit.KitId,
+                    PurchaseCost = purchaseCost,
+                    Quantity = kit.Quantity,
+                };
+                listKit.Add(kitDTO);
+            }
+
+            var sumOfKit = listKit.Sum(k => k.PurchaseCost * k.Quantity);
+
+            var listLabInPackage = new List<PackageLabDTO>();
+            foreach (var packageLab in listPackageOrder)
+            {
+                var labIds = await _unitOfWork.PackageLabRepository.GetByPackageId(packageLab.PackageId);
+                foreach (var labId in labIds)
+                {
+                    PackageLabDTO packageLabDTO = new PackageLabDTO()
+                    {
+                        Id = labId,
+                        Quantity = packageLab.PackageQuantity,
+                    };
+                    listLabInPackage!.Add(packageLabDTO);
+                }
+            }
+
+            var listLab = new List<LabDTO>();
+
+            foreach (var lab in listLabInPackage)
+            {
+                var purchaseCost = await _unitOfWork.LabRepository.GetPurchaseCostById(lab.Id);
+                LabDTO labDTO = new LabDTO()
+                {
+                    Id = lab.Id,
+                    PurchaseCost = purchaseCost,
+                    Quantity = lab.Quantity,
+                };
+                listLab.Add(labDTO);
+            }
+
+            var sumOfLab = listLab.Sum(l => l.PurchaseCost * l.Quantity);
+
+            var total = sumOfKit + sumOfLab;
+            return total;
+        }
+        #endregion
     }
 }
