@@ -31,7 +31,7 @@ namespace KSH.Api.Repositories
             return (packageOrders, totalPages);
         }
         #region method for AnalyticService
-        public async Task<(IEnumerable<PackageTopSaleDTO>, int)> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO, int sizePerPage)
+        public async Task<IEnumerable<PackageTopSaleDTO>> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
         {
             var baseQuery = _dbContext.PackageOrders
                                          .Where(po => po.Order.ShippingStatus == packageSaleGetDTO.ShippingStatus)
@@ -46,44 +46,26 @@ namespace KSH.Api.Repositories
                                          {
                                              PackageId = g.Key.PackageId,
                                              TotalPackagePrice = g.Sum(po => po.Package.Price),
-                                             KitId = g.Key.KitID,
-                                             KitName = g.Key.KitName
-                                         });
-            int totalRecords = await baseQuery.CountAsync();
-            int totalPages = (int)Math.Ceiling((double)totalRecords / sizePerPage);
-            var results = await baseQuery
-                                    .OrderByDescending(p => p.TotalPackagePrice)
-                                    .Skip(sizePerPage * packageSaleGetDTO.Page)
-                                    .Take(sizePerPage)
-                                    .ToListAsync();
-            return (results, totalPages);
-        }
-        public async Task<(IEnumerable<PackageTopProfitDTO>, int)> GetTopPackageProfit(TopPackageSaleGetDTO packageSaleGetDTO, int sizePerPage)
-        {
-            var baseQuery = _dbContext.PackageOrders
-                                         .Where(po => po.Order.ShippingStatus == packageSaleGetDTO.ShippingStatus)
-                                         .Where(po => po.Order.DeliveredAt >= packageSaleGetDTO.FromDate && po.Order.DeliveredAt <= packageSaleGetDTO.ToDate)
-                                         .GroupBy(po => new
-                                         {
-                                             po.PackageId,
-                                             KitID = po.Package.KitId,
-                                             KitName = po.Package.Kit.Name
-                                         })
-                                         .Select(g => new PackageTopProfitDTO
-                                         {
-                                             PackageId = g.Key.PackageId,
                                              TotalProfit = g.Sum(po => po.Package.Price) - g.Sum(po => po.Package.Kit.PurchaseCost),
                                              KitId = g.Key.KitID,
                                              KitName = g.Key.KitName
                                          });
-            int totalRecords = await baseQuery.CountAsync();
-            int totalPages = (int)Math.Ceiling((double)totalRecords / sizePerPage);
-            var results = await baseQuery
-                                    .OrderByDescending(p => p.TotalProfit)
-                                    .Skip(sizePerPage * packageSaleGetDTO.Page)
-                                    .Take(sizePerPage)
+            List<PackageTopSaleDTO>? results = null;
+            if (packageSaleGetDTO.BySale)
+            {
+                results = await baseQuery
+                                    .OrderByDescending(p => p.TotalPackagePrice)
+                                    .Take(packageSaleGetDTO.PackageTop)
                                     .ToListAsync();
-            return (results, totalPages);
+            } 
+            else
+            {
+                results = await baseQuery
+                                    .OrderByDescending(p => p.TotalProfit)
+                                    .Take(packageSaleGetDTO.PackageTop)
+                                    .ToListAsync();
+            }
+            return results;
         }
         #endregion
     }

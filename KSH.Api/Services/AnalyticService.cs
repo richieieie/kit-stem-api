@@ -20,30 +20,10 @@ namespace KSH.Api.Services
         {
             try
             {
-                int sizePerPage = 20;
-                var (packages, totalPages) = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO, sizePerPage);
+                var packages = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO);
                 return new ServiceResponse()
                                 .SetSucceeded(true)
-                                .AddDetail("data", new { totalPages, currentPage = (packageSaleGetDTO.Page + 1), packages = packages});
-            }
-            catch
-            {
-                return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .SetStatusCode(StatusCodes.Status500InternalServerError)
-                    .AddError("outOfService", "Không thể lấy danh sách package lúc này")
-                    .AddDetail("message", "Lấy danh sách top thất bại");
-            }
-        }
-        public async Task<ServiceResponse> GetTopPackageProfit(TopPackageSaleGetDTO packageSaleGetDTO)
-        {
-            try
-            {
-                int sizePerPage = 20;
-                var (packages, totalPages) = await _unitOfWork.PackageOrderRepository.GetTopPackageProfit(packageSaleGetDTO, sizePerPage);
-                return new ServiceResponse()
-                                .SetSucceeded(true)
-                                .AddDetail("data", new { totalPages, currentPage = (packageSaleGetDTO.Page + 1), packages = packages });
+                                .AddDetail("data", new {packages = packages});
             }
             catch
             {

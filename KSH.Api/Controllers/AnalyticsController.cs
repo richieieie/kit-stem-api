@@ -40,16 +40,5 @@ namespace KSH.Api.Controllers
             }
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details});
         }
-        [HttpGet]
-        [Route("Package/Profit")]
-        public async Task<IActionResult> GetTopPackageProfitAsync([FromQuery] TopPackageSaleGetDTO packageSaleGetDTO)
-        {
-            ServiceResponse serviceResponse = await _analyticService.GetTopPackageProfit(packageSaleGetDTO);
-            if (!serviceResponse.Succeeded)
-            {
-                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
-            }
-            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        }
     }
 }

@@ -10,7 +10,7 @@ namespace KSH.Api.Models.DTO.Request
         [Required]
         public DateTimeOffset ToDate { get; set; }
         public string ShippingStatus { get; set; } = OrderFulfillmentConstants.OrderSuccessStatus;
-        public int Page { get; set; } = 0;
-
+        public int PackageTop { get; set; } = 5;
+        public bool BySale { get; set; } = true;
     }
 }

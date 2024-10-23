@@ -6,6 +6,5 @@ namespace KSH.Api.Services.IServices
     {
         Task<ServiceResponse> GetOrderData(DateTimeOffset fromDate, DateTimeOffset toDate, string? shippingStatus);
         Task<ServiceResponse> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO);
-        Task<ServiceResponse> GetTopPackageProfit(TopPackageSaleGetDTO packageSaleGetDTO);
     }
 }
