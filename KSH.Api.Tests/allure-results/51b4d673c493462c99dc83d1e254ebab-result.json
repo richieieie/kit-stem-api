@@ -1,0 +1,51 @@
+{
+  "uuid": "f64ab929-f69e-477c-b516-3e0fc365abf6",
+  "historyId": "90f36fb41ab9b9466a35a18102123e68",
+  "testCaseId": "db3d468db0135cba273cea3127e3d33d",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.LabServiceTests.UpdateAsync_InValidCredentials_ReturnFalse()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "Trungs-MacBook-Pro-2"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.LabServiceTests.UpdateAsync_InValidCredentials_ReturnFalse"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.LabServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.LabServiceTests.UpdateAsync_InValidCredentials_ReturnFalse",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729512910843,
+  "stop": 1729512910844
+}

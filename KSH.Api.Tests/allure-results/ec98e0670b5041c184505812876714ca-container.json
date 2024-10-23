@@ -1,0 +1,28 @@
+{
+  "uuid": "70ad6bde-3798-4285-bd1f-3f6152460d84",
+  "name": "KSH.Api.Tests.TypeServiceTests",
+  "children": [
+    "083d8a09-ce24-4393-9bfc-ef8f3557cebe"
+  ],
+  "befores": [
+    {
+      "name": "Setup API connection",
+      "status": "passed",
+      "statusDetails": {
+        "known": false,
+        "muted": false,
+        "flaky": false
+      },
+      "stage": "finished",
+      "steps": [],
+      "attachments": [],
+      "parameters": [],
+      "start": 1729561586525,
+      "stop": 1729561587019
+    }
+  ],
+  "afters": [],
+  "links": [],
+  "start": 1729561586338,
+  "stop": 1729561587066
+}

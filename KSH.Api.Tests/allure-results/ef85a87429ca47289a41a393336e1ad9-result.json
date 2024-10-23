@@ -1,0 +1,51 @@
+{
+  "uuid": "e2f8faa2-5030-4a9c-9cf0-acdb99cda9c7",
+  "historyId": "87ac565ccd7e386b14bed8959e66e175",
+  "testCaseId": "ae0bdeec770a03797e0152b4755f346c",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.UserServiceTests.RefreshTokenAsync_ValidRefreshTokenId_ReturnTrue()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "Trungs-MacBook-Pro-2"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.UserServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.UserServiceTests.RefreshTokenAsync_ValidRefreshTokenId_ReturnTrue"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.UserServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.UserServiceTests.RefreshTokenAsync_ValidRefreshTokenId_ReturnTrue",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729511875328,
+  "stop": 1729511875339
+}

@@ -1,0 +1,52 @@
+{
+  "uuid": "dbaae927-b07d-431c-9317-6e9f3862f7df",
+  "historyId": "8899b2f3d9db02bc58739f1e18ae43f3",
+  "testCaseId": "f7a6a14bc4cc0b5c00843cb084fc011a",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.UserServiceTests.LoginAsync_ValidCredentials_ReturnSucceed()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "Trungs-MacBook-Pro-2"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.UserServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.UserServiceTests.LoginAsync_ValidCredentials_ReturnSucceed"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.UserServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.UserServiceTests.LoginAsync_ValidCredentials_ReturnSucceed",
+  "status": "failed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": "Assert.True() Failure\nExpected: True\nActual:   False",
+    "trace": "   at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 141\n   at Xunit.Assert.True(Boolean condition) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 95\n   at KSH.Api.Tests.UserServiceTests.LoginAsync_ValidCredentials_ReturnSucceed() in /Users/trung/Code/csharp/kit-stem-api/KSH.Api.Tests/UserServiceTests.cs:line 64\n   at Xunit.Sdk.TestInvoker`1.<>c__DisplayClass47_0.<<InvokeTestMethodAsync>b__1>d.MoveNext() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestInvoker.cs:line 259\n--- End of stack trace from previous location ---\n   at Xunit.Sdk.ExecutionTimer.AggregateAsync(Func`1 asyncAction) in /_/src/xunit.execution/Sdk/Frameworks/ExecutionTimer.cs:line 48\n   at Xunit.Sdk.ExceptionAggregator.RunAsync(Func`1 code) in /_/src/xunit.core/Sdk/ExceptionAggregator.cs:line 90"
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729511875296,
+  "stop": 1729511875322
+}

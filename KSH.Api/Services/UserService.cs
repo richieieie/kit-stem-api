@@ -72,7 +72,7 @@ namespace KSH.Api.Services
             {
                 return serviceResponse
                             .SetSucceeded(false)
-                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
@@ -80,7 +80,7 @@ namespace KSH.Api.Services
             {
                 return serviceResponse
                             .SetSucceeded(false)
-                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Vui lòng xác thực tài khoản của bạn thông qua email!");
             }
 
@@ -88,7 +88,7 @@ namespace KSH.Api.Services
             {
                 return serviceResponse
                             .SetSucceeded(false)
-                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 000000000 để được hỗ trợ!");
             }
 
@@ -98,7 +98,7 @@ namespace KSH.Api.Services
 
             return new ServiceResponse()
                         .SetSucceeded(true)
-                        .AddDetail("message", "Đăng nhập thành công!")
+                        .AddDetail("message", "Đăng nhập thành công!")
                         .AddDetail("accessToken", accessToken)
                         .AddDetail("refreshToken", refreshToken);
         }
@@ -278,8 +278,12 @@ namespace KSH.Api.Services
 
         public async Task<ServiceResponse> GetAllAsync(UserManagerGetDTO userManagerGetDTO)
         {
-
-            var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!)).Where(u => u.Email!.Length > 0);
+            var usersInRole = (await _userManager.GetUsersInRoleAsync(userManagerGetDTO.Role!))
+                                    .Where(u => u.Email != null && u.Email.Contains(userManagerGetDTO.Email ?? "") &&
+                                    (userManagerGetDTO.FirstName == null || (u.FirstName != null && u.FirstName.Contains(userManagerGetDTO.FirstName ?? ""))) &&
+                                    (userManagerGetDTO.FirstName == null || (u.LastName != null && u.LastName.Contains(userManagerGetDTO.LastName ?? ""))) &&
+                                    (userManagerGetDTO.PhoneNumber == null || (u.PhoneNumber != null && u.PhoneNumber.Contains(userManagerGetDTO.PhoneNumber ?? "")))
+                                );
             var totalUsers = usersInRole.Count();
             var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
             var usersInPage = usersInRole.Skip(userManagerGetDTO.Page * pageSize).Take(pageSize).ToList();

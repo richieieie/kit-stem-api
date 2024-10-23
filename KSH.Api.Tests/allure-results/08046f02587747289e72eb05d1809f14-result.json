@@ -1,0 +1,51 @@
+{
+  "uuid": "76976831-1c28-4e06-8eed-ed7f42856a6e",
+  "historyId": "5c1d95f9ebb59344c9a44ed3c2baf29f",
+  "testCaseId": "a9267269de9d8c8edd1516a2be1a8735",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.TypeServiceTests.RemoveAsync_ValidCredentials_ReturnTrue()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "Trungs-MacBook-Pro-2"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.TypeServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.TypeServiceTests.RemoveAsync_ValidCredentials_ReturnTrue"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.TypeServiceTests"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.TypeServiceTests.RemoveAsync_ValidCredentials_ReturnTrue",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729512910824,
+  "stop": 1729512910826
+}
