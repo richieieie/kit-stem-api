@@ -42,23 +42,41 @@ namespace KSH.Api.Services
                     null,
                     skip: sizePerPage * kitGetDTO.Page,
                     take: sizePerPage,
-                    query => query.Include(l => l.Category).Include(l => l.KitImages)
+                    query => query
+                                .Include(l => l.Category)
+                                .Include(l => l.KitImages)
+                                .Include(l => l.KitComponents!)
+                                    .ThenInclude(k => k.Component)
                     );
-                if (kits.Count() > 0)
-                {
-                    var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
-                    return new ServiceResponse()
-                         .SetSucceeded(true)
-                         .AddDetail("message", "Lấy danh sách kit thành công")
-                         .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page + 1, kits = kitsDTO });
-                }
-                else
+                if (kits == null || kits.Count() <= 0)
                 {
                     return new ServiceResponse()
                        .SetSucceeded(true)
                        .AddDetail("message", "Không tìm thấy bộ kit!!!!!")
                        .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page, kits = kits });
                 }
+                var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
+                
+                for (int i = 0; i < kits.Count(); i ++)
+                {
+                    if (kits.ElementAt(i).KitComponents!.Count() > 0)
+                    {
+                        for (int j = 0; j < kits.ElementAt(i).KitComponents!.Count(); j++)
+                        {
+                            var component = new KitComponentInKitDTO()
+                            {
+                                ComponentId = kits.ElementAt(i).KitComponents!.ElementAt(j).ComponentId,
+                                ComponentName = kits.ElementAt(i).KitComponents!.ElementAt(j).Component.Name,
+                                ComponentQuantity = kits.ElementAt(i).KitComponents!.ElementAt(j).ComponentQuantity
+                            };
+                            kitsDTO.ElementAt(i).Components.Add(component);
+                        }
+                    }
+                }
+                return new ServiceResponse()
+                     .SetSucceeded(true)
+                     .AddDetail("message", "Lấy danh sách kit thành công")
+                     .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page + 1, kits = kitsDTO });
             }
             catch
             {

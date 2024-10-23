@@ -12,11 +12,10 @@ namespace KSH.Api.Models.DTO.Response
         public string Description { get; set; } = null!;
         public long MinPackagePrice { get; set; }
         public long MaxPackagePrice { get; set; }
-
         public int PurchaseCost { get; set; }
-
         public bool Status { get; set; }
         public virtual KitsCategory? KitsCategory { get; set; }
         public virtual ICollection<KitImageDTO>? KitImages { get; set; }
+        public List<KitComponentInKitDTO> Components { get; set; } = new();
     }
 }
