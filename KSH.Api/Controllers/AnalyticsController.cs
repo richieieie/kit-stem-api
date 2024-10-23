@@ -40,5 +40,29 @@ namespace KSH.Api.Controllers
             }
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+        [HttpGet]
+        [Route("Revenues")]
+        public async Task<IActionResult> GetRevenueAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate)
+        {
+            ServiceResponse serviceResponse = await _analyticService.GetRevenue(fromDate, toDate);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("Profits")]
+        public async Task<IActionResult> GetProfitAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate)
+        {
+            ServiceResponse serviceResponse = await _analyticService.GetProfit(fromDate, toDate);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }

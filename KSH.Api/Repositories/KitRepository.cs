@@ -1,5 +1,6 @@
 ﻿using KSH.Api.Data;
 using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 using Microsoft.EntityFrameworkCore;
 
 namespace KSH.Api.Repositories
@@ -27,6 +28,12 @@ namespace KSH.Api.Repositories
         {
             var maxId = await _dbContext.Kits.MaxAsync(k => k.Id);
             return maxId;
+        }
+
+        public async Task<int> GetPurchaseCostById(int kitId)
+        {
+            var kit = await _dbContext.Kits.FirstOrDefaultAsync(k => k.Id == kitId);
+            return kit!.PurchaseCost;
         }
     }
 }

@@ -1,0 +1,59 @@
+{
+  "uuid": "cdd16a65-7bd1-463f-ac61-a4ddd015d1fa",
+  "historyId": "5c1d95f9ebb59344c9a44ed3c2baf29f",
+  "testCaseId": "a9267269de9d8c8edd1516a2be1a8735",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.TypeServiceTests.RemoveAsync_ValidCredentials_ReturnTrue()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "LAPTOP-09181QFB"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.TypeServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.TypeServiceTests.RemoveAsync_ValidCredentials_ReturnTrue"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.TypeServiceTests"
+    },
+    {
+      "name": "feature",
+      "value": "Type API"
+    },
+    {
+      "name": "tag",
+      "value": "remove"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.TypeServiceTests.RemoveAsync_ValidCredentials_ReturnTrue",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729561321798,
+  "stop": 1729561321800
+}

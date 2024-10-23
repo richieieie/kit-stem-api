@@ -1,5 +1,11 @@
 {
+<<<<<<< HEAD
+  "$schema": "https://raw.githubusercontent.com/allure-framework/allure-csharp/2.12.1/Allure.XUnit/Schemas/allureConfig.schema.json",
+  "allure": {
+    "directory": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\KSH.Api.Tests\\allure-results"
+=======
   "allure": {
     "directory": "/Users/trung/Code/Nodejs/allure-results"
+>>>>>>> 987beb1f13c39a3ececdef67bae9f5aea43d4836
   }
 }

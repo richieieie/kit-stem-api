@@ -1,6 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq.Expressions;
 using KSH.Api.Data;
 using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 using Microsoft.EntityFrameworkCore;
 
 namespace KSH.Api.Repositories
@@ -41,6 +44,12 @@ namespace KSH.Api.Repositories
                                                             );
 
             return (packages, totalPages);
+        }
+
+        public async Task<int> GetByPackageId(int packageId)
+        {
+            var package = await _dbContext.Packages.FirstOrDefaultAsync(p => p.Id == packageId);
+            return package!.KitId;
         }
     }
 }

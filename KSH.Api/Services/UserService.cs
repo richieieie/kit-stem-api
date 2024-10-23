@@ -72,7 +72,7 @@ namespace KSH.Api.Services
             {
                 return serviceResponse
                             .SetSucceeded(false)
-                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tên đăng nhập hoặc mật khẩu không chính xác!");
             }
 
@@ -80,7 +80,7 @@ namespace KSH.Api.Services
             {
                 return serviceResponse
                             .SetSucceeded(false)
-                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Vui lòng xác thực tài khoản của bạn thông qua email!");
             }
 
@@ -88,7 +88,7 @@ namespace KSH.Api.Services
             {
                 return serviceResponse
                             .SetSucceeded(false)
-                            .AddDetail("message", "Đăng nhập thất bại!")
+                            .AddDetail("message", "Đăng nhập thất bại!")
                             .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 000000000 để được hỗ trợ!");
             }
 
@@ -98,7 +98,7 @@ namespace KSH.Api.Services
 
             return new ServiceResponse()
                         .SetSucceeded(true)
-                        .AddDetail("message", "Đăng nhập thành công!")
+                        .AddDetail("message", "Đăng nhập thành công!")
                         .AddDetail("accessToken", accessToken)
                         .AddDetail("refreshToken", refreshToken);
         }

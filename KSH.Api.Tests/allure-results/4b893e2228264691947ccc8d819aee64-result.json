@@ -1,0 +1,59 @@
+{
+  "uuid": "083d8a09-ce24-4393-9bfc-ef8f3557cebe",
+  "historyId": "73c66756fdf85fd8331d68ef4393b3c0",
+  "testCaseId": "adc66ce2e9222bf694483e8cb4c5c5a9",
+  "fullName": "KSH.Api.Tests:KSH.Api.Tests.TypeServiceTests.UpdateAsync_ValidCredentials_ReturnTrue()",
+  "labels": [
+    {
+      "name": "thread",
+      "value": ".NET TP Worker"
+    },
+    {
+      "name": "host",
+      "value": "LAPTOP-09181QFB"
+    },
+    {
+      "name": "language",
+      "value": "C#"
+    },
+    {
+      "name": "framework",
+      "value": "xUnit.net"
+    },
+    {
+      "name": "testClass",
+      "value": "KSH.Api.Tests.TypeServiceTests"
+    },
+    {
+      "name": "testMethod",
+      "value": "KSH.Api.Tests.TypeServiceTests.UpdateAsync_ValidCredentials_ReturnTrue"
+    },
+    {
+      "name": "package",
+      "value": "KSH.Api.Tests.TypeServiceTests"
+    },
+    {
+      "name": "feature",
+      "value": "Type API"
+    },
+    {
+      "name": "tag",
+      "value": "update"
+    }
+  ],
+  "links": [],
+  "name": "KSH.Api.Tests.TypeServiceTests.UpdateAsync_ValidCredentials_ReturnTrue",
+  "status": "passed",
+  "statusDetails": {
+    "known": false,
+    "muted": false,
+    "flaky": false,
+    "message": ""
+  },
+  "stage": "finished",
+  "steps": [],
+  "attachments": [],
+  "parameters": [],
+  "start": 1729561587020,
+  "stop": 1729561587065
+}

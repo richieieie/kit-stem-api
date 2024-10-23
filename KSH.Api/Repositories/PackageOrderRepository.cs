@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using KSH.Api.Constants;
 using KSH.Api.Data;
 using KSH.Api.Models.Domain;
+using KSH.Api.Models.DTO.Request;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Bcpg;
 
 namespace KSH.Api.Repositories
 {
@@ -28,7 +31,7 @@ namespace KSH.Api.Repositories
             var (packageOrders, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (packageOrders, totalPages);
         }
-
+        
         public async Task<IEnumerable<object>> GetTopPackageOrderedByYear(int top, int year)
         {
             var packageSales = await _dbContext.PackageOrders.Include(po => po.Order).Include(po => po.Package).ThenInclude(p => p.Kit)
@@ -52,6 +55,20 @@ namespace KSH.Api.Repositories
                                         .Take(top)
                                         .ToListAsync<object>();
             return packageSales;
+        }
+
+        public async Task<List<PackageOrderDTO>> GetPackageOrder(List<Guid> listOrderId)
+        {
+            var PackageOrderDTO = await _dbContext.PackageOrders
+            .Where(p => listOrderId.Contains(p.OrderId))
+            .GroupBy(p => p.PackageId)
+            .Select(g => new PackageOrderDTO
+            {
+                PackageId = g.Key,
+                PackageQuantity = g.Sum(p => p.PackageQuantity),
+            })
+            .ToListAsync();
+            return PackageOrderDTO;
         }
     }
 }
