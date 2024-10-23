@@ -2,6 +2,8 @@ using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Utilities.Date;
+using System.ComponentModel.DataAnnotations;
 
 namespace KSH.Api.Controllers
 {
@@ -63,6 +65,17 @@ namespace KSH.Api.Controllers
                 return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpGet]
+        [Route("Package/Sale")]
+        public async Task<IActionResult> GetTopPackageSaleAsync([FromQuery]TopPackageSaleGetDTO packageSaleGetDTO)
+        {
+            ServiceResponse serviceResponse = await _analyticService.GetTopPackageSale(packageSaleGetDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details});
         }
     }
 }

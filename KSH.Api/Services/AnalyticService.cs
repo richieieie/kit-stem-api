@@ -127,6 +127,24 @@ namespace KSH.Api.Services
                     .AddError("outOfService", "Không thể lấy dữ liệu doanh thu ngay lúc này!");
             }
         }
+        public async Task<ServiceResponse> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO)
+        {
+            try
+            {
+                var packages = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO);
+                return new ServiceResponse()
+                                .SetSucceeded(true)
+                                .AddDetail("data", new { packages = packages });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                    .AddError("outOfService", "Không thể lấy danh sách package lúc này")
+                    .AddDetail("message", "Lấy danh sách top thất bại");
+            }
+        }
 
         #region Helper
         private async Task<int> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)

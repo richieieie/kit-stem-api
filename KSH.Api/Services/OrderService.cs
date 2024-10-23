@@ -293,9 +293,8 @@ namespace KSH.Api.Services
                                 );
                             if (checkOrderSupportExited.Count() == 0)
                             {
-                                _unitOfWork.OrderSupportRepository.Create(new OrderSupport() { Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes });
+                                _unitOfWork.OrderSupportRepository.Create(new OrderSupport() { Id = Guid.NewGuid(), LabId = lab.LabId, OrderId = order.Id, PackageId = lab.PackageId, RemainSupportTimes = lab.Lab.MaxSupportTimes * packageOrder.PackageQuantity });
                             }
-
                         }
                     }
                 }

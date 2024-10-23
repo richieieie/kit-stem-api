@@ -28,6 +28,18 @@ namespace KST.Api.Controllers
             }
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
+        [HttpGet]
+        [Route("{labSupportId:Guid}")]
+        // [Authorize(Roles = "staff,customer")]
+        public async Task<IActionResult> GetByIdAsync(Guid labSupportId)
+        {
+            var serviceResponse = await _labSupportService.GetByIdAsync(labSupportId);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+        }
 
         [HttpGet]
         [Route("customers")]
