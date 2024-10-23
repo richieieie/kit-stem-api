@@ -39,5 +39,28 @@ namespace KSH.Api.Services
                     .AddDetail("message", "Lấy danh sách top thất bại");
             }
         }
+        public async Task<ServiceResponse> GetTopPackageProfit(TopPackageSaleGetDTO packageSaleGetDTO)
+        {
+            try
+            {
+                int sizePerPage = 20;
+                var (packages, totalPages) = await _unitOfWork.PackageOrderRepository.GetTopPackageProfit(packageSaleGetDTO, sizePerPage);
+                if (packages == null)
+                {
+                    int i = 0;
+                }
+                return new ServiceResponse()
+                                .SetSucceeded(true)
+                                .AddDetail("data", new { totalPages, currentPage = (packageSaleGetDTO.Page + 1), packages = packages });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                    .AddError("outOfService", "Không thể lấy danh sách package lúc này")
+                    .AddDetail("message", "Lấy danh sách top thất bại");
+            }
+        }
     }
 }
