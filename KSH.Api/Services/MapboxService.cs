@@ -28,22 +28,18 @@ namespace KSH.Api.Services
                        .AddError("notFound", "Không thể xác định được địa chỉ cấn lấy khoảng cách!");
                 }
 
-                const double R = 6371e3; // Earth's radius in meters
-                double phi1 = (double)(addressLat * Math.PI / 180); // Convert latitude to radians
-                double phi2 = shopLat * Math.PI / 180; // Convert latitude to radians
-                double deltaPhi = (double)((shopLat - addressLat) * Math.PI / 180); // Difference in latitude
-                double deltaLambda = (double)((shopLong - addressLong) * Math.PI / 180); // Difference in longitude
+                var distance = await GetDistanceAsync(shopLat, shopLong, (double)addressLat, (double)addressLong);
+                if (distance == null)
+                {
+                    return serviceResponse
+                       .SetSucceeded(false)
+                       .AddDetail("message", "Lâý khoảng cách không thành công!")
+                       .AddError("notFound", "Không thể xác định được địa chỉ cấn lấy khoảng cách!");
+                }
 
-                // Haversine formula
-                double a = Math.Sin(deltaPhi / 2) * Math.Sin(deltaPhi / 2) +
-                           Math.Cos(phi1) * Math.Cos(phi2) *
-                           Math.Sin(deltaLambda / 2) * Math.Sin(deltaLambda / 2);
-                double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-                double distance = R * c; // Distance in meters
                 return serviceResponse
                         .AddDetail("message", "Lâý khoảng cách thành công!")
-                        .AddDetail("distance", Math.Ceiling(distance / 1000)); // Returns distance in km
+                        .AddDetail("distance", distance); // Returns distance in km
             }
             catch
             {
@@ -60,7 +56,7 @@ namespace KSH.Api.Services
             {
                 return (null, null);
             }
-            var requestUri = $"{_configuration["Mapbox:GeocodingUrl"]}/forward?q={Uri.EscapeDataString(address)}&access_token={_configuration["Mapbox:AccessToken"]}";
+            var requestUri = $"{_configuration["Mapbox:GeocodingUrl"]}/forward?q={Uri.EscapeDataString(address)}&country=vn&access_token={_configuration["Mapbox:AccessToken"]}";
 
             try
             {
@@ -84,6 +80,31 @@ namespace KSH.Api.Services
             catch (HttpRequestException ex)
             {
                 throw new Exception($"Error calling Mapbox API: {ex.Message}", ex);
+            }
+        }
+
+        private async Task<double?> GetDistanceAsync(double startLat, double startLon, double endLat, double endLon)
+        {
+            var startLongitude = Uri.EscapeDataString(startLon.ToString());
+            var startLatitude = Uri.EscapeDataString(startLat.ToString());
+            var endLongitude = Uri.EscapeDataString(endLon.ToString());
+            var endLatitude = Uri.EscapeDataString(endLat.ToString());
+            var requestUri = $"{_configuration["Mapbox:DirectionUrl"]}/driving/{startLongitude},{startLatitude};{endLongitude},{endLatitude}?access_token={_configuration["Mapbox:AccessToken"]}&geometries=geojson";
+            try
+            {
+                var response = await _httpClient.GetAsync(requestUri);
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var json = JObject.Parse(content);
+
+                // Extract the distance from the response
+                var distance = json["routes"]?[0]?["distance"];
+                return distance != null ? Math.Ceiling((double)distance / 1000) : null;
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Error calling Mapbox Directions API: {ex.Message}", ex);
             }
         }
     }
