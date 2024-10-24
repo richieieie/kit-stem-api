@@ -9,5 +9,6 @@ namespace KSH.Api.Services.IServices
         Task<ServiceResponse> GetByIdAsync(Guid id, string userId, string role);
         Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string shippingAddress, string phoneNumber, string note);
         Task<ServiceResponse> UpdateShippingStatus(OrderShippingStatusUpdateDTO getDTO);
+        Task<ServiceResponse> GetShippingFee(string address);
     }
 }

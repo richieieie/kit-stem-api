@@ -19,6 +19,7 @@ namespace KSH.Api.Models.DTO.Request
         public string ShippingStatus { get; set; } = null!;
 
         public string ShippingAddress { get; set; }= null!;
+        public int ShippingFeeId { get; set; }
 
         public string PhoneNumber { get; set; } = null!;
 
