@@ -22,12 +22,14 @@ namespace KSH.Api.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private const int pointRate = 100;
         private readonly ICartService _cartService;
-        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, ICartService cartService)
+        private readonly IMapboxService _mapboxService;
+        public OrderService(IMapper mapper, UnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, ICartService cartService, IMapboxService mapboxService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _cartService = cartService;
+            _mapboxService = mapboxService;
         }
         #region Service methods
         public async Task<ServiceResponse> GetAsync(OrderStaffGetDTO orderStaffGetDTO)
@@ -142,7 +144,17 @@ namespace KSH.Api.Services
                     if (point > price) { point -= price; }
                     user.Points -= point;
                 }
-                var totalPrice = price - point;
+                var distance = await _mapboxService.GetDistanceBetweenAddressAndShop(shippingAddress);
+                if (distance == 0)
+                {
+                    return (new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy khoảng cách thất bại!")
+                        .AddError("notFound", "Không thể xác định được địa chỉ cấn lấy khoảng cách!"), Guid.Empty);
+                }
+
+                var shippingFee = await _unitOfWork.ShippingFeeRepository.GetShippingFee(distance);
+                int totalPrice = price - point + (int)shippingFee.Price;
 
                 var orderId = Guid.NewGuid();
                 var orderDTO = new OrderCreateDTO()
@@ -153,6 +165,7 @@ namespace KSH.Api.Services
                     DeliveredAt = null,
                     ShippingStatus = OrderFulfillmentConstants.OrderFailStatus,
                     ShippingAddress = shippingAddress,
+                    ShippingFeeId = shippingFee.Id,
                     PhoneNumber = phoneNumber,
                     IsLabDownloaded = false,
                     Price = price,
@@ -317,6 +330,36 @@ namespace KSH.Api.Services
                     .SetSucceeded(false)
                     .AddError("outOfService", "Không thể cập nhật ngay lúc này")
                     .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+            }
+        }
+
+        public async Task<ServiceResponse> GetShippingFee(string address)
+        {
+            try
+            {
+                var distance = await _mapboxService.GetDistanceBetweenAddressAndShop(address);
+                if (distance == 0)
+                {
+                    return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Lấy khoảng cách thất bại!")
+                        .AddError("notFound", "Không thể xác định được địa chỉ cấn lấy khoảng cách!");
+                }
+
+                var shippingFee = await _unitOfWork.ShippingFeeRepository.GetShippingFee(distance);
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Lấy phí giao hàng thành công!")
+                    .AddDetail("data", new { shippingFee.Price });
+
+            }
+            catch
+            {
+                return new ServiceResponse()
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status500InternalServerError)
+                        .AddDetail("message", "Lâý phí giao hàng thất bại!")
+                        .AddError("outOfService", "Không thể lấy phí giao hàng ngay lúc này!");
             }
         }
 
