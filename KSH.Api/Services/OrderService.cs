@@ -59,14 +59,14 @@ namespace KSH.Api.Services
             try
             {
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
-                // if (order == null || (userId != order.UserId && role != "staff"))
-                // {
-                //     return new ServiceResponse()
-                //             .SetSucceeded(false)
-                //             .SetStatusCode(StatusCodes.Status404NotFound)
-                //             .AddDetail("message", "Lấy thông tin order thất bại!")
-                //             .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
-                // }
+                if (order == null || (userId != order.UserId && role != "staff"))
+                {
+                    return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status404NotFound)
+                            .AddDetail("message", "Lấy thông tin order thất bại!")
+                            .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
+                }
 
                 var orderDTO = _mapper.Map<IndividualOrderResponseDTO>(order);
 
@@ -136,8 +136,8 @@ namespace KSH.Api.Services
                         .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
 
-                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
-                int point = 0;
+                var price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
+                var point = 0L;
                 if (isUsePoint)
                 {
                     point = user.Points;
@@ -154,7 +154,7 @@ namespace KSH.Api.Services
                 }
 
                 var shippingFee = await _unitOfWork.ShippingFeeRepository.GetShippingFee(distance);
-                int totalPrice = price - point + (int)shippingFee.Price;
+                var totalPrice = price - point + shippingFee.Price;
 
                 var orderId = Guid.NewGuid();
                 var orderDTO = new OrderCreateDTO()
@@ -350,7 +350,7 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy phí giao hàng thành công!")
-                    .AddDetail("data", new {shippingFee.Price});
+                    .AddDetail("data", new { shippingFee.Price });
 
             }
             catch

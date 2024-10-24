@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +22,7 @@ namespace KSH.Api.Models.Domain
         [Unicode(false)]
         public string Url { get; set; } = null!;
 
-        public int Price { get; set; }
+        public long Price { get; set; }
 
         public int MaxSupportTimes { get; set; }
 

@@ -57,9 +57,9 @@ namespace KSH.Api.Repositories
             return count;
         }
 
-        public async Task<int> SumTotalOrder(DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        public async Task<long> SumTotalOrder(DateTimeOffset? fromDate, DateTimeOffset? toDate)
         {
-            return await _dbContext.UserOrders.Where(o => 
+            return await _dbContext.UserOrders.Where(o =>
             o.DeliveredAt >= fromDate &&
             o.DeliveredAt <= toDate &&
             o.ShippingStatus.Equals(OrderFulfillmentConstants.OrderSuccessStatus)).SumAsync(o => o.TotalPrice);

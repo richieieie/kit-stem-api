@@ -26,7 +26,7 @@ namespace KSH.Api.Models.Domain
         public long MinPackagePrice { get; set; }
         public long MaxPackagePrice { get; set; }
 
-        public int PurchaseCost { get; set; }
+        public long PurchaseCost { get; set; }
 
         public bool Status { get; set; }
 

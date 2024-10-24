@@ -30,7 +30,7 @@ namespace KSH.Api.Repositories
             return maxId;
         }
 
-        public async Task<int> GetPurchaseCostById(int kitId)
+        public async Task<long> GetPurchaseCostById(int kitId)
         {
             var kit = await _dbContext.Kits.FirstOrDefaultAsync(k => k.Id == kitId);
             return kit!.PurchaseCost;
