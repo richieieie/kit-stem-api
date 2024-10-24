@@ -134,15 +134,15 @@ namespace KSH.Api.Services
                         .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
 
-                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
-                int point = 0;
+                var price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
+                var point = 0L;
                 if (isUsePoint)
                 {
                     point = user.Points;
                     if (point > price) { point -= price; }
                     user.Points -= point;
                 }
-                int totalPrice = price - point;
+                var totalPrice = price - point;
 
                 var orderId = Guid.NewGuid();
                 var orderDTO = new OrderCreateDTO()

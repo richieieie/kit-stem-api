@@ -42,7 +42,7 @@ namespace KSH.Api.Repositories
             return (labs, totalPages);
         }
 
-        public async Task<int> GetPurchaseCostById(Guid id)
+        public async Task<long> GetPurchaseCostById(Guid id)
         {
             var lab = await _dbContext.Labs.FirstOrDefaultAsync(l => l.Id == id);
             return lab!.Price;
