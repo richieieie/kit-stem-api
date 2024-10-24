@@ -30,6 +30,7 @@ public class Program
 
         Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"./googleCloudStorage.json");
 
+        builder.Services.AddHttpClient();
         builder.Services.AddHttpContextAccessor();
 
         // Add repositories
@@ -56,6 +57,7 @@ public class Program
         builder.Services.AddScoped<ILabSupportService, LabSupportService>();
         builder.Services.AddScoped<IOrderSupportService, OrderSupportService>();
         builder.Services.AddScoped<IAnalyticService, AnalyticService>();
+        builder.Services.AddScoped<IMapboxService, MapboxService>();
 
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
