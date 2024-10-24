@@ -11,7 +11,7 @@ namespace KSH.Api.Models.DTO.Request
         [Required(ErrorMessage = "Vui lòng cung cấp cấp độ của gói!")]
         public int LevelId { get; set; }
         [Required(ErrorMessage = "Vui lòng cung cấp giá của gói!")]
-        public int Price { get; set; }
+        public long Price { get; set; }
         [Required(ErrorMessage = "Vui lòng cung trạng thái của gói!")]
         public bool Status { get; set; }
         public ICollection<Guid>? LabIds { get; set; }

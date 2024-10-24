@@ -18,7 +18,7 @@ namespace KSH.Api.Models.DTO
         [StringLength(100)]
         public string? Name { get; set; }
         [Required]
-        public int Price { get; set; }
+        public long Price { get; set; }
         [Required]
         public int MaxSupportTimes { get; set; }
         [Required]

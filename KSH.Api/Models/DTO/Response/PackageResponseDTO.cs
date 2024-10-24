@@ -6,7 +6,7 @@ namespace KSH.Api.Models.DTO.Response
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public int Price { get; set; }
+        public long Price { get; set; }
         public bool Status { get; set; }
         public virtual Level? Level { get; set; }
         public virtual KitInPackageResponseDTO? Kit { get; set; }
