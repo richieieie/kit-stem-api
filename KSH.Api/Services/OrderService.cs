@@ -59,14 +59,14 @@ namespace KSH.Api.Services
             try
             {
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
-                // if (order == null || (userId != order.UserId && role != "staff"))
-                // {
-                //     return new ServiceResponse()
-                //             .SetSucceeded(false)
-                //             .SetStatusCode(StatusCodes.Status404NotFound)
-                //             .AddDetail("message", "Lấy thông tin order thất bại!")
-                //             .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
-                // }
+                if (order == null || (userId != order.UserId && role != "staff"))
+                {
+                    return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status404NotFound)
+                            .AddDetail("message", "Lấy thông tin order thất bại!")
+                            .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
+                }
 
                 var orderDTO = _mapper.Map<IndividualOrderResponseDTO>(order);
 
@@ -154,7 +154,7 @@ namespace KSH.Api.Services
                 }
 
                 var shippingFee = await _unitOfWork.ShippingFeeRepository.GetShippingFee(distance);
-                int totalPrice = price - point + (int)shippingFee.Price;
+                var totalPrice = price - point + shippingFee.Price;
 
                 var orderId = Guid.NewGuid();
                 var orderDTO = new OrderCreateDTO()
