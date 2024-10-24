@@ -12,6 +12,7 @@ namespace KSH.Api.Models.Domain
 
         [StringLength(450)]
         public string UserId { get; set; } = null!;
+        public int ShippingFeeId { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
 
@@ -47,5 +48,8 @@ namespace KSH.Api.Models.Domain
 
         [InverseProperty("UserOrders")]
         public virtual Payment? Payment { get; set; }
+
+        [ForeignKey("ShippingFeeId")]
+        public virtual ShippingFee ShippingFee { get; set; } = null!;
     }
 }

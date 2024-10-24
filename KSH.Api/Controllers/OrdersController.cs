@@ -48,7 +48,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        [Authorize(Roles = "staff,customer")]
+        // [Authorize(Roles = "staff,customer")]
         [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
