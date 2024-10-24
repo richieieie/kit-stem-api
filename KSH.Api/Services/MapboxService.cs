@@ -107,5 +107,30 @@ namespace KSH.Api.Services
                 throw new Exception($"Error calling Mapbox Directions API: {ex.Message}", ex);
             }
         }
+
+        public async Task<double?> GetDistanceBetweenAddressAndShop(string address)
+        {
+            try
+            {
+                var (shopLong, shopLat) = (_configuration.GetValue<double>("KitStemHub:Coordinates:Longitude"), _configuration.GetValue<double>("KitStemHub:Coordinates:Latitude"));
+                var (addressLong, addressLat) = await GetCoordinatesAsync(address);
+                if (addressLong == null || addressLat == null)
+                {
+                    return 0;
+                }
+
+                var distance = await GetDistanceAsync(shopLat, shopLong, (double)addressLat, (double)addressLong);
+                if (distance == null)
+                {
+                    return 0;
+                }
+
+                return distance;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
