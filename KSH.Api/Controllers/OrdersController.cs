@@ -13,8 +13,10 @@ namespace KSH.Api.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrdersController(IOrderService orderService)
+        private readonly IMapboxService _mapboxService;
+        public OrdersController(IOrderService orderService, IMapboxService mapboxService)
         {
+            _mapboxService = mapboxService;
             _orderService = orderService;
         }
 
@@ -77,32 +79,19 @@ namespace KSH.Api.Controllers
             return CreatedAtAction(nameof(GetByIdAsync), new { id = guid }, new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        // [HttpGet]
-        // [Route("{id:guid}/OrderSupports")]
-        // [Authorize(Roles = "staff,customer")]
-        // public async Task<IActionResult> GetOrderSupportsByIdAsync()
-        // {
-        //     var serviceResponse = await _orderService.GetByIdAsync();
-        //     if (!serviceResponse.Succeeded)
-        //     {
-        //         return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-        //     }
 
-        //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        // }
+        [HttpGet]
+        [Route("GetDistanceTest")]
+        public async Task<IActionResult> GetDistance([FromQuery] string address)
+        {
+            var serviceResponse = await _mapboxService.GetDistanceBetweenAnAddressAndShop(address);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
 
-        // [HttpGet]
-        // [Route("OrderSupports/{id:guid}/LabSupports")]
-        // public async Task<IActionResult> GetLabSupportByOrderSupportIdAsync()
-        // {
-        //     var serviceResponse = await _orderService.GetByIdAsync();
-        //     if (!serviceResponse.Succeeded)
-        //     {
-        //         return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
-        //     }
-
-        //     return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        // }
         [HttpPut]
         [Route("{orderId:guid}/verified")]
         // [Authorize(Roles = "staff")]
