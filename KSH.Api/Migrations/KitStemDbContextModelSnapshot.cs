@@ -682,8 +682,7 @@ namespace KSH.Api.Migrations
                     b.HasKey("Id")
                         .HasName("PK__UserOrde__3214EC07B653418C");
 
-                    b.HasIndex("ShippingFeeId")
-                        .IsUnique();
+                    b.HasIndex("ShippingFeeId");
 
                     b.HasIndex("UserId");
 

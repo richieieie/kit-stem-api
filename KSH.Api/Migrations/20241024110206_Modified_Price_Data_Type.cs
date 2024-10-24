@@ -5,11 +5,15 @@
 namespace KSH.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Modified_data_type_of_Price : Migration
+    public partial class Modified_Price_Data_Type : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_Order_ShippingFeeId",
+                table: "Order");
+
             migrationBuilder.AlterColumn<long>(
                 name: "Price",
                 table: "Package",
@@ -65,11 +69,20 @@ namespace KSH.Api.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_ShippingFeeId",
+                table: "Order",
+                column: "ShippingFeeId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_Order_ShippingFeeId",
+                table: "Order");
+
             migrationBuilder.AlterColumn<int>(
                 name: "Price",
                 table: "Package",
@@ -125,6 +138,12 @@ namespace KSH.Api.Migrations
                 nullable: false,
                 oldClrType: typeof(long),
                 oldType: "bigint");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_ShippingFeeId",
+                table: "Order",
+                column: "ShippingFeeId",
+                unique: true);
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KSH.Api.Migrations
 {
     [DbContext(typeof(KitStemDbContext))]
-    [Migration("20241024095109_Modified_data_type_of_Price")]
-    partial class Modified_data_type_of_Price
+    [Migration("20241024110206_Modified_Price_Data_Type")]
+    partial class Modified_Price_Data_Type
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -685,8 +685,7 @@ namespace KSH.Api.Migrations
                     b.HasKey("Id")
                         .HasName("PK__UserOrde__3214EC07B653418C");
 
-                    b.HasIndex("ShippingFeeId")
-                        .IsUnique();
+                    b.HasIndex("ShippingFeeId");
 
                     b.HasIndex("UserId");
 

@@ -14,7 +14,7 @@ namespace KSH.Api.Models.DTO.Request
         public string Description { get; set; } = "";
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Giá mua phải lớn hơn hoặc bằng 0.")]
-        public int PurchaseCost { get; set; }
+        public long PurchaseCost { get; set; }
         [Required]
         public bool Status { get; set; }
         [Required]
@@ -22,6 +22,6 @@ namespace KSH.Api.Models.DTO.Request
         [Required]
         public List<int>? ComponentQuantity { get; set; }
         public List<IFormFile>? KitImagesList { get; set; }
-        
+
     }
 }

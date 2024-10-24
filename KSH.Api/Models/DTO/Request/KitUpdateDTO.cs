@@ -19,7 +19,7 @@ namespace KSH.Api.Models.DTO.Request
         public string? Description { get; set; } = "";
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Giá mua phải lớn hơn hoặc bằng 0.")]
-        public int PurchaseCost { get; set; } = 1;
+        public long PurchaseCost { get; set; } = 1;
         [Required]
         public List<int>? ComponentId { get; set; }
         [Required]

@@ -23,6 +23,7 @@ namespace KSH.Api.Repositories
         )
         {
             Func<IQueryable<UserOrders>, IQueryable<UserOrders>> includeQuery = includeQuery => includeQuery
+                                                                                                .Include(o => o.ShippingFee)
                                                                                                 .Include(o => o.User);
             var (orders, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (orders, totalPages);
@@ -31,6 +32,7 @@ namespace KSH.Api.Repositories
         public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
             return await _dbContext.UserOrders
+                            .Include(o => o.ShippingFee)
                             .Include(p => p.PackageOrders)
                                 .ThenInclude(p => p.Package)
                                     .ThenInclude(p => p.Kit)
