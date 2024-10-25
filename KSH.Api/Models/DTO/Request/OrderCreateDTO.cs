@@ -5,34 +5,35 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KSH.Api.Models.DTO.Request
 {
-    public class OrderCreateDTO
-    {
-        public Guid Id { get; set; }
+        public class OrderCreateDTO
+        {
+                public Guid Id { get; set; }
 
-        [StringLength(450)]
-        public string UserId { get; set; } = null!;
+                [StringLength(450)]
+                public string UserId { get; set; } = null!;
 
-        public DateTimeOffset CreatedAt { get; set; }
+                public DateTimeOffset CreatedAt { get; set; }
 
-        public DateTimeOffset? DeliveredAt { get; set; }
+                public DateTimeOffset? DeliveredAt { get; set; }
 
-        public string ShippingStatus { get; set; } = null!;
+                public string ShippingStatus { get; set; } = null!;
 
-        public string ShippingAddress { get; set; }= null!;
+                public string ShippingAddress { get; set; } = null!;
+                public int ShippingFeeId { get; set; }
 
-        public string PhoneNumber { get; set; } = null!;
+                public string PhoneNumber { get; set; } = null!;
 
-        public bool IsLabDownloaded { get; set; }
+                public bool IsLabDownloaded { get; set; }
 
-        public int Price { get; set; }
+                public long Price { get; set; }
 
-        public int Discount { get; set; }
+                public long Discount { get; set; }
 
-        public int TotalPrice { get; set; }
+                public long TotalPrice { get; set; }
 
-        public string? Note { get; set; }
+                public string? Note { get; set; }
 
-        public ICollection<PackageOrderCreateDTO> PackageOrders { get; set; } = new List<PackageOrderCreateDTO>();
+                public ICollection<PackageOrderCreateDTO> PackageOrders { get; set; } = new List<PackageOrderCreateDTO>();
 
-    }
+        }
 }

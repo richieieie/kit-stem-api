@@ -60,7 +60,7 @@ namespace KSH.Api.Controllers
 
             var subject = "Chào mừng bạn đến với shop!";
             var body = _emailTemplateProvider.GetOrderConfirmationTemplate("KitStemHub", orderDTO!);
-            await _emailService.SendEmail(orderDTO.User!.UserName!, subject, body);
+            await _emailService.SendEmail(orderDTO!.User!.UserName!, subject, body);
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }

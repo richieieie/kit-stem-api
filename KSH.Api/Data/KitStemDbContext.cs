@@ -198,6 +198,8 @@ namespace KSH.Api.Data
                         .HasForeignKey<Payment>(p => p.OrderId);
                 entity.HasOne(o => o.ShippingFee)
                         .WithOne();
+                entity.HasIndex(o => o.ShippingFeeId)
+                        .IsUnique(false);
 
             });
             modelBuilder.Entity<LabSupport>(entity =>

@@ -9,7 +9,7 @@ namespace KSH.Api.Models.DTO.Response
         public string Name { get; set; } = null!;
         public string Brief { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public int PurchaseCost { get; set; }
+        public long PurchaseCost { get; set; }
         public bool Status { get; set; }
         public virtual KitsCategory? Category { get; set; }
         public virtual ICollection<KitImageDTO>? KitImages { get; set; }

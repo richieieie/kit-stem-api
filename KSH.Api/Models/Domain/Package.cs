@@ -14,7 +14,7 @@ namespace KSH.Api.Models.Domain
         public int KitId { get; set; }
         public int LevelId { get; set; }
         [Required]
-        public int Price { get; set; }
+        public long Price { get; set; }
         public bool Status { get; set; }
 
         [ForeignKey("LevelId")]

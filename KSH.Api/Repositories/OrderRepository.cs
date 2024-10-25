@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using KSH.Api.Constants;
 using KSH.Api.Data;
 using KSH.Api.Models.Domain;
+using KSH.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace KSH.Api.Repositories
@@ -22,6 +23,7 @@ namespace KSH.Api.Repositories
         )
         {
             Func<IQueryable<UserOrders>, IQueryable<UserOrders>> includeQuery = includeQuery => includeQuery
+                                                                                                .Include(o => o.ShippingFee)
                                                                                                 .Include(o => o.User);
             var (orders, totalPages) = await base.GetFilterAsync(filter, orderBy, skip, take, includeQuery);
             return (orders, totalPages);
@@ -30,6 +32,7 @@ namespace KSH.Api.Repositories
         public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
             return await _dbContext.UserOrders
+                            .Include(o => o.ShippingFee)
                             .Include(p => p.PackageOrders)
                                 .ThenInclude(p => p.Package)
                                     .ThenInclude(p => p.Kit)
@@ -56,9 +59,9 @@ namespace KSH.Api.Repositories
             return count;
         }
 
-        public async Task<int> SumTotalOrder(DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        public async Task<long> SumTotalOrder(DateTimeOffset? fromDate, DateTimeOffset? toDate)
         {
-            return await _dbContext.UserOrders.Where(o => 
+            return await _dbContext.UserOrders.Where(o =>
             o.DeliveredAt >= fromDate &&
             o.DeliveredAt <= toDate &&
             o.ShippingStatus.Equals(OrderFulfillmentConstants.OrderSuccessStatus)).SumAsync(o => o.TotalPrice);
@@ -71,5 +74,6 @@ namespace KSH.Api.Repositories
             o.DeliveredAt <= toDate &&
             o.ShippingStatus.Equals(OrderFulfillmentConstants.OrderSuccessStatus)).Select(o => o.Id).ToListAsync();
         }
+
     }
 }

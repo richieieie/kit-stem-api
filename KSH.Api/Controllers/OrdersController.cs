@@ -148,5 +148,18 @@ namespace KSH.Api.Controllers
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+        [HttpGet]
+        [Route("shippingfees")]
+        public async Task<IActionResult> GetShippingFee([FromQuery] string address)
+        {
+            var serviceResponse = await _orderService.GetShippingFee(address);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        } 
     }
 }

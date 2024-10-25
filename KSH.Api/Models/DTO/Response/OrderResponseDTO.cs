@@ -9,9 +9,10 @@ namespace KSH.Api.Models.DTO.Response
         public string? ShippingAddress { get; set; }
         public string? PhoneNumber { get; set; }
         public bool IsLabDownloaded { get; set; }
-        public int Price { get; set; }
-        public int Discount { get; set; }
-        public int TotalPrice { get; set; }
+        public long Price { get; set; }
+        public long Discount { get; set; }
+        public long ShippingFee { get; set; }
+        public long TotalPrice { get; set; }
         public string? Note { get; set; }
         public UserProfileDTO? User { get; set; }
     }
