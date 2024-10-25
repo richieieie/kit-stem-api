@@ -7,10 +7,8 @@ namespace KSH.Api.Models.DTO.Request
     {
         [Required(ErrorMessage = "Vui lòng nhập ID")]
         public Guid Id { get; set; }
-
         [Required(ErrorMessage = "Vui lòng nhập ID của kit")]
         public int KitId { get; set; }
-
         [Unicode(false)]
         public string? Url { get; set; }
     }
