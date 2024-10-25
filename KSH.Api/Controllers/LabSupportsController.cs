@@ -26,7 +26,7 @@ namespace KST.Api.Controllers
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
         [HttpGet]
         [Route("{labSupportId:Guid}")]
@@ -36,9 +36,9 @@ namespace KST.Api.Controllers
             var serviceResponse = await _labSupportService.GetByIdAsync(labSupportId);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpGet]
@@ -50,9 +50,9 @@ namespace KST.Api.Controllers
             var serviceResponse = await _labSupportService.GetByCustomerIdAsync(customerId!, getDTO);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPost]
