@@ -371,15 +371,21 @@ namespace KSH.Api.Services
         #region Methods that help service
         private Expression<Func<Kit, bool>> GetFilter(KitGetDTO kitGetDTO, bool package)
         {
+            string kitName = kitGetDTO.KitName.ToLower();
+            string categoryName = kitGetDTO.CategoryName.ToLower();
+            int levelId = kitGetDTO.LevelId;
+
             if (package)
             {
-                return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
-                l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower());
+                return kit => kit.Name.ToLower().Contains(kitName) &&
+                              kit.Category.Name.ToLower().Contains(categoryName) &&
+                              (levelId == 0 || kit.Labs.Any(lab => lab.LevelId == levelId));
             }
-            return (l) => l.Name.ToLower().Contains(kitGetDTO.KitName.ToLower()) &&
-            l.Category.Name.ToLower().Contains(kitGetDTO.CategoryName.ToLower()) &&
-            l.Packages!.Any(p => p.Price >= kitGetDTO.FromPrice && p.Price <= kitGetDTO.ToPrice);
-            ;
+
+            return kit => kit.Name.ToLower().Contains(kitName) &&
+                          kit.Category.Name.ToLower().Contains(categoryName) &&
+                          kit.Packages!.Any(package => package.Price >= kitGetDTO.FromPrice && package.Price <= kitGetDTO.ToPrice) && 
+                          (levelId == 0 || kit.Labs.Any(lab => lab.LevelId == levelId));
         }
         #endregion
     }

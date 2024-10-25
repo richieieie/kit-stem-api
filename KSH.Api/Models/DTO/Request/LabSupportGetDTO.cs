@@ -8,5 +8,6 @@ namespace KST.Api.Models.DTO.Request
         public bool Supported { get; set; } = false;
         public string LabSupportId { get; set; } = "";
         public string CustomerEmail { get; set; } = "";
+        public bool OrderByCreateatDesc { get; set; } = true;
     }
 }

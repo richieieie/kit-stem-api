@@ -29,7 +29,9 @@ namespace KST.Api.Services
                 var filter = GetFilter(getDTO);
                 var (labSupports, totalPages) = await _unitOfWork.LabSupportRepository.GetFilterAsync(
                 filter,
-                null,
+                orderBy: getDTO.OrderByCreateatDesc 
+                            ? query => query.OrderByDescending(ls => ls.CreatedAt)
+                            : query => query.OrderBy(ls => ls.CreatedAt),
                 skip: sizePerPage * getDTO.Page,
                 take: sizePerPage
                 );
