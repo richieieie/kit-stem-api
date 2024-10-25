@@ -4,25 +4,21 @@ namespace KSH.Api.Models.DTO.Request
 {
     public class KitUpdateDTO
     {
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Không tìm thấy sản phẩm")]
+        [Required(ErrorMessage = "Vui lòng nhập ID")]
         public int Id { get; set; }
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "Không tìm thấy sản phẩm")]
-        public int CategoryId { get; set; } = 1;
+        [Required(ErrorMessage = "Vui lòng chọn danh mục")]
+        public int CategoryId { get; set; }
         [Required(ErrorMessage = "Tên không được để trống.")]
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "Tên không được vượt quá 100 ký tự")]
         public string Name { get; set; } = "";
         [Required(ErrorMessage = "Tóm tắt không được để trống.")]
         public string Brief { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Mô tả không được để trống.")]
         public string? Description { get; set; } = "";
-        [Required]
+        [Required(ErrorMessage = "Vui lòng nhập giá mua")]
         [Range(0, int.MaxValue, ErrorMessage = "Giá mua phải lớn hơn hoặc bằng 0.")]
-        public int PurchaseCost { get; set; } = 1;
-        [Required]
+        public int PurchaseCost { get; set; }
         public List<int>? ComponentId { get; set; }
-        [Required]
         public List<int>? ComponentQuantity { get; set; }
         public List<IFormFile>? KitImagesList { get; set; }
     }
