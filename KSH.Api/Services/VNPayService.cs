@@ -52,6 +52,7 @@ namespace KSH.Api.Services
 
                 //Build URL for VNPAY
                 var vnPay = new VnPayLibrary();
+                var returnUrl = _httpContextAccessor.HttpContext?.Request.Scheme == "https" ? _configuration["VNPay:vnp_ReturnUrl"]! : _configuration["VNPay:vnp_ReturnUrlLocal"]!;
                 vnPay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
                 vnPay.AddRequestData("vnp_Command", "pay");
                 vnPay.AddRequestData("vnp_TmnCode", _configuration["VNPay:vnp_TmnCode"]!);
@@ -62,7 +63,7 @@ namespace KSH.Api.Services
                 vnPay.AddRequestData("vnp_Locale", _configuration.GetValue("VNPay:vnp_Locale", "vn") ?? "vn");
                 vnPay.AddRequestData("vnp_OrderInfo", $"Thanh toan don hang: {payment.Id}");
                 vnPay.AddRequestData("vnp_OrderType", "250000");
-                vnPay.AddRequestData("vnp_ReturnUrl", _configuration["VNPay:vnp_ReturnUrl"]!);
+                vnPay.AddRequestData("vnp_ReturnUrl", returnUrl);
                 vnPay.AddRequestData("vnp_TxnRef", $"{payment.Id}");
                 vnPay.AddRequestData("vnp_ExpireDate", payment.CreatedAt.AddMinutes(_configuration.GetValue("VNPay:vpn_TransactionTimeOut", 5)).ToString("yyyyMMddHHmmss"));
 

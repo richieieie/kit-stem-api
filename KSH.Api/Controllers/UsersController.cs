@@ -142,7 +142,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("Profile")]
-        [Authorize(Roles = "customer")]
+        [Authorize(Roles = "customer,staff")]
         public async Task<IActionResult> GetAsync()
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -170,7 +170,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Profile")]
-        [Authorize(Roles = "customer")]
+        [Authorize(Roles = "customer,staff")]
         public async Task<IActionResult> UpdateAsync(UserUpdateDTO userUpdateDTO)
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;

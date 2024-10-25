@@ -27,6 +27,7 @@ namespace KST.Api.Repositories
         {
             Func<IQueryable<LabSupport>, IQueryable<LabSupport>> includeQuery = includeQuery => includeQuery
                                                                                                 .Include(l => l.OrderSupport.Lab)
+                                                                                                    .ThenInclude(l => l.Level)
                                                                                                 .Include(p => p.OrderSupport.Package)
                                                                                                 .Include(s => s.Staff)
                                                                                                 .Include(c => c.OrderSupport.Order.User);
