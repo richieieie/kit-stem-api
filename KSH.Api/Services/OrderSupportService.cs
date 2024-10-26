@@ -27,21 +27,21 @@ namespace KST.Api.Services
                 if (OrderSupports.Count() > 0)
                 {
                     return new ServiceResponse()
-                        .SetSucceeded(true)
-                        .AddDetail("message", "Lấy danh sách LabSupoet thành công")
-                        .AddDetail("data", new { totalPages, curremtPage = (getDTO.Page + 1), labSupports = OrderSupports });
+                                    .SetSucceeded(true)
+                                    .AddDetail("message", "Lấy danh sách LabSupoet thành công")
+                                    .AddDetail("data", new { totalPages, curremtPage = (getDTO.Page + 1), labSupports = OrderSupports });
                 }
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("invalidCredentials", "Thông tin không hợp lệ")
-                    .AddDetail("message", "Lấy danh sách thất bại");
+                                .SetSucceeded(false)
+                                .AddError("invalidCredentials", "Thông tin không hợp lệ")
+                                .AddDetail("message", "Lấy danh sách thất bại");
             }
             catch
             {
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể lấy danh sách LabSupport lúc này")
-                    .AddDetail("message", "Lấy danh sách thất bại");
+                                .SetSucceeded(false)
+                                .AddError("outOfService", "Không thể lấy danh sách LabSupport lúc này")
+                                .AddDetail("message", "Lấy danh sách thất bại");
             }
         }
     }

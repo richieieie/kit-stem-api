@@ -1,4 +1,6 @@
-﻿namespace KSH.Api.Models.DTO.Request
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KSH.Api.Models.DTO.Request
 {
     public class LabDTO
     {
