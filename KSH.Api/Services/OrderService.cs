@@ -106,7 +106,7 @@ namespace KSH.Api.Services
                         .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
-        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string shippingAddress, string phoneNumber, string note)
+        public async Task<(ServiceResponse, Guid)> CreateByCustomerIdAsync(string userId, bool isUsePoint, string shippingAddress, string phoneNumber, string? note)
         {
             try
             {
