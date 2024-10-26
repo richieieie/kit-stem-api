@@ -26,11 +26,11 @@ namespace KSH.Api.Models.Domain
 
         public bool IsLabDownloaded { get; set; }
 
-        public int Price { get; set; }
+        public long Price { get; set; }
 
-        public int Discount { get; set; }
+        public long Discount { get; set; }
 
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
 
         public string? Note { get; set; }
 

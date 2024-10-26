@@ -42,9 +42,11 @@ namespace KSH.Api.Utils
             CreateMap<KitComponent, KitComponentDTO>().ReverseMap();
 
             // Using for Order
-            CreateMap<UserOrders, OrderResponseDTO>();
+            CreateMap<UserOrders, OrderResponseDTO>()
+                .ForMember(dest => dest.ShippingFee, opt => opt.MapFrom(src => src.ShippingFee.Price));
             CreateMap<OrderSupport, OrderSupportResponseDTO>();
-            CreateMap<UserOrders, IndividualOrderResponseDTO>();
+            CreateMap<UserOrders, IndividualOrderResponseDTO>()
+                .ForMember(dest => dest.ShippingFee, opt => opt.MapFrom(src => src.ShippingFee.Price));
             CreateMap<PackageOrder, PackageOrderResponseDTO>();
             CreateMap<VNPaymentRequestDTO, Payment>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

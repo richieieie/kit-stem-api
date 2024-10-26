@@ -147,7 +147,7 @@ namespace KSH.Api.Services
         }
 
         #region Helper
-        private async Task<int> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)
+        private async Task<long> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)
         {
             var listOrderId = await _unitOfWork.OrderRepository.GetOrderId(fromDate, toDate);
             var listPackageOrder = await _unitOfWork.PackageOrderRepository.GetPackageOrder(listOrderId);

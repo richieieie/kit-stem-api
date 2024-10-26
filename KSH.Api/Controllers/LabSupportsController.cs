@@ -26,7 +26,7 @@ namespace KST.Api.Controllers
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
         [HttpGet]
         [Route("{labSupportId:Guid}")]
@@ -36,28 +36,28 @@ namespace KST.Api.Controllers
             var serviceResponse = await _labSupportService.GetByIdAsync(labSupportId);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpGet]
         [Route("customers")]
-        [Authorize(Roles = "customer")]
+        // [Authorize(Roles = "customer")]
         public async Task<IActionResult> GetByIdCustomerAsync([FromQuery] LabSupportGetDTO getDTO)
         {
             var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var serviceResponse = await _labSupportService.GetByCustomerIdAsync(customerId!, getDTO);
             if (!serviceResponse.Succeeded)
             {
-                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
-            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
         [HttpPost]
         [Route("orders/{orderId:guid}/packages/{packageId:int}/labs/{labId:guid}")]
-        [Authorize(Roles = "customer")]
+        // [Authorize(Roles = "customer")]
         public async Task<IActionResult> CreateAsync([FromRoute] Guid orderId, Guid labId, int packageId)
         {
             var serviceResponse = await _labSupportService.CreateAsync(orderId, labId, packageId);

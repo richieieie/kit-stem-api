@@ -42,15 +42,15 @@ namespace KSH.Api.Services
                 var orderDTOs = _mapper.Map<IEnumerable<OrderResponseDTO>>(orders);
 
                 return new ServiceResponse()
-                        .AddDetail("message", "Lấy các order thành công!")
-                        .AddDetail("data", new { totalPages, currentPage = orderStaffGetDTO.Page, orders = orderDTOs });
+                                .AddDetail("message", "Lấy các order thành công!")
+                                .AddDetail("data", new { totalPages, currentPage = orderStaffGetDTO.Page, orders = orderDTOs });
             }
             catch
             {
                 return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddDetail("message", "Lấy dữ liệu orders thất bại!bại")
-                        .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
+                                .SetSucceeded(false)
+                                .AddDetail("message", "Lấy dữ liệu orders thất bại!bại")
+                                .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
 
@@ -59,28 +59,28 @@ namespace KSH.Api.Services
             try
             {
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
-                // if (order == null || (userId != order.UserId && role != "staff"))
-                // {
-                //     return new ServiceResponse()
-                //             .SetSucceeded(false)
-                //             .SetStatusCode(StatusCodes.Status404NotFound)
-                //             .AddDetail("message", "Lấy thông tin order thất bại!")
-                //             .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
-                // }
+                if (order == null)
+                {
+                    return new ServiceResponse()
+                            .SetSucceeded(false)
+                            .SetStatusCode(StatusCodes.Status404NotFound)
+                            .AddDetail("message", "Lấy thông tin order thất bại!")
+                            .AddError("notFound", "Không thể tìm thấy order của bạn, vui lòng kiểm tra lại thông tin!");
+                }
 
                 var orderDTO = _mapper.Map<IndividualOrderResponseDTO>(order);
 
                 return new ServiceResponse()
-                        .AddDetail("message", "Lấy thông tin order thành công!")
-                        .AddDetail("data", new { order = orderDTO });
+                                .AddDetail("message", "Lấy thông tin order thành công!")
+                                .AddDetail("data", new { order = orderDTO });
             }
             catch
             {
                 return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .SetStatusCode(500)
-                        .AddDetail("message", "Lấy dữ liệu orders thất bại!")
-                        .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
+                                .SetSucceeded(false)
+                                .SetStatusCode(500)
+                                .AddDetail("message", "Lấy dữ liệu orders thất bại!")
+                                .AddError("outOfService", "Không thể lấy dữ liệu order ngay lúc này!");
             }
         }
 
@@ -136,8 +136,8 @@ namespace KSH.Api.Services
                         .AddError("notFound", "Giỏ hàng của bạn đang trống!"), Guid.Empty);
                 }
 
-                int price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
-                int point = 0;
+                var price = carts.Sum(cart => cart.Package.Price * cart.PackageQuantity);
+                var point = 0L;
                 if (isUsePoint)
                 {
                     point = user.Points;
@@ -154,7 +154,7 @@ namespace KSH.Api.Services
                 }
 
                 var shippingFee = await _unitOfWork.ShippingFeeRepository.GetShippingFee(distance);
-                int totalPrice = price - point + (int)shippingFee.Price;
+                var totalPrice = price - point + shippingFee.Price;
 
                 var orderId = Guid.NewGuid();
                 var orderDTO = new OrderCreateDTO()
@@ -214,9 +214,9 @@ namespace KSH.Api.Services
                 if (orders == null)
                 {
                     return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("notFound", "Không tìm thấy đơn hàng này!")
-                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                    .SetSucceeded(false)
+                                    .AddError("notFound", "Không tìm thấy đơn hàng này!")
+                                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
 
                 var order = orders.FirstOrDefault();
@@ -226,16 +226,16 @@ namespace KSH.Api.Services
                 if (!await _unitOfWork.OrderRepository.UpdateAsync(order))
                 {
                     return new ServiceResponse()
-                   .SetSucceeded(false)
-                   .AddError("invalidCredentials", "Thông tin nhập không hợp lệ")
-                   .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                   .SetSucceeded(false)
+                                   .AddError("invalidCredentials", "Thông tin nhập không hợp lệ")
+                                   .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
 
                 if (order.ShippingStatus != OrderFulfillmentConstants.OrderSuccessStatus)
                 {
                     return new ServiceResponse()
-                            .SetSucceeded(true)
-                            .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
+                                    .SetSucceeded(true)
+                                    .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
                 }
                 // cập nhật trạng thái thanh toán của order
                 try
@@ -246,19 +246,19 @@ namespace KSH.Api.Services
                         if (!await _unitOfWork.PaymentRepository.UpdateAsync(order.Payment))
                         {
                             return new ServiceResponse()
-                                .SetSucceeded(false)
-                                .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
-                                .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                            .SetSucceeded(false)
+                                            .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
+                                            .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                         }
                     }
                 }
                 catch
                 {
                     return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("outOfService", "Không thể cập nhật ngay lúc này")
-                        .AddError("erorr", "Cập nhật trạng thái giao hàng thất bại")
-                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                    .SetSucceeded(false)
+                                    .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                                    .AddError("erorr", "Cập nhật trạng thái giao hàng thất bại")
+                                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
 
                 // Cập nhật điểm cho khách hàng
@@ -269,18 +269,18 @@ namespace KSH.Api.Services
                     if (!await _unitOfWork.UserRepository.UpdateAsync(order.User))
                     {
                         return new ServiceResponse()
-                                .SetSucceeded(false)
-                                .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
-                                .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                        .SetSucceeded(false)
+                                        .AddError("outOfService", "Không thể cập nhật trạng thái giao hàng ngay lúc này")
+                                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                     }
                 }
                 catch
                 {
                     return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("outOfService", "Không thể cập nhật ngay lúc này")
-                        .AddError("error", "Cập nhật điểm cho khách hàng thất bại")
-                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                    .SetSucceeded(false)
+                                    .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                                    .AddError("error", "Cập nhật điểm cho khách hàng thất bại")
+                                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
 
                 // Tạo từng order support cho từng LabId có trong những package đã mua trong order 
@@ -314,22 +314,22 @@ namespace KSH.Api.Services
                 catch
                 {
                     return new ServiceResponse()
-                        .SetSucceeded(false)
-                        .AddError("outOfService", "Không thể cập nhật ngay lúc này")
-                        .AddError("error", "Tạo OrderSupport thất bại")
-                        .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                    .SetSucceeded(false)
+                                    .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                                    .AddError("error", "Tạo OrderSupport thất bại")
+                                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
 
                 return new ServiceResponse()
-                            .SetSucceeded(true)
-                            .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
+                                .SetSucceeded(true)
+                                .AddDetail("message", "Cập nhật trạng thái giao hàng thành công");
             }
             catch
             {
                 return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .AddError("outOfService", "Không thể cập nhật ngay lúc này")
-                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                                .SetSucceeded(false)
+                                .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                                .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
             }
         }
 
@@ -350,7 +350,7 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy phí giao hàng thành công!")
-                    .AddDetail("data", new {shippingFee.Price});
+                    .AddDetail("data", new { shippingFee.Price });
 
             }
             catch

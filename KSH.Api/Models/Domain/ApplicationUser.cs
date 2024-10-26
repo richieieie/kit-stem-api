@@ -13,8 +13,8 @@ namespace KSH.Api.Models.Domain
         public string? LastName { get; set; }
         [MaxLength(100)]
         public string? Address { get; set; }
-        private int points = 0;
-        public int Points
+        private long points = 0;
+        public long Points
         {
             get
             {
