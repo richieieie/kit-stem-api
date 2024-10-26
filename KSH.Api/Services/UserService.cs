@@ -26,6 +26,22 @@ namespace KSH.Api.Services
             _mapper = mapper;
         }
 
+        public ServiceResponse GetGenderOptions()
+        {
+            var serviceResponse = new ServiceResponse();
+            var genderOptions = Enum.GetValues(typeof(UserConstants.Gender))
+                                            .Cast<UserConstants.Gender>()
+                                            .Select(g => new
+                                            {
+                                                Code = (int)g,
+                                                Name = g.ToString()
+                                            });
+            return serviceResponse
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Lấy thông tin giới tính thành công!")
+                    .AddDetail("data", new { genders = genderOptions });
+        }
+
         public async Task<ServiceResponse> GetAsync(string userName)
         {
             try
@@ -46,6 +62,8 @@ namespace KSH.Api.Services
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
+                    Gender = Enum.GetName(typeof(UserConstants.Gender), user.Gender) ?? "Unknown",
+                    BirthDate = user.BirthDate,
                     Points = user.Points,
                     Status = user.Status
                 };
@@ -167,9 +185,18 @@ namespace KSH.Api.Services
                     Email = requestBody.Email,
                     Status = true
                 };
-                if (role == UserConstants.StaffRole)
+                if (role == UserConstants.StaffRole || role == UserConstants.AdminRole || role == UserConstants.ManagerRole)
                 {
                     user.EmailConfirmed = true;
+                    if (requestBody is StaffRegisterDTO)
+                    {
+                        var staffRegisterDTO = (StaffRegisterDTO)requestBody;
+                        user.FirstName = staffRegisterDTO.FirstName;
+                        user.LastName = staffRegisterDTO.LastName;
+                        user.Address = staffRegisterDTO.Address;
+                        user.Gender = staffRegisterDTO.GenderCode;
+                        user.BirthDate = staffRegisterDTO.BirthDate;
+                    }
                 }
 
                 var identityResult = await _userManager.CreateAsync(user, requestBody.Password!);
@@ -230,6 +257,8 @@ namespace KSH.Api.Services
                 user.LastName = userUpdateDTO.LastName;
                 user.Address = userUpdateDTO.Address;
                 user.PhoneNumber = userUpdateDTO.PhoneNumber;
+                user.Gender = userUpdateDTO.GenderCode;
+                user.BirthDate = userUpdateDTO.BirthDate;
 
                 await _userManager.UpdateAsync(user);
                 return new ServiceResponse()

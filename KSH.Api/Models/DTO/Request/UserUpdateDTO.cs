@@ -12,5 +12,8 @@ namespace KSH.Api.Models.DTO
         public string? PhoneNumber { get; set; }
         [MaxLength(100)]
         public string? Address { get; set; }
+
+        public int GenderCode { get; set; }
+        public DateTimeOffset BirthDate { get; set; }
     }
 }

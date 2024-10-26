@@ -6,6 +6,7 @@ namespace KSH.Api.Services.IServices
 {
     public interface IUserService
     {
+        ServiceResponse GetGenderOptions();
         Task<(ServiceResponse, string?)> RegisterAsync(UserRegisterDTO requestBody, string role);
         Task<ServiceResponse> LoginAsync(UserLoginDTO requestBody);
         Task<(ServiceResponse, string?)> GeneratePasswordResetTokenAsync(string email);

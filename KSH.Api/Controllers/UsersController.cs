@@ -28,6 +28,19 @@ namespace KSH.Api.Controllers
             _emailTemplateProvider = emailTemplateProvider;
         }
 
+        [HttpGet]
+        [Route("Genders")]
+        public IActionResult GetGenders()
+        {
+            var serviceResponse = _userService.GetGenderOptions();
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDTO requestBody)
@@ -61,9 +74,38 @@ namespace KSH.Api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
+        [HttpPut]
+        [Route("Profile/Staff/{staffUserName}")]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> UpdateStaffAsync(string staffUserName, UserUpdateDTO userUpdateDTO)
+        {
+            var serviceResponse = await _userService.UpdateAsync(staffUserName, userUpdateDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("Profile/Staff/{staffUserName}")]
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> GetStaffAsync(string staffUserName)
+        {
+            var serviceResponse = await _userService.GetAsync(staffUserName!);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
         [HttpPost]
         [Route("Register/Staff")]
-        public async Task<IActionResult> RegisterStaffAsync([FromBody] UserRegisterDTO requestBody)
+        [Authorize(Roles = "manager")]
+        public async Task<IActionResult> RegisterStaffAsync([FromBody] StaffRegisterDTO requestBody)
         {
             var (serviceResponse, token) = await _userService.RegisterAsync(requestBody, UserConstants.StaffRole);
             if (!serviceResponse.Succeeded)
@@ -170,7 +212,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Profile")]
-        [Authorize(Roles = "customer,staff")]
+        [Authorize(Roles = "customer")]
         public async Task<IActionResult> UpdateAsync(UserUpdateDTO userUpdateDTO)
         {
             var userName = User.FindFirst(ClaimTypes.Email)?.Value;
