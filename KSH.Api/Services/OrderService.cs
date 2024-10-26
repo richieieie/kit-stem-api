@@ -59,7 +59,7 @@ namespace KSH.Api.Services
             try
             {
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(id);
-                if (order == null)
+                if (order == null || (userId != order.UserId && role != "staff"))
                 {
                     return new ServiceResponse()
                             .SetSucceeded(false)

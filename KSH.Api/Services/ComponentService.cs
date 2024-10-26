@@ -99,18 +99,18 @@ namespace KSH.Api.Services
             }
         }
 
-        public async Task<ServiceResponse> GetAsync(ComponentGetDTO  componentGetDTO)
+        public async Task<ServiceResponse> GetAsync(ComponentGetDTO componentGetDTO)
         {
             try
             {
                 Expression<Func<Component, bool>> filter = GetFilter(componentGetDTO);
                 var (componentModels, totalPages) = await _unitOfWork.ComponentRepository.GetFilterAsync(filter, null, sizePerPage * componentGetDTO.Page, sizePerPage);
-                
+
                 var components = _mapper.Map<IEnumerable<ComponentDTO>>(componentModels);
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy danh sách linh kiện thành công!")
-                    .AddDetail("data", new { totalPages, currentPage = componentGetDTO.Page, componentModels = components });
+                    .AddDetail("data", new { totalPages, currentPage = componentGetDTO.Page, components });
             }
             catch
             {

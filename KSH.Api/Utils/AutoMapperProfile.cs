@@ -15,7 +15,8 @@ namespace KSH.Api.Utils
         public AutoMapperProfile()
         {
             // Using for users
-            CreateMap<ApplicationUser, UserProfileDTO>();
+            CreateMap<ApplicationUser, UserProfileDTO>()
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => Enum.GetName(typeof(UserConstants.Gender), src.Gender) ?? "Unknown"));
 
             // Using for packages
             CreateMap<Package, PackageResponseDTO>();
