@@ -1,5 +1,4 @@
-﻿using KSH.Api.Models.Domain;
-using KSH.Api.Models.DTO;
+﻿using KSH.Api.Models.DTO;
 
 namespace KSH.Api.Services.IServices
 {

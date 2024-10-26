@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/allure-framework/allure-csharp/2.12.1/Allure.XUnit/Schemas/allureConfig.schema.json",
   "allure": {
-    "directory": "D:\\FPT\\Term 5\\SWP391\\KitStemProject\\kit-stem-api\\KSH.Api.Tests\\allure-results"
+    "directory": "D:\\FPT\\Term 5\\SWT301\\FinalLab\\allure-results"
   }
 }
