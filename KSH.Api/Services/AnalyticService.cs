@@ -1,9 +1,11 @@
-﻿using KSH.Api.Models.DTO.Request;
+﻿using KSH.Api.Constants;
+using KSH.Api.Models.DTO.Request;
 using KSH.Api.Models.DTO.Response;
 using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
 using KSH.Api.Utils;
-using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KSH.Api.Services
 {
@@ -161,6 +163,94 @@ namespace KSH.Api.Services
             }
         }
 
+        public async Task<ServiceResponse> GetRevenuePerYear(int year)
+        {
+            try
+            {
+                var monthDTO = GetDateHelper(year);
+
+                var yearDTO = new YearDTO()
+                {
+                    January = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JanuaryStart, monthDTO.JanuaryEnd),
+                    February = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.FebruaryStart, monthDTO.FebruaryEnd),
+                    March = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.MarchStart, monthDTO.MarchEnd),
+                    April = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.AprilStart, monthDTO.AprilEnd),
+                    May = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.MayStart, monthDTO.MayEnd),
+                    June = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JuneStart, monthDTO.JuneEnd),
+                    July = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JulyStart, monthDTO.JulyEnd),
+                    August = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.AugustStart, monthDTO.AugustEnd),
+                    September = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.SeptemberStart, monthDTO.SeptemberEnd),
+                    October = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.OctoberStart, monthDTO.OctoberEnd),
+                    November = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.NovemberStart, monthDTO.NovemberEnd),
+                    December = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.DecemberStart, monthDTO.DecemberEnd)
+                };
+
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Lấy doanh thu theo năm thành công!")
+                    .AddDetail("data", new { yearDTO } );
+            }
+            catch 
+            {
+                return new ServiceResponse()
+                    .SetSucceeded(false)
+                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                    .AddDetail("message", "Lấy doanh thu theo năm thất bại!")
+                    .AddError("outOfService", "Không thể lấy doanh thu theo năm lúc này!");
+            }
+
+        }
+
+        public async Task<ServiceResponse> GetProfitPerYear(int year)
+        {
+            try
+            {
+                var monthDTO = GetDateHelper(year);
+
+                var yearDTO = new YearDTO()
+                {
+                    January = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JanuaryStart, monthDTO.JanuaryEnd)
+                    - await GetPurchaseCostHelper(monthDTO.JanuaryStart, monthDTO.JanuaryEnd),
+                    February = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.FebruaryStart, monthDTO.FebruaryEnd)
+                    - await GetPurchaseCostHelper(monthDTO.FebruaryStart, monthDTO.FebruaryEnd),
+                    March = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.MarchStart, monthDTO.MarchEnd)
+                    - await GetPurchaseCostHelper(monthDTO.MarchStart, monthDTO.MarchEnd),
+                    April = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.AprilStart, monthDTO.AprilEnd)
+                    - await GetPurchaseCostHelper(monthDTO.AprilStart, monthDTO.AprilEnd),
+                    May = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.MayStart, monthDTO.MayEnd)
+                    - await GetPurchaseCostHelper(monthDTO.MayStart, monthDTO.MayEnd),
+                    June = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JuneStart, monthDTO.JuneEnd)
+                    - await GetPurchaseCostHelper(monthDTO.JuneStart, monthDTO.JuneEnd),
+                    July = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JulyStart, monthDTO.JulyEnd)
+                    - await GetPurchaseCostHelper(monthDTO.JulyStart, monthDTO.JulyEnd),
+                    August = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.AugustStart, monthDTO.AugustEnd)
+                    - await GetPurchaseCostHelper(monthDTO.AugustStart, monthDTO.AugustEnd),
+                    September = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.SeptemberStart, monthDTO.SeptemberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.SeptemberStart, monthDTO.SeptemberEnd),
+                    October = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.OctoberStart, monthDTO.OctoberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.OctoberStart, monthDTO.OctoberEnd),
+                    November = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.NovemberStart, monthDTO.NovemberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.NovemberStart, monthDTO.NovemberEnd),
+                    December = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.DecemberStart, monthDTO.DecemberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.DecemberStart, monthDTO.DecemberEnd)
+                };
+
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Lấy lợi nhuận theo năm thành công!")
+                    .AddDetail("data", new { yearDTO });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                   .SetSucceeded(false)
+                   .SetStatusCode(StatusCodes.Status500InternalServerError)
+                   .AddDetail("message", "Lấy lợi nhuận theo năm thất bại!")
+                   .AddError("outOfService", "Không thể lấy lợi nhuận theo năm lúc này!");
+            }
+        }
+
+
         #region Helper
         private async Task<long> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)
         {
@@ -233,6 +323,62 @@ namespace KSH.Api.Services
             var total = sumOfKit + sumOfLab;
             return total;
         }
+
+        private MonthDTO GetDateHelper(int year)
+        {
+            DateTimeOffset februaryEnd;
+            if (DateTime.IsLeapYear(year))
+            {
+                februaryEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.FebruaryLeapEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN")));
+            }
+            else
+            {
+                februaryEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.FebruaryEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN")));
+            }
+
+            MonthDTO monthDTO = new MonthDTO()
+            {
+                JanuaryStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.JanuaryStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                JanuaryEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.JanuaryEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                FebruaryStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.FebruaryStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                FebruaryEnd = februaryEnd,
+
+                MarchStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.MarchStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                MarchEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.MarchEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                AprilStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.AprilStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                AprilEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.AprilEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                MayStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.MayStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                MayEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.MayEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                JuneStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.JuneStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                JuneEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.JuneEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                JulyStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.JulyStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                JulyEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.JulyEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                AugustStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.AugustStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                AugustEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.AugustEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                SeptemberStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.SeptemberStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                SeptemberEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.SeptemberEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                OctoberStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.OctoberStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                OctoberEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.OctoberEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                NovemberStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.NovemberStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                NovemberEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.NovemberEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+
+                DecemberStart = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.DecemberStart}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN"))),
+                DecemberEnd = new DateTimeOffset(DateTime.ParseExact($"{year}-{DateConstants.DecemberEnd}", "yyyy-dd-MM HH:mm:ss", new CultureInfo("vi-VN")))
+            };
+
+            return monthDTO;
+        }
+
+        
         #endregion
     }
 }
