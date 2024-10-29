@@ -12,5 +12,19 @@ namespace KSH.Api.Constants
             Male = 1,
             Female = 2,
         }
+        public static string GetGenderString(Gender gender)
+        {
+            switch ((int)gender)
+            {
+                case 0:
+                    return "Khác";
+                case 1:
+                    return "Nam";
+                case 2:
+                    return "Nữ";
+                default:
+                    return "Không xác định";
+            }
+        }
     }
 }
