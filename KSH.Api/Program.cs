@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using KSH.Api.Configs;
 using KSH.Api.Data;
@@ -59,9 +60,11 @@ public class Program
         builder.Services.AddScoped<IAnalyticService, AnalyticService>();
         builder.Services.AddScoped<IMapboxService, MapboxService>();
 
+        builder.Services.AddSingleton(GoogleCredential.GetApplicationDefault());
+        builder.Services.AddSingleton(s => StorageClient.Create());
+        builder.Services.AddSingleton<IFirebaseService, FirebaseService>();
         builder.Services.AddSingleton<IEmailService>(s => new GmailService(builder.Configuration));
         builder.Services.AddSingleton<IGoogleService>(s => new GoogleService(builder.Configuration));
-        builder.Services.AddSingleton<IFirebaseService>(s => new FirebaseService(StorageClient.Create()));
         builder.Services.AddSingleton<IEmailTemplateProvider, EmailTemplateProvider>();
 
         // Add services to the container.

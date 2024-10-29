@@ -20,6 +20,10 @@ namespace KSH.Api.Services
             {
                 var fromDate = TimeConverter.ToVietNamTime(analyticOrderDTO.FromDate);
                 var toDate = TimeConverter.ToVietNamTime(analyticOrderDTO.ToDate);
+                if (toDate < DateTimeOffset.MaxValue)
+                {
+                    toDate.AddDays(1).AddTicks(-1);
+                }
                 var shippingStatus = analyticOrderDTO.ShippingStatus;
                 var numberOfOrders = await _unitOfWork.OrderRepository.CountTotalOrders(fromDate, toDate, shippingStatus);
                 return serviceResponse
@@ -69,15 +73,15 @@ namespace KSH.Api.Services
         {
             try
             {
-                DateTimeOffset currentTime = TimeConverter.GetCurrentVietNamTime();
-                if (toDate <= fromDate || fromDate > currentTime || toDate > currentTime)
-                {
-                    return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .SetStatusCode(StatusCodes.Status400BadRequest)
-                    .AddDetail("message", "Lấy dữ liệu lợi nhuận thất bại!")
-                    .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
-                }
+                // DateTimeOffset currentTime = TimeConverter.GetCurrentVietNamTime();
+                // if (toDate <= fromDate || fromDate > currentTime || toDate > currentTime)
+                // {
+                //     return new ServiceResponse()
+                //     .SetSucceeded(false)
+                //     .SetStatusCode(StatusCodes.Status400BadRequest)
+                //     .AddDetail("message", "Lấy dữ liệu lợi nhuận thất bại!")
+                //     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
+                // }
 
                 var purchaseCost = await GetPurchaseCostHelper(fromDate, toDate);
                 var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDate, toDate);
@@ -102,15 +106,15 @@ namespace KSH.Api.Services
         {
             try
             {
-                DateTimeOffset currentTime = TimeConverter.GetCurrentVietNamTime();
-                if (toDate <= fromDate || fromDate > currentTime || toDate > currentTime)
-                {
-                    return new ServiceResponse()
-                    .SetSucceeded(false)
-                    .SetStatusCode(StatusCodes.Status400BadRequest)
-                    .AddDetail("message", "Lấy dữ liệu doanh thu thất bại!")
-                    .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
-                }
+                // DateTimeOffset currentTime = TimeConverter.GetCurrentVietNamTime();
+                // if (toDate <= fromDate || fromDate > currentTime || toDate > currentTime)
+                // {
+                //     return new ServiceResponse()
+                //     .SetSucceeded(false)
+                //     .SetStatusCode(StatusCodes.Status400BadRequest)
+                //     .AddDetail("message", "Lấy dữ liệu doanh thu thất bại!")
+                //     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
+                // }
 
                 var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDate, toDate);
                 return new ServiceResponse()
@@ -149,6 +153,10 @@ namespace KSH.Api.Services
         #region Helper
         private async Task<long> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)
         {
+            if (toDate < DateTimeOffset.MaxValue)
+            {
+                toDate.AddDays(1).AddTicks(-1);
+            }
             var listOrderId = await _unitOfWork.OrderRepository.GetOrderId(fromDate, toDate);
             var listPackageOrder = await _unitOfWork.PackageOrderRepository.GetPackageOrder(listOrderId);
             List<PackageDTO> listKitInPackage = new List<PackageDTO>();
