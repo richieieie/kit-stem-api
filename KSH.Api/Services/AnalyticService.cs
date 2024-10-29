@@ -187,6 +187,56 @@ namespace KSH.Api.Services
 
         }
 
+        public async Task<ServiceResponse> GetProfitPerYear(int year)
+        {
+            try
+            {
+                var monthDTO = GetDateHelper(year);
+
+                var yearDTO = new YearDTO()
+                {
+                    January = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JanuaryStart, monthDTO.JanuaryEnd)
+                    - await GetPurchaseCostHelper(monthDTO.JanuaryStart, monthDTO.JanuaryEnd),
+                    February = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.FebruaryStart, monthDTO.FebruaryEnd)
+                    - await GetPurchaseCostHelper(monthDTO.FebruaryStart, monthDTO.FebruaryEnd),
+                    March = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.MarchStart, monthDTO.MarchEnd)
+                    - await GetPurchaseCostHelper(monthDTO.MarchStart, monthDTO.MarchEnd),
+                    April = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.AprilStart, monthDTO.AprilEnd)
+                    - await GetPurchaseCostHelper(monthDTO.AprilStart, monthDTO.AprilEnd),
+                    May = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.MayStart, monthDTO.MayEnd)
+                    - await GetPurchaseCostHelper(monthDTO.MayStart, monthDTO.MayEnd),
+                    June = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JuneStart, monthDTO.JuneEnd)
+                    - await GetPurchaseCostHelper(monthDTO.JuneStart, monthDTO.JuneEnd),
+                    July = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.JulyStart, monthDTO.JulyEnd)
+                    - await GetPurchaseCostHelper(monthDTO.JulyStart, monthDTO.JulyEnd),
+                    August = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.AugustStart, monthDTO.AugustEnd)
+                    - await GetPurchaseCostHelper(monthDTO.AugustStart, monthDTO.AugustEnd),
+                    September = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.SeptemberStart, monthDTO.SeptemberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.SeptemberStart, monthDTO.SeptemberEnd),
+                    October = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.OctoberStart, monthDTO.OctoberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.OctoberStart, monthDTO.OctoberEnd),
+                    November = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.NovemberStart, monthDTO.NovemberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.NovemberStart, monthDTO.NovemberEnd),
+                    December = await _unitOfWork.OrderRepository.SumTotalOrder(monthDTO.DecemberStart, monthDTO.DecemberEnd)
+                    - await GetPurchaseCostHelper(monthDTO.DecemberStart, monthDTO.DecemberEnd)
+                };
+
+                return new ServiceResponse()
+                    .SetSucceeded(true)
+                    .AddDetail("message", "Lấy lợi nhuận theo năm thành công!")
+                    .AddDetail("data", new { yearDTO });
+            }
+            catch
+            {
+                return new ServiceResponse()
+                   .SetSucceeded(false)
+                   .SetStatusCode(StatusCodes.Status500InternalServerError)
+                   .AddDetail("message", "Lấy lợi nhuận theo năm thất bại!")
+                   .AddError("outOfService", "Không thể lấy lợi nhuận theo năm lúc này!");
+            }
+        }
+
+
         #region Helper
         private async Task<long> GetPurchaseCostHelper(DateTimeOffset fromDate, DateTimeOffset toDate)
         {
@@ -310,6 +360,7 @@ namespace KSH.Api.Services
             return monthDTO;
         }
 
+        
         #endregion
     }
 }

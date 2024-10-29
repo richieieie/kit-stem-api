@@ -12,6 +12,7 @@ namespace KSH.Api.Services.IServices
         Task<ServiceResponse> GetProfit(DateTimeOffset fromDate, DateTimeOffset toDate);
         Task<ServiceResponse> GetTopPackageSale(TopPackageSaleGetDTO packageSaleGetDTO);
 
+        Task<ServiceResponse> GetProfitPerYear(int year);
         Task<ServiceResponse> GetRevenuePerYear(int year);
     }
 }
