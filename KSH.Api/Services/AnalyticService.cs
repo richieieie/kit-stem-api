@@ -5,7 +5,6 @@ using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
 using KSH.Api.Utils;
 using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KSH.Api.Services
 {
@@ -30,14 +29,14 @@ namespace KSH.Api.Services
                 var shippingStatus = analyticOrderDTO.ShippingStatus;
                 var numberOfOrders = await _unitOfWork.OrderRepository.CountTotalOrders(fromDate, toDate, shippingStatus);
                 return serviceResponse
-                        .AddDetail("message", "")
+                        .AddDetail("message", "Lấy dữ liệu đơn hàng thành công!công")
                         .AddDetail("data", new { numberOfOrders });
             }
             catch
             {
                 return serviceResponse
-                        .AddDetail("message", "")
-                        .AddError("outOfService", "");
+                        .AddDetail("message", "Lấy dữ liệu đơn hàng thất bại!")
+                        .AddError("outOfService", "Không lấy được dữ liệu đơn hàng ngay lúc này");
             }
         }
 
@@ -67,8 +66,8 @@ namespace KSH.Api.Services
             catch
             {
                 return serviceResponse
-                        .AddDetail("message", "")
-                        .AddError("outOfService", "");
+                        .AddDetail("message", "Lâý danh sách các gói kit bán chạy nhất thất bại!")
+                        .AddError("outOfService", "Không lấy được các gói kit bán chạy nhất ở thời điểm hiện tại");
             }
         }
 
@@ -178,9 +177,9 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy doanh thu theo năm thành công!")
-                    .AddDetail("data", new { yearDTO } );
+                    .AddDetail("data", new { yearDTO });
             }
-            catch 
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -368,7 +367,7 @@ namespace KSH.Api.Services
             return monthDTO;
         }
 
-        
+
         #endregion
     }
 }
