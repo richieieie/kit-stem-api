@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using KSH.Api.Constants;
 using KSH.Api.Models.DTO;
+using KSH.Api.Models.DTO.Response;
 using KSH.Api.Services;
 using KSH.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,28 @@ namespace KSH.Api.Controllers
         public async Task<IActionResult> GetAsync([FromQuery] LabGetDTO labGetDTO)
         {
             var serviceResponse = await _labService.GetAsync(labGetDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/Url")]
+        [Authorize(Roles = "manager,staff")]
+        public async Task<IActionResult> GetAuthenticatedUrlAsync(Guid id)
+        {
+            var serviceResponse = await _labService.GetByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            var data = (dynamic)serviceResponse.GetDetailsValue("data")!;
+            var lab = (LabResponseDTO)data.lab;
+            serviceResponse = _firebaseService.GetSignedUrlAsync(FirebaseConstants.BucketPrivate, $"{lab.Url}", 1);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

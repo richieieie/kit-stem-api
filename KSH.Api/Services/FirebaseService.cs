@@ -1,3 +1,4 @@
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using KSH.Api.Services.IServices;
 
@@ -6,9 +7,11 @@ namespace KSH.Api.Services
     public class FirebaseService : IFirebaseService
     {
         private readonly StorageClient _storageClient;
-        public FirebaseService(StorageClient storageClient)
+        private readonly UrlSigner _urlSigner;
+        public FirebaseService(StorageClient storageClient, GoogleCredential googleCredential)
         {
             _storageClient = storageClient;
+            _urlSigner = UrlSigner.FromCredential(googleCredential);
         }
         public async Task<ServiceResponse> UploadFileAsync(string bucket, string folder, string fileName, IFormFile file)
         {
@@ -121,6 +124,29 @@ namespace KSH.Api.Services
                         .SetSucceeded(false)
                         .AddDetail("message", "Tải file thất bại")
                         .AddError("outOfService", $"Không thể tải file ngay bây giờ!");
+            }
+        }
+
+        public ServiceResponse GetSignedUrlAsync(string bucket, string filePath, int expirationInMinutes = 15)
+        {
+            var serviceResponse = new ServiceResponse();
+            try
+            {
+                var expiration = TimeSpan.FromMinutes(expirationInMinutes);
+
+                // Generate a signed URL for the specified object
+                string signedUrl = _urlSigner.Sign(bucket, filePath, expiration, HttpMethod.Get);
+
+                return serviceResponse
+                        .SetSucceeded(true)
+                        .AddDetail("signedUrl", signedUrl);
+            }
+            catch (Exception ex)
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Unable to generate signed URL.")
+                        .AddError("exception", ex.Message);
             }
         }
     }

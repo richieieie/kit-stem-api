@@ -30,12 +30,12 @@ namespace KSH.Api.Services
         {
             var serviceResponse = new ServiceResponse();
             var genderOptions = Enum.GetValues(typeof(UserConstants.Gender))
-                                            .Cast<UserConstants.Gender>()
-                                            .Select(g => new
-                                            {
-                                                Code = (int)g,
-                                                Name = g.ToString()
-                                            });
+                                .Cast<UserConstants.Gender>()
+                                .Select(g => new
+                                {
+                                    Code = (int)g,
+                                    Name = UserConstants.GetGenderString(g)
+                                });
             return serviceResponse
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy thông tin giới tính thành công!")
@@ -62,7 +62,8 @@ namespace KSH.Api.Services
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
-                    Gender = Enum.GetName(typeof(UserConstants.Gender), user.Gender) ?? "Unknown",
+                    GenderCode = user.Gender,
+                    Gender = UserConstants.GetGenderString((UserConstants.Gender)user.Gender),
                     BirthDate = user.BirthDate,
                     Points = user.Points,
                     Status = user.Status
@@ -196,6 +197,7 @@ namespace KSH.Api.Services
                         user.Address = staffRegisterDTO.Address;
                         user.Gender = staffRegisterDTO.GenderCode;
                         user.BirthDate = staffRegisterDTO.BirthDate;
+                        user.PhoneNumber = staffRegisterDTO.PhoneNumber;
                     }
                 }
 
