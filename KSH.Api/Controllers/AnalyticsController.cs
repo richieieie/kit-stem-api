@@ -75,5 +75,17 @@ namespace KSH.Api.Controllers
             }
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+        [HttpGet]
+        [Route("Revenue/{year:int}")]
+        public async Task<IActionResult> GetRevenuePerYear(int year)
+        {
+            var serviceResponse = await _analyticService.GetRevenuePerYear(year);
+            if (!serviceResponse.Succeeded)
+            {
+                return BadRequest(new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
     }
 }
