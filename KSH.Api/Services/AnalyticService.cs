@@ -5,6 +5,8 @@ using KSH.Api.Repositories;
 using KSH.Api.Services.IServices;
 using KSH.Api.Utils;
 using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KSH.Api.Services
 {
@@ -137,7 +139,17 @@ namespace KSH.Api.Services
         {
             try
             {
-                var packages = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO);
+                var (packages, labsSales) = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO);
+                for (int i = 0; i < labsSales.Count(); i++)
+                {
+                    for (int j = 0; j < packages.Count(); j++)
+                    {
+                        if (packages.ElementAt(j).PackageId == labsSales.ElementAt(i).PackageId)
+                        {
+                            packages.ElementAt(j).TotalProfit += labsSales.ElementAt(i).TotalLabPrice;
+                        }
+                    }
+                }
                 return new ServiceResponse()
                                 .SetSucceeded(true)
                                 .AddDetail("data", new { packages = packages });
