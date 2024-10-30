@@ -384,13 +384,15 @@ namespace KSH.Api.Services
             {
                 return kit => kit.Name.ToLower().Contains(kitName) &&
                               kit.Category.Name.ToLower().Contains(categoryName) &&
-                              (levelId == 0 || kit.Labs!.Any(lab => lab.LevelId == levelId));
+                              (levelId == 0 || kit.Labs!.Any(lab => lab.LevelId == levelId)) &&
+                              kit.Status == kitGetDTO.Status;
             }
 
             return kit => kit.Name.ToLower().Contains(kitName) &&
                           kit.Category.Name.ToLower().Contains(categoryName) &&
                           kit.Packages!.Any(package => package.Price >= kitGetDTO.FromPrice && package.Price <= kitGetDTO.ToPrice) && 
-                          (levelId == 0 || kit.Labs!.Any(lab => lab.LevelId == levelId));
+                          (levelId == 0 || kit.Labs!.Any(lab => lab.LevelId == levelId)) &&
+                          kit.Status == kitGetDTO.Status;
         }
         #endregion
     }
