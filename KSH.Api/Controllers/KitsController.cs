@@ -49,9 +49,10 @@ namespace KSH.Api.Controllers
         [Route("{kitId:int}/Packages")]
         [ActionName(nameof(GetPackagesByKitIdAsync))]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId)
+        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId, bool packageStatus = true)
         {
-            var serviceResponse = await _kitService.GetPackagesByKitId(kitId);
+            PackageGetByKitIdDTO DTO = new() { KitId = kitId, Status = packageStatus };
+            var serviceResponse = await _kitService.GetPackagesByKitId(DTO);
             if (!serviceResponse.Succeeded)
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
@@ -128,6 +129,16 @@ namespace KSH.Api.Controllers
         // [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm] KitUpdateDTO DTO)
         {
+            ServiceResponse serviceResponse = null;
+            if (DTO.KitImagesList == null)
+            {
+                serviceResponse = await _kitService.UpdateAsync(DTO);
+                if (!serviceResponse.Succeeded)
+                    return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+
+                return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            }
+            #region method hander fileBase
             var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
             if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
 
@@ -173,8 +184,8 @@ namespace KSH.Api.Controllers
                 var fileServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
                 if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
             }
-
-            var serviceResponse = await _kitService.UpdateAsync(DTO);
+            #endregion
+            serviceResponse = await _kitService.UpdateAsync(DTO);
             if (!serviceResponse.Succeeded)
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
 

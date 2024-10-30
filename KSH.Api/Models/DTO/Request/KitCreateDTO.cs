@@ -22,7 +22,8 @@ namespace KSH.Api.Models.DTO.Request
         public List<int>? ComponentId { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập số lượng thành phần")]
         public List<int>? ComponentQuantity { get; set; }
-        public List<IFormFile>? KitImagesList { get; set; }
+        [Required(ErrorMessage = "Vui lòng thêm ảnh")]
+        public List<IFormFile>? KitImagesList { get; set; } = null;
 
     }
 }

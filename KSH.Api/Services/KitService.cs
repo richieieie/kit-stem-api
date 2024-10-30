@@ -304,20 +304,20 @@ namespace KSH.Api.Services
                                 .AddDetail("message", "Khôi phục kit thất bại");
             }
         }
-        public async Task<ServiceResponse> GetPackagesByKitId(int id)
+        public async Task<ServiceResponse> GetPackagesByKitId(PackageGetByKitIdDTO DTO)
         {
             try
             {
-                var kit = await _unitOfWork.KitRepository.GetByIdAsync(id);
+                var kit = await _unitOfWork.KitRepository.GetByIdAsync(DTO.KitId);
                 if (kit == null || !kit.Status)
                 {
                     return new ServiceResponse()
                                     .SetSucceeded(false)
                                     .AddDetail("message", "Lấy Packages không thành công")
-                                    .AddError("notFound", $"Không tồn tại Kit với Id {id}");
+                                    .AddError("notFound", $"Không tồn tại Kit với Id {DTO.KitId}");
                 }
 
-                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync((l) => (l.KitId == id), null, null, null, true);
+                var (packages, totalPages) = await _unitOfWork.PackageRepository.GetFilterAsync(l => (l.KitId == DTO.KitId) && l.Status == DTO.Status, null, null, null, true);
                 var packagesDTO = _mapper.Map<IEnumerable<PackageInKitDTO>>(packages);
                 return new ServiceResponse()
                                 .AddDetail("message", "Lấy thông tin Package thành công!")

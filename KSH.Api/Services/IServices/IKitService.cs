@@ -11,7 +11,7 @@ namespace KSH.Api.Services.IServices
         Task<ServiceResponse> UpdateAsync(KitUpdateDTO DTO);
         Task<ServiceResponse> RemoveAsync(int id);
         Task<ServiceResponse> RestoreByIdAsync(int id);
-        Task<ServiceResponse> GetPackagesByKitId(int id);
+        Task<ServiceResponse> GetPackagesByKitId(PackageGetByKitIdDTO DTO);
         Task<ServiceResponse> GetLabByKitId(int id);
     }
 }
