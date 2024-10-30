@@ -139,11 +139,13 @@ namespace KSH.Api.Controllers
                 return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
             }
             #region method hander fileBase
-            var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
-            if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
+            
 
             if (DTO.KitImagesList != null)
             {
+                var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
+                if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
+
                 int kitImageCount = 1;
                 var nameFiles = new Dictionary<string, IFormFile>();
                 var imageIdList = new List<Guid>();
@@ -178,11 +180,6 @@ namespace KSH.Api.Controllers
                     }
                 }
 
-            }
-            else
-            {
-                var fileServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
-                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
             }
             #endregion
             serviceResponse = await _kitService.UpdateAsync(DTO);
