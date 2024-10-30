@@ -146,7 +146,7 @@ namespace KSH.Api.Services
                     {
                         if(packages.ElementAt(j).PackageId == labsSales.ElementAt(i).PackageId)
                         {
-                            packages.ElementAt(j).TotalProfit += labsSales.ElementAt(i).TotalLabPrice;
+                            packages.ElementAt(j).TotalProfit -= labsSales.ElementAt(i).TotalLabPrice;
                         }
                     }
                 }
