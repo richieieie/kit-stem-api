@@ -43,7 +43,7 @@ namespace KSH.Api.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] UserRegisterDTO requestBody)
+        public async Task<IActionResult> RegisterAsync([FromBody] CustomerRegisterDTO requestBody)
         {
             var (serviceResponse, token) = await _userService.RegisterAsync(requestBody, UserConstants.CustomerRole);
             if (!serviceResponse.Succeeded)

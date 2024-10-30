@@ -216,7 +216,7 @@ namespace KSH.Api.Services
         private async Task<Package?> TryCreatePackageLabsAsync(PackageCreateDTO packageCreateDTO, Package package)
         {
             var kit = await _unitOfWork.KitRepository.GetByIdAsync(packageCreateDTO.KitId);
-            if (kit == null)
+            if (kit == null || kit.Status == false)
             {
                 return null;
             }
@@ -228,7 +228,7 @@ namespace KSH.Api.Services
             }
 
             var (labs, _) = await _unitOfWork.LabRepository.GetByKitIdAsync(packageCreateDTO.KitId);
-            var validLabIds = labs.Select(l => l.Id).ToHashSet();
+            var validLabIds = labs.Where(l => l.Status == true).Select(l => l.Id).ToHashSet();
             if (packageCreateDTO.LabIds.Except(validLabIds).Any())
             {
                 return null;

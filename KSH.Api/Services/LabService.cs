@@ -279,7 +279,8 @@ namespace KSH.Api.Services
         private Expression<Func<Lab, bool>> GetFilter(LabGetDTO labGetDTO)
         {
             return (l) => l.Kit.Name.Contains(labGetDTO.KitName ?? "") &&
-                        l.Name.Contains(labGetDTO.LabName ?? "");
+                            l.Name.Contains(labGetDTO.LabName ?? "") &&
+                            l.Status == labGetDTO.Status;
         }
         #endregion
     }

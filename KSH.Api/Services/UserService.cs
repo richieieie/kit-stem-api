@@ -162,7 +162,7 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
-                            .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 000000000 để được hỗ trợ!");
+                            .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 0000000000 để được hỗ trợ!");
             }
 
             var refreshToken = (await _tokenRepository.CreateOrUpdateRefreshTokenAsync(user)).Id;
@@ -184,21 +184,26 @@ namespace KSH.Api.Services
                 {
                     UserName = requestBody.Email,
                     Email = requestBody.Email,
+                    EmailConfirmed = role != UserConstants.CustomerRole,
                     Status = true
                 };
-                if (role == UserConstants.StaffRole || role == UserConstants.AdminRole || role == UserConstants.ManagerRole)
+                if (role == UserConstants.CustomerRole)
                 {
-                    user.EmailConfirmed = true;
-                    if (requestBody is StaffRegisterDTO)
-                    {
-                        var staffRegisterDTO = (StaffRegisterDTO)requestBody;
-                        user.FirstName = staffRegisterDTO.FirstName;
-                        user.LastName = staffRegisterDTO.LastName;
-                        user.Address = staffRegisterDTO.Address;
-                        user.Gender = staffRegisterDTO.GenderCode;
-                        user.BirthDate = staffRegisterDTO.BirthDate;
-                        user.PhoneNumber = staffRegisterDTO.PhoneNumber;
-                    }
+                    var customerRegisterDTO = (CustomerRegisterDTO)requestBody;
+                    user.FirstName = customerRegisterDTO.FirstName;
+                    user.LastName = customerRegisterDTO.LastName;
+                    user.Address = customerRegisterDTO.Address;
+                    user.PhoneNumber = customerRegisterDTO.PhoneNumber;
+                }
+                if (role == UserConstants.StaffRole)
+                {
+                    var staffRegisterDTO = (StaffRegisterDTO)requestBody;
+                    user.FirstName = staffRegisterDTO.FirstName;
+                    user.LastName = staffRegisterDTO.LastName;
+                    user.Address = staffRegisterDTO.Address;
+                    user.Gender = staffRegisterDTO.GenderCode;
+                    user.BirthDate = staffRegisterDTO.BirthDate;
+                    user.PhoneNumber = staffRegisterDTO.PhoneNumber;
                 }
 
                 var identityResult = await _userManager.CreateAsync(user, requestBody.Password!);
