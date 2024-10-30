@@ -49,9 +49,9 @@ namespace KSH.Api.Controllers
         [Route("{kitId:int}/Packages")]
         [ActionName(nameof(GetPackagesByKitIdAsync))]
         // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId, bool status = true)
+        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId, bool packageStatus = true)
         {
-            PackageGetByKitIdDTO DTO = new() { KitId = kitId, Status = status };
+            PackageGetByKitIdDTO DTO = new() { KitId = kitId, Status = packageStatus };
             var serviceResponse = await _kitService.GetPackagesByKitId(DTO);
             if (!serviceResponse.Succeeded)
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
