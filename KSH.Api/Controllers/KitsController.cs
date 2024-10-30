@@ -130,7 +130,7 @@ namespace KSH.Api.Controllers
         public async Task<IActionResult> UpdateAsync([FromForm] KitUpdateDTO DTO)
         {
             ServiceResponse serviceResponse = null;
-            if (DTO.KitImagesList == null)
+            if (DTO.KitImagesList == null || DTO.KitImagesList.Count <= 0)
             {
                 serviceResponse = await _kitService.UpdateAsync(DTO);
                 if (!serviceResponse.Succeeded)
