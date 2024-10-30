@@ -14,5 +14,6 @@ namespace KSH.Api.Models.DTO.Request
         public int FromPrice { get; set; } = 0;
         [Range(0, int.MaxValue, ErrorMessage = "Giá đến phải lớn hơn hoặc bằng 0")]
         public int ToPrice { get; set; } = int.MaxValue;
+        public bool Status { get; set; } = true;
     }
 }

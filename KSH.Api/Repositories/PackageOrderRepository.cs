@@ -88,23 +88,6 @@ namespace KSH.Api.Repositories
                                                 KitId = g.Key.KitID,
                                                 KitName = g.Key.KitName
                                             });
-            var LabSaleresults = await _dbContext.PackageOrders
-                                            .Join(_dbContext.Packages, po => po.PackageId, p => p.Id, (po, p) => new { po, p })
-                                            .Join(_dbContext.UserOrders, po_p => po_p.po.OrderId, o => o.Id, (po_p, o) => new { po_p.po, po_p.p, o })
-                                            .GroupJoin(_dbContext.PackageLabs, po_p_o => po_p_o.p.Id, pl => pl.PackageId, (po_p_o, pls) => new { po_p_o.po, po_p_o.p, po_p_o.o, pls })
-                                            .SelectMany(x => x.pls.DefaultIfEmpty(), (x, pl) => new { x.po, x.p, x.o, pl })
-                                            .GroupJoin(_dbContext.Labs, x => x.pl.LabId, l => l.Id, (x, labs) => new { x.po, x.p, x.o, labs })
-                                            .SelectMany(x => x.labs.DefaultIfEmpty(), (x, l) => new { x.po, x.p, x.o, l })
-                                            .Where(x => x.o.ShippingStatus == OrderFulfillmentConstants.OrderSuccessStatus)
-                                            .Where(x => x.o.DeliveredAt >= packageSaleGetDTO.FromDate && x.o.DeliveredAt <= packageSaleGetDTO.ToDate)
-                                            .GroupBy(x => x.po.PackageId)
-                                            .Select(g => new PackageTopSaleLabPriceDTO
-                                            {
-                                                PackageId = g.Key,
-                                                TotalLabPrice = g.Sum(x => (x.l != null ? x.l.Price : 0) * x.po.PackageQuantity)
-                                            })
-                                            .OrderBy(x => x.PackageId)
-                                            .ToListAsync();
                                         
             List<PackageTopSaleDTO>? packageSaleresults = null;
             if (packageSaleGetDTO.BySale)
@@ -121,6 +104,28 @@ namespace KSH.Api.Repositories
                                     .Take(packageSaleGetDTO.PackageTop)
                                     .ToListAsync();
             }
+            var topPackageId = packageSaleresults
+                                    .OrderByDescending(p => p.TotalPackagePrice)
+                                    .Select(p => p.PackageId)
+                                    .ToList();
+            var LabSaleresults = await _dbContext.PackageOrders
+                                            .Join(_dbContext.Packages, po => po.PackageId, p => p.Id, (po, p) => new { po, p })
+                                            .Join(_dbContext.UserOrders, po_p => po_p.po.OrderId, o => o.Id, (po_p, o) => new { po_p.po, po_p.p, o })
+                                            .GroupJoin(_dbContext.PackageLabs, po_p_o => po_p_o.p.Id, pl => pl.PackageId, (po_p_o, pls) => new { po_p_o.po, po_p_o.p, po_p_o.o, pls })
+                                            .SelectMany(x => x.pls.DefaultIfEmpty(), (x, pl) => new { x.po, x.p, x.o, pl })
+                                            .GroupJoin(_dbContext.Labs, x => x.pl.LabId, l => l.Id, (x, labs) => new { x.po, x.p, x.o, labs })
+                                            .SelectMany(x => x.labs.DefaultIfEmpty(), (x, l) => new { x.po, x.p, x.o, l })
+                                            .Where(x => x.o.ShippingStatus == OrderFulfillmentConstants.OrderSuccessStatus)
+                                            .Where(x => x.o.DeliveredAt >= packageSaleGetDTO.FromDate && x.o.DeliveredAt <= packageSaleGetDTO.ToDate)
+                                            .Where(x => topPackageId.Contains(x.po.PackageId))
+                                            .GroupBy(x => x.po.PackageId)
+                                            .Select(g => new PackageTopSaleLabPriceDTO
+                                            {
+                                                PackageId = g.Key,
+                                                TotalLabPrice = g.Sum(x => (x.l != null ? x.l.Price : 0) * x.po.PackageQuantity)
+                                            })
+                                            .OrderBy(x => x.PackageId)
+                                            .ToListAsync();
             return (packageSaleresults, LabSaleresults);
         }
         #region method help for PackageSale
