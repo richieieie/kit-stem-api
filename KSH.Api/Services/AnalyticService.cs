@@ -26,12 +26,12 @@ namespace KSH.Api.Services
                 var toDate = TimeConverter.ToVietNamTime(analyticOrderDTO.ToDate);
                 if (toDate < DateTimeOffset.MaxValue)
                 {
-                    toDate.AddDays(1).AddTicks(-1);
+                    toDate = toDate.AddDays(1).AddTicks(-1);
                 }
                 var shippingStatus = analyticOrderDTO.ShippingStatus;
                 var numberOfOrders = await _unitOfWork.OrderRepository.CountTotalOrders(fromDate, toDate, shippingStatus);
                 return serviceResponse
-                        .AddDetail("message", "Lấy dữ liệu đơn hàng thành công!công")
+                        .AddDetail("message", "Lấy dữ liệu đơn hàng thành công!")
                         .AddDetail("data", new { numberOfOrders });
             }
             catch
@@ -257,7 +257,7 @@ namespace KSH.Api.Services
         {
             if (toDate < DateTimeOffset.MaxValue)
             {
-                toDate.AddDays(1).AddTicks(-1);
+                toDate = toDate.AddDays(1).AddTicks(-1);
             }
             var listOrderId = await _unitOfWork.OrderRepository.GetOrderId(fromDate, toDate);
             var listPackageOrder = await _unitOfWork.PackageOrderRepository.GetPackageOrder(listOrderId);

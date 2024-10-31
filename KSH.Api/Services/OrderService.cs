@@ -368,6 +368,10 @@ namespace KSH.Api.Services
         #region Methods that help service
         private Expression<Func<UserOrders, bool>>? GetFilter(OrderStaffGetDTO orderStaffGetDTO)
         {
+            if (orderStaffGetDTO.CreatedTo < DateTimeOffset.MaxValue)
+            {
+                orderStaffGetDTO.CreatedTo = orderStaffGetDTO.CreatedTo.AddDays(1).AddTicks(-1);
+            }
             return o => o.CreatedAt >= orderStaffGetDTO.CreatedFrom &&
                         o.CreatedAt <= orderStaffGetDTO.CreatedTo &&
                         o.User.Email!.Contains(orderStaffGetDTO.CustomerEmail ?? "") &&
@@ -378,6 +382,10 @@ namespace KSH.Api.Services
 
         private Expression<Func<UserOrders, bool>>? GetByCustomerIdFilter(OrderGetDTO orderGetDTO, string customerId)
         {
+            if (orderGetDTO.CreatedTo < DateTimeOffset.MaxValue)
+            {
+                orderGetDTO.CreatedTo = orderGetDTO.CreatedTo.AddDays(1).AddTicks(-1);
+            }
             return o => o.CreatedAt >= orderGetDTO.CreatedFrom &&
                         o.CreatedAt <= orderGetDTO.CreatedTo &&
                         o.UserId == customerId &&
