@@ -22,7 +22,7 @@ namespace KSH.Api.Controllers
         }
         #region Controller methods
         [HttpGet]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
         {
             var serviceResponse = await _kitService.GetAsync(kitGetDTO);
@@ -35,7 +35,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
@@ -48,7 +48,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{kitId:int}/Packages")]
         [ActionName(nameof(GetPackagesByKitIdAsync))]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId, bool packageStatus = true)
         {
             PackageGetByKitIdDTO DTO = new() { KitId = kitId, Status = packageStatus };
@@ -62,7 +62,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{kitId:int}/Lab")]
         [ActionName(nameof(GetLabByKitIdAsync))]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetLabByKitIdAsync(int kitId)
         {
             var serviceResponse = await _kitService.GetLabByKitId(kitId);
