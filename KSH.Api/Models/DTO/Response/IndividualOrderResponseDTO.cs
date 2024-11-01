@@ -1,3 +1,5 @@
+using KSH.Api.Models.Domain;
+
 namespace KSH.Api.Models.DTO.Response
 {
     public class IndividualOrderResponseDTO
@@ -14,6 +16,7 @@ namespace KSH.Api.Models.DTO.Response
         public long ShippingFee { get; set; }
         public long TotalPrice { get; set; }
         public string? Note { get; set; }
+        public Payment? Payment { get; set; }
         public UserProfileDTO? User { get; set; }
         public List<OrderSupportResponseDTO>? OrderSupports { get; set; }
         public List<PackageOrderResponseDTO>? PackageOrders { get; set; }
