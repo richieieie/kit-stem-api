@@ -125,6 +125,8 @@ namespace KSH.Api.Services
         public async Task<ServiceResponse> LoginWithGoogleAsync(GoogleJsonWebSignature.Payload payload)
         {
             var email = payload.Email;
+            var firstName = payload.GivenName;
+            var lastName = payload.FamilyName;
             var user = await _userManager.FindByNameAsync(email);
             if (user == null)
             {
@@ -133,6 +135,8 @@ namespace KSH.Api.Services
                     UserName = email,
                     Email = email,
                     EmailConfirmed = true,
+                    FirstName = firstName,
+                    LastName = lastName,
                     Status = true
                 };
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
