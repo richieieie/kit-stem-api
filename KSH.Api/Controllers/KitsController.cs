@@ -23,7 +23,6 @@ namespace KSH.Api.Controllers
         }
         #region Controller methods
         [HttpGet]
-        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
         {
             var serviceResponse = await _kitService.GetAsync(kitGetDTO);
@@ -36,7 +35,6 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
-        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
@@ -49,7 +47,6 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{kitId:int}/Packages")]
         [ActionName(nameof(GetPackagesByKitIdAsync))]
-        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId, bool packageStatus = true)
         {
             PackageGetByKitIdDTO DTO = new() { KitId = kitId, Status = packageStatus };
@@ -63,7 +60,6 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{kitId:int}/Lab")]
         [ActionName(nameof(GetLabByKitIdAsync))]
-        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetLabByKitIdAsync(int kitId)
         {
             var serviceResponse = await _kitService.GetLabByKitId(kitId);
@@ -130,7 +126,7 @@ namespace KSH.Api.Controllers
         [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm] KitUpdateDTO DTO)
         {
-            ServiceResponse serviceResponse = null;
+            ServiceResponse serviceResponse;
             if (DTO.KitImagesList == null || DTO.KitImagesList.Count <= 0)
             {
                 serviceResponse = await _kitService.UpdateAsync(DTO);
@@ -140,7 +136,7 @@ namespace KSH.Api.Controllers
                 return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
             }
             #region method hander fileBase
-            
+
 
             if (DTO.KitImagesList != null)
             {

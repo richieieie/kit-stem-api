@@ -22,7 +22,6 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] LabGetDTO labGetDTO)
         {
             var serviceResponse = await _labService.GetAsync(labGetDTO);
@@ -59,7 +58,6 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName(nameof(GetByIdAsync))]
-        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var serviceResponse = await _labService.GetByIdAsync(id);
@@ -73,7 +71,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:guid}/Download")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager,staff")]
         public async Task<IActionResult> DownloadLabByIdAsync(Guid id)
         {
             var serviceResponse = await _labService.GetFileUrlByIdAsync(id);
@@ -124,7 +122,7 @@ namespace KSH.Api.Controllers
 
 
         [HttpPost]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm] LabUploadDTO labUploadDTO)
         {
             var labId = Guid.NewGuid();
@@ -145,7 +143,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPut]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm] LabUpdateDTO labUpdateDTO)
         {
             ServiceResponse serviceResponse;
@@ -171,7 +169,7 @@ namespace KSH.Api.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             var serviceResponse = await _labService.RemoveByIdAsync(id);
@@ -185,7 +183,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:guid}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreAsync(Guid id)
         {
             var serviceResponse = await _labService.RestoreByIdAsync(id);

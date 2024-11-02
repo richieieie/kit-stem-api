@@ -31,7 +31,6 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{id:int}/Labs")]
         [ActionName(nameof(GetByIdAsync))]
-        // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _packageService.GetByIdAsync(id);
@@ -45,7 +44,7 @@ namespace KSH.Api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _packageService.RemoveByIdAsync(id);
@@ -59,7 +58,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _packageService.RestoreByIdAsync(id);
@@ -72,7 +71,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromBody] PackageCreateDTO packageCreateDTO)
         {
             var (serviceResponse, id) = await _packageService.CreateAsync(packageCreateDTO);
@@ -85,7 +84,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPut]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromBody] PackageUpdateDTO packageUpdateDTO)
         {
             var serviceResponse = await _packageService.UpdateAsync(packageUpdateDTO);
