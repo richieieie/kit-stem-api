@@ -332,7 +332,51 @@ namespace KSH.Api.Services
                                 .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
             }
         }
-
+        public async Task<ServiceResponse> CancelShippingStatus(OrderShippingStatusUpdateDTO getDTO)
+        {
+            try
+            {
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(getDTO.Id);
+                if (order == null)
+                {
+                    return new ServiceResponse()
+                                    .SetSucceeded(false)
+                                    .SetStatusCode(StatusCodes.Status404NotFound)
+                                    .AddError("notFound", "Không tìm thấy đơn hàng này!")
+                                    .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
+                }
+                if (order.ShippingStatus.Equals(OrderFulfillmentConstants.OrderDeliveringStatus))
+                {
+                    return new ServiceResponse()
+                                    .SetSucceeded(false)
+                                    .SetStatusCode(StatusCodes.Status451UnavailableForLegalReasons)
+                                    .AddError("Unavailable", "Không thể sử dụng ngày lúc này!")
+                                    .AddDetail("message", "Không thể hủy đơn hàng lúc này");
+                }
+                order.ShippingStatus = OrderFulfillmentConstants.OrderFailStatus;
+                if (!await _unitOfWork.OrderRepository.UpdateAsync(order))
+                {
+                    return new ServiceResponse()
+                                    .SetSucceeded(false)
+                                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                                    .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                                    .AddError("error", "hủy đơn hàng thất bại thất bại")
+                                    .AddDetail("message", "Khách hàng hủy đơn hàng thất bại thất bại");
+                }
+                return new ServiceResponse()
+                                    .SetSucceeded(true)
+                                    .AddDetail("message", "Hủy đơn hàng thành công");
+            }
+            catch
+            {
+                return new ServiceResponse()
+                                    .SetSucceeded(false)
+                                    .SetStatusCode(StatusCodes.Status500InternalServerError)
+                                    .AddError("outOfService", "Không thể cập nhật ngay lúc này")
+                                    .AddError("error", "hủy đơn hàng thất bại thất bại")
+                                    .AddDetail("message", "Khách hàng hủy đơn hàng thất bại thất bại");
+            }
+        }
         public async Task<ServiceResponse> GetShippingFee(string address)
         {
             try
