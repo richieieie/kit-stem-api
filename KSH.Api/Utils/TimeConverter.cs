@@ -21,6 +21,7 @@ namespace KSH.Api.Utils
         {
 
             var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+
             var timeAtVietNam = TimeZoneInfo.ConvertTime(time, vietnamTimeZone);
 
             return timeAtVietNam;

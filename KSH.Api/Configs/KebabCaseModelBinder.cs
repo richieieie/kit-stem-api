@@ -1,4 +1,5 @@
 using System.Globalization;
+using KSH.Api.Utils;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace KSH.Api.Configs
@@ -84,7 +85,7 @@ namespace KSH.Api.Configs
                 {
                     if (DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTimeOffset dateTimeOffsetValue))
                     {
-                        return dateTimeOffsetValue;
+                        return TimeConverter.ToVietNamTime(dateTimeOffsetValue);
                     }
                     else
                     {
