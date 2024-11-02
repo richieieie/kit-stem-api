@@ -7,6 +7,6 @@ namespace KSH.Api.Models.Domain
     {
         public Guid Id { get; set; }
         public string UserId { get; set; } = null!;
-        public DateTime ExpirationTime { get; set; }
+        public DateTimeOffset ExpirationTime { get; set; }
     }
 }
