@@ -21,7 +21,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = "staff")]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> GetAsync([FromQuery] OrderStaffGetDTO orderStaffGetDTO)
         {
             var serviceResponse = await _orderService.GetAsync(orderStaffGetDTO);
@@ -94,7 +94,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("{orderId:guid}/verified")]
-        // [Authorize(Roles = "staff")]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateVerifiedStatus(Guid orderId)
         {
             OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderVerifiedStatus };
@@ -108,7 +108,7 @@ namespace KSH.Api.Controllers
         }
         [HttpPut]
         [Route("{orderId:guid}/delivering")]
-        // [Authorize(Roles = "staff")]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateDeliveringStatus(Guid orderId)
         {
             OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderDeliveringStatus };
@@ -122,7 +122,7 @@ namespace KSH.Api.Controllers
         }
         [HttpPut]
         [Route("{orderId:guid}/success")]
-        // [Authorize(Roles = "staff")]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateSuccessStatus(Guid orderId)
         {
             OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderSuccessStatus };
@@ -136,11 +136,25 @@ namespace KSH.Api.Controllers
         }
         [HttpPut]
         [Route("{orderId:guid}/fail")]
-        // [Authorize(Roles = "staff")]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> UpdateFailStatus(Guid orderId)
         {
             OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
             var serviceResponse = await _orderService.UpdateShippingStatus(getDTO);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
+        }
+        [HttpPut]
+        [Route("{orderId:guid}/cancel")]
+        // [Authorize(Roles = "customer")]
+        public async Task<IActionResult> UpdateCancelStatus(Guid orderId)
+        {
+            OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
+            var serviceResponse = await _orderService.CancelShippingStatus(getDTO);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });

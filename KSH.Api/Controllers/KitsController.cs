@@ -2,6 +2,7 @@
 using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services;
 using KSH.Api.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KSH.Api.Controllers
@@ -22,7 +23,7 @@ namespace KSH.Api.Controllers
         }
         #region Controller methods
         [HttpGet]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetAsync([FromQuery] KitGetDTO kitGetDTO)
         {
             var serviceResponse = await _kitService.GetAsync(kitGetDTO);
@@ -35,7 +36,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [ActionName(nameof(GetByIdAsync))]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _kitService.GetByIdAsync(id);
@@ -48,10 +49,11 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{kitId:int}/Packages")]
         [ActionName(nameof(GetPackagesByKitIdAsync))]
-        // [Authorize(Roles = "manager")]
-        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId)
+        // [Authorize(Roles = "manager, customer")]
+        public async Task<IActionResult> GetPackagesByKitIdAsync(int kitId, bool packageStatus = true)
         {
-            var serviceResponse = await _kitService.GetPackagesByKitId(kitId);
+            PackageGetByKitIdDTO DTO = new() { KitId = kitId, Status = packageStatus };
+            var serviceResponse = await _kitService.GetPackagesByKitId(DTO);
             if (!serviceResponse.Succeeded)
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
@@ -61,7 +63,7 @@ namespace KSH.Api.Controllers
         [HttpGet]
         [Route("{kitId:int}/Lab")]
         [ActionName(nameof(GetLabByKitIdAsync))]
-        // [Authorize(Roles = "manager")]
+        // [Authorize(Roles = "manager, customer")]
         public async Task<IActionResult> GetLabByKitIdAsync(int kitId)
         {
             var serviceResponse = await _kitService.GetLabByKitId(kitId);
@@ -71,7 +73,7 @@ namespace KSH.Api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
         [HttpPost]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync([FromForm] KitCreateDTO DTO)
         {
             var serviceResponse = await _kitService.CreateAsync(DTO);
@@ -125,14 +127,26 @@ namespace KSH.Api.Controllers
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
         [HttpPut]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync([FromForm] KitUpdateDTO DTO)
         {
-            var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
-            if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
+            ServiceResponse serviceResponse = null;
+            if (DTO.KitImagesList == null || DTO.KitImagesList.Count <= 0)
+            {
+                serviceResponse = await _kitService.UpdateAsync(DTO);
+                if (!serviceResponse.Succeeded)
+                    return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+
+                return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
+            }
+            #region method hander fileBase
+            
 
             if (DTO.KitImagesList != null)
             {
+                var imageServiceResponse = await _kitImageService.RemoveAsync(DTO.Id);
+                if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
+
                 int kitImageCount = 1;
                 var nameFiles = new Dictionary<string, IFormFile>();
                 var imageIdList = new List<Guid>();
@@ -168,13 +182,8 @@ namespace KSH.Api.Controllers
                 }
 
             }
-            else
-            {
-                var fileServiceResponse = await _firebaseService.UploadFilesAsync(FirebaseConstants.BucketPublic, FirebaseConstants.ImagesKitsFolder + $"/{DTO.Id}", null);
-                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
-            }
-
-            var serviceResponse = await _kitService.UpdateAsync(DTO);
+            #endregion
+            serviceResponse = await _kitService.UpdateAsync(DTO);
             if (!serviceResponse.Succeeded)
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
 
@@ -182,7 +191,7 @@ namespace KSH.Api.Controllers
         }
         [HttpDelete]
         [Route("{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync(int id)
         {
             var serviceResponse = await _kitService.RemoveAsync(id);
@@ -194,7 +203,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreByIdAsync(int id)
         {
             var serviceResponse = await _kitService.RestoreByIdAsync(id);
