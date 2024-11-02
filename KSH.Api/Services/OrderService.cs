@@ -336,15 +336,8 @@ namespace KSH.Api.Services
         {
             try
             {
-                Expression<Func<UserOrders, bool>> orderFilter = (l) => l.Id.Equals(getDTO.Id);
-                var (orders, totalOrderPages) = await _unitOfWork.OrderRepository.GetFilterAsync(
-                orderFilter,
-                null,
-                null,
-                null,
-                query => query.Include(l => l.Payment).Include(l => l.User)
-                );
-                if (orders == null || orders.Count() <= 0)
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(getDTO.Id);
+                if (order == null)
                 {
                     return new ServiceResponse()
                                     .SetSucceeded(false)
@@ -352,7 +345,7 @@ namespace KSH.Api.Services
                                     .AddError("notFound", "Không tìm thấy đơn hàng này!")
                                     .AddDetail("message", "Cập nhật trạng thái giao hàng thất bại");
                 }
-                if (orders.FirstOrDefault()!.ShippingStatus.Equals(OrderFulfillmentConstants.OrderVerifyingStatus) || orders.FirstOrDefault()!.ShippingStatus.Equals(OrderFulfillmentConstants.OrderVerifiedStatus))
+                if (order.ShippingStatus.Equals(OrderFulfillmentConstants.OrderDeliveringStatus))
                 {
                     return new ServiceResponse()
                                     .SetSucceeded(false)
@@ -360,8 +353,8 @@ namespace KSH.Api.Services
                                     .AddError("Unavailable", "Không thể sử dụng ngày lúc này!")
                                     .AddDetail("message", "Không thể hủy đơn hàng lúc này");
                 }
-                orders.FirstOrDefault()!.ShippingStatus = OrderFulfillmentConstants.OrderFailStatus;
-                if (!await _unitOfWork.OrderRepository.UpdateAsync(orders.FirstOrDefault()!))
+                order.ShippingStatus = OrderFulfillmentConstants.OrderFailStatus;
+                if (!await _unitOfWork.OrderRepository.UpdateAsync(order))
                 {
                     return new ServiceResponse()
                                     .SetSucceeded(false)
