@@ -1,5 +1,4 @@
 using System.Data;
-using System.Drawing;
 using System.Linq.Expressions;
 using AutoMapper;
 using KSH.Api.Constants;
