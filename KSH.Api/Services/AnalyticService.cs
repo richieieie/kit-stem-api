@@ -163,6 +163,8 @@ namespace KSH.Api.Services
         {
             try
             {
+                packageSaleGetDTO.FromDate = TimeConverter.ToVietNamTime(packageSaleGetDTO.FromDate);
+                packageSaleGetDTO.ToDate = TimeConverter.ToVietNamTime(packageSaleGetDTO.ToDate);
                 var (packages, labsSales) = await _unitOfWork.PackageOrderRepository.GetTopPackageSale(packageSaleGetDTO);
                 for (int i = 0; i < labsSales.Count(); i++)
                 {
