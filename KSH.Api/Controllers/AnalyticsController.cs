@@ -68,6 +68,7 @@ namespace KSH.Api.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
         [HttpGet]
+        [Authorize(Roles = "manager")]
         [Route("Package/Sale")]
         public async Task<IActionResult> GetTopPackageSaleAsync([FromQuery] TopPackageSaleGetDTO packageSaleGetDTO)
         {

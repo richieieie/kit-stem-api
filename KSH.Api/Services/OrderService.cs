@@ -221,8 +221,10 @@ namespace KSH.Api.Services
 
                 var order = orders.FirstOrDefault();
                 order!.ShippingStatus = getDTO.ShippingStatus!;
-                order!.DeliveredAt = TimeConverter.GetCurrentVietNamTime();
-
+                if (getDTO.ShippingStatus == OrderFulfillmentConstants.OrderSuccessStatus)
+                {
+                    order!.DeliveredAt = TimeConverter.GetCurrentVietNamTime();
+                }
                 if (!await _unitOfWork.OrderRepository.UpdateAsync(order))
                 {
                     return new ServiceResponse()
