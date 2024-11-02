@@ -32,6 +32,8 @@ namespace KSH.Api.Repositories
         public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
             return await _dbContext.UserOrders
+                            .Include(o => o.Payment)
+                                .ThenInclude(p => p!.Method)
                             .Include(o => o.ShippingFee)
                             .Include(p => p.PackageOrders)
                                 .ThenInclude(p => p.Package)

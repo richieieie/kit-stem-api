@@ -4,6 +4,7 @@ using System.Text;
 using KSH.Api.Data;
 using KSH.Api.Models.Domain;
 using KSH.Api.Repositories.IRepositories;
+using KSH.Api.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -61,7 +62,7 @@ namespace KSH.Api.Repositories
             return new RefreshToken()
             {
                 UserId = user.Id,
-                ExpirationTime = DateTime.Now.AddSeconds(refreshTokenExpirationTime)
+                ExpirationTime = TimeConverter.ToVietNamTime(DateTimeOffset.Now.AddSeconds(refreshTokenExpirationTime))
             };
         }
 
@@ -73,7 +74,7 @@ namespace KSH.Api.Repositories
         public async Task<string?> GetUserIdByRefreshTokenAsync(Guid refreshTokenId)
         {
             var rt = await _dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == refreshTokenId);
-            if (rt == null || rt.ExpirationTime < DateTime.Now)
+            if (rt == null || rt.ExpirationTime < TimeConverter.ToVietNamTime(DateTimeOffset.Now))
             {
                 return null;
             }

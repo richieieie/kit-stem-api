@@ -9,5 +9,7 @@ namespace KSH.Api.Models.DTO
         public string? LabName { get; set; }
         [FromQuery(Name = "kit-name")]
         public string? KitName { get; set; }
+        [FromQuery]
+        public bool Status { get; set; } = true;
     }
 }

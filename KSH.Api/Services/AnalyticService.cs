@@ -26,19 +26,19 @@ namespace KSH.Api.Services
                 var toDate = TimeConverter.ToVietNamTime(analyticOrderDTO.ToDate);
                 if (toDate < DateTimeOffset.MaxValue)
                 {
-                    toDate.AddDays(1).AddTicks(-1);
+                    toDate = toDate.AddDays(1).AddTicks(-1);
                 }
                 var shippingStatus = analyticOrderDTO.ShippingStatus;
                 var numberOfOrders = await _unitOfWork.OrderRepository.CountTotalOrders(fromDate, toDate, shippingStatus);
                 return serviceResponse
-                        .AddDetail("message", "")
+                        .AddDetail("message", "Lấy dữ liệu đơn hàng thành công!")
                         .AddDetail("data", new { numberOfOrders });
             }
             catch
             {
                 return serviceResponse
-                        .AddDetail("message", "")
-                        .AddError("outOfService", "");
+                        .AddDetail("message", "Lấy dữ liệu đơn hàng thất bại!")
+                        .AddError("outOfService", "Không lấy được dữ liệu đơn hàng ngay lúc này");
             }
         }
 
@@ -68,8 +68,8 @@ namespace KSH.Api.Services
             catch
             {
                 return serviceResponse
-                        .AddDetail("message", "")
-                        .AddError("outOfService", "");
+                        .AddDetail("message", "Lâý danh sách các gói kit bán chạy nhất thất bại!")
+                        .AddError("outOfService", "Không lấy được các gói kit bán chạy nhất ở thời điểm hiện tại");
             }
         }
 
@@ -168,7 +168,7 @@ namespace KSH.Api.Services
                 {
                     for (int j = 0; j < packages.Count(); j++)
                     {
-                        if(packages.ElementAt(j).PackageId == labsSales.ElementAt(i).PackageId)
+                        if (packages.ElementAt(j).PackageId == labsSales.ElementAt(i).PackageId)
                         {
                             packages.ElementAt(j).TotalProfit -= labsSales.ElementAt(i).TotalLabPrice;
                         }
@@ -213,9 +213,9 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy doanh thu theo năm thành công!")
-                    .AddDetail("data", new { yearDTO } );
+                    .AddDetail("data", new { yearDTO });
             }
-            catch 
+            catch
             {
                 return new ServiceResponse()
                     .SetSucceeded(false)
@@ -281,7 +281,7 @@ namespace KSH.Api.Services
         {
             if (toDate < DateTimeOffset.MaxValue)
             {
-                toDate.AddDays(1).AddTicks(-1);
+                toDate = toDate.AddDays(1).AddTicks(-1);
             }
             var listOrderId = await _unitOfWork.OrderRepository.GetOrderId(fromDate, toDate);
             var listPackageOrder = await _unitOfWork.PackageOrderRepository.GetPackageOrder(listOrderId);
@@ -403,7 +403,7 @@ namespace KSH.Api.Services
             return monthDTO;
         }
 
-        
+
         #endregion
     }
 }

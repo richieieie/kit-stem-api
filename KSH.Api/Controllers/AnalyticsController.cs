@@ -30,7 +30,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        [Route("Packages/Top/{top:int}/Year{year:int}")]
+        [Route("Packages/Top/{top:int}/Year/{year:int}")]
         // [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetOrdersAnalyticsAsync(int top, int year)
         {

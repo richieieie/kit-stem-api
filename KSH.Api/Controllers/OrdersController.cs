@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Security.Cryptography;
 using KSH.Api.Constants;
 using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services.IServices;
@@ -50,7 +49,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        // [Authorize(Roles = "staff,customer")]
+        [Authorize(Roles = "staff,customer")]
         [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
@@ -150,7 +149,7 @@ namespace KSH.Api.Controllers
         }
         [HttpPut]
         [Route("{orderId:guid}/cancel")]
-        // [Authorize(Roles = "customer")]
+        [Authorize(Roles = "customer")]
         public async Task<IActionResult> UpdateCancelStatus(Guid orderId)
         {
             OrderShippingStatusUpdateDTO getDTO = new() { Id = orderId, ShippingStatus = OrderFulfillmentConstants.OrderFailStatus };
@@ -175,6 +174,6 @@ namespace KSH.Api.Controllers
             }
 
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
-        } 
+        }
     }
 }

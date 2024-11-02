@@ -56,8 +56,8 @@ namespace KSH.Api.Services
                                    .AddDetail("data", new { totalPages, currentPage = kitGetDTO.Page, kits = kits });
                 }
                 var kitsDTO = _mapper.Map<IEnumerable<KitResponseDTO>>(kits);
-                
-                for (int i = 0; i < kits.Count(); i ++)
+
+                for (int i = 0; i < kits.Count(); i++)
                 {
                     if (kits.ElementAt(i).KitComponents!.Count() > 0)
                     {
@@ -118,7 +118,7 @@ namespace KSH.Api.Services
                 if (kit!.KitComponents!.Count > 0)
                 {
                     for (int i = 0; i < kit.KitComponents.Count(); i++)
-                    { 
+                    {
                         var conponent = new KitComponentInKitDTO()
                         {
                             ComponentId = kit.KitComponents.ElementAt(i).Component.Id,
@@ -127,7 +127,7 @@ namespace KSH.Api.Services
                         };
                         kitDTO!.Components.Add(conponent);
                     }
-                } 
+                }
                 return new ServiceResponse()
                                 .SetSucceeded(true)
                                 .AddDetail("message", "Lấy kit thành công")
@@ -189,7 +189,7 @@ namespace KSH.Api.Services
         {
             try
             {
-                if ((DTO.ComponentId != null && DTO.ComponentQuantity != null && DTO.ComponentId.Count != DTO.ComponentQuantity.Count) || 
+                if ((DTO.ComponentId != null && DTO.ComponentQuantity != null && DTO.ComponentId.Count != DTO.ComponentQuantity.Count) ||
                     (DTO.ComponentId != null && DTO.ComponentQuantity == null) ||
                     (DTO.ComponentId == null && DTO.ComponentQuantity != null))
                 {
@@ -216,8 +216,8 @@ namespace KSH.Api.Services
                 kit.Status = true;
                 await _unitOfWork.KitRepository.UpdateAsync(kit);
                 // Update table Kit conponent
-                
-                if (! await _unitOfWork.KitComponentRepository.DeleteAsync(kit.Id))
+
+                if (!await _unitOfWork.KitComponentRepository.DeleteAsync(kit.Id))
                 {
                     return new ServiceResponse()
                                     .SetSucceeded(false)
@@ -235,7 +235,7 @@ namespace KSH.Api.Services
                             ComponentId = DTO.ComponentId![i],
                             ComponentQuantity = DTO.ComponentQuantity[i]
                         };
-                    
+
                         await _unitOfWork.KitComponentRepository.CreateAsync(composnent);
                     }
                 }
@@ -390,7 +390,7 @@ namespace KSH.Api.Services
 
             return kit => kit.Name.ToLower().Contains(kitName) &&
                           kit.Category.Name.ToLower().Contains(categoryName) &&
-                          kit.Packages!.Any(package => package.Price >= kitGetDTO.FromPrice && package.Price <= kitGetDTO.ToPrice) && 
+                          kit.Packages!.Any(package => package.Price >= kitGetDTO.FromPrice && package.Price <= kitGetDTO.ToPrice) &&
                           (levelId == 0 || kit.Labs!.Any(lab => lab.LevelId == levelId)) &&
                           kit.Status == kitGetDTO.Status;
         }
