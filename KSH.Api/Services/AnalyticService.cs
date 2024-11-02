@@ -87,8 +87,20 @@ namespace KSH.Api.Services
                 //     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
                 // }
 
-                var purchaseCost = await GetPurchaseCostHelper(fromDate, toDate);
-                var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDate, toDate);
+                var fromDay = TimeConverter.ToVietNamTime(fromDate);
+                var toDay = TimeConverter.ToVietNamTime(toDate);
+
+                if (toDay == DateTime.MaxValue)
+                {
+                    return new ServiceResponse()
+                     .SetSucceeded(false)
+                     .SetStatusCode(StatusCodes.Status400BadRequest)
+                     .AddDetail("message", "Lấy dữ liệu lợi nhuận thất bại!")
+                     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
+                }
+
+                var purchaseCost = await GetPurchaseCostHelper(fromDay, toDay.AddDays(1).AddTicks(-1));
+                var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDay, toDay.AddDays(1).AddTicks(-1));
                 var profit = revenue - purchaseCost;
 
                 return new ServiceResponse()
@@ -120,7 +132,19 @@ namespace KSH.Api.Services
                 //     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
                 // }
 
-                var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDate, toDate);
+                var fromDay = TimeConverter.ToVietNamTime(fromDate);
+                var toDay = TimeConverter.ToVietNamTime(toDate);
+
+                if (toDay == DateTime.MaxValue)
+                {
+                    return new ServiceResponse()
+                     .SetSucceeded(false)
+                     .SetStatusCode(StatusCodes.Status400BadRequest)
+                     .AddDetail("message", "Lấy dữ liệu lợi nhuận thất bại!")
+                     .AddError("invalidCredentials", "Ngày bắt đầu và ngày kết thúc không hợp lệ!");
+                }
+
+                var revenue = await _unitOfWork.OrderRepository.SumTotalOrder(fromDay, toDay.AddDays(1).AddTicks(-1));
                 return new ServiceResponse()
                     .SetSucceeded(true)
                     .AddDetail("message", "Lấy dữ liệu doanh thu thành công!")

@@ -20,7 +20,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] ComponentGetDTO componentGetDTO)
         {
             var serviceResponse = await _componentService.GetAsync(componentGetDTO);
@@ -34,7 +34,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _componentService.GetByIdAsync(id);
@@ -47,7 +47,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> CreateAsync(ComponentCreateDTO component)
         {
             var serviceResponse = await _componentService.CreateAsync(component);
@@ -60,7 +60,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPut]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> UpdateAsync(ComponentUpdateDTO component)
         {
             var serviceResponse = await _componentService.UpdateAsync(component);
@@ -74,7 +74,7 @@ namespace KSH.Api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentService.RemoveByIdAsync(id);
@@ -88,7 +88,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentService.RestoreByIdAsync(id);

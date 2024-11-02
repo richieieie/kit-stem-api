@@ -156,7 +156,7 @@ namespace KST.Api.Services
                 await _unitOfWork.LabSupportRepository.CreateAsync(labSupport);
                 return new ServiceResponse()
                                 .SetSucceeded(true)
-                                .AddDetail("message", "Gửi yêu cầ hổ trợ thành công");
+                                .AddDetail("message", "Gửi yêu cầu hổ trợ thành công!");
             }
             catch
             {

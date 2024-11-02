@@ -57,7 +57,7 @@ namespace KST.Api.Controllers
 
         [HttpPost]
         [Route("orders/{orderId:guid}/packages/{packageId:int}/labs/{labId:guid}")]
-        // [Authorize(Roles = "customer")]
+        [Authorize(Roles = "customer")]
         public async Task<IActionResult> CreateAsync([FromRoute] Guid orderId, Guid labId, int packageId)
         {
             var serviceResponse = await _labSupportService.CreateAsync(orderId, labId, packageId);
