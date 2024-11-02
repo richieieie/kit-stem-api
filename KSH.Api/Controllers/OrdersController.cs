@@ -150,6 +150,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "customer")]
         [Route("shippingfees")]
         public async Task<IActionResult> GetShippingFee([FromQuery] string address)
         {

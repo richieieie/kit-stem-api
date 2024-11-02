@@ -19,7 +19,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _componentTypeService.GetAllAsync();
@@ -33,7 +33,7 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        // [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _componentTypeService.GetByIdAsync(id);
@@ -46,7 +46,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateAsync(ComponentTypeCreateDTO componentTypeCreateDTO)
         {
             var serviceResponse = await _componentTypeService.CreateAsync(componentTypeCreateDTO);
@@ -59,7 +59,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpPut]
-        // [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateAsync(ComponentTypeUpdateDTO componentTypeUpdateDTO)
         {
             var serviceResponse = await _componentTypeService.UpdateAsync(componentTypeUpdateDTO);
@@ -73,7 +73,7 @@ namespace KSH.Api.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        // [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> RemoveByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentTypeService.RemoveByIdAsync(id);
@@ -87,7 +87,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Restore/{id:int}")]
-        // [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> RestoreByIdAsync([FromRoute] int id)
         {
             var serviceResponse = await _componentTypeService.RestoreByIdAsync(id);

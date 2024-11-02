@@ -1,6 +1,7 @@
 using KSH.Api.Models.DTO.Request;
 using KSH.Api.Services;
 using KSH.Api.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KSH.Api.Controllers
@@ -42,6 +43,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "manager")]
         [Route("Revenues")]
         public async Task<IActionResult> GetRevenueAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate)
         {
@@ -54,6 +56,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "manager")]
         [Route("Profits")]
         public async Task<IActionResult> GetProfitAsync([FromQuery] DateTimeOffset fromDate, [FromQuery] DateTimeOffset toDate)
         {
@@ -77,6 +80,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "manager")]
         [Route("Revenues/{year:int}")]
         public async Task<IActionResult> GetRevenuePerYear(int year)
         {
@@ -89,6 +93,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "manager")]
         [Route("Profits/{year:int}")]
         public async Task<IActionResult> GetProfitPerYear(int year)
         {
