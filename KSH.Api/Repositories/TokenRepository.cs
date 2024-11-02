@@ -62,7 +62,7 @@ namespace KSH.Api.Repositories
             return new RefreshToken()
             {
                 UserId = user.Id,
-                ExpirationTime = TimeConverter.ToVietNamTime(DateTime.Now.AddSeconds(refreshTokenExpirationTime))
+                ExpirationTime = TimeConverter.ToVietNamTime(DateTimeOffset.Now.AddSeconds(refreshTokenExpirationTime))
             };
         }
 
