@@ -18,7 +18,6 @@ namespace KST.Api.Controllers
             _labSupportService = labSupportService;
         }
         [HttpGet]
-        // [Authorize(Roles = "staff")]
         public async Task<IActionResult> GetAsync([FromQuery] LabSupportGetDTO getDTO)
         {
             var serviceResponse = await _labSupportService.GetAsync(getDTO);
@@ -30,7 +29,6 @@ namespace KST.Api.Controllers
         }
         [HttpGet]
         [Route("{labSupportId:Guid}")]
-        // [Authorize(Roles = "staff,customer")]
         public async Task<IActionResult> GetByIdAsync(Guid labSupportId)
         {
             var serviceResponse = await _labSupportService.GetByIdAsync(labSupportId);
@@ -43,7 +41,6 @@ namespace KST.Api.Controllers
 
         [HttpGet]
         [Route("customers")]
-        // [Authorize(Roles = "customer")]
         public async Task<IActionResult> GetByIdCustomerAsync([FromQuery] LabSupportGetDTO getDTO)
         {
             var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);

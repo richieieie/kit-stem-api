@@ -198,7 +198,7 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] UserManagerGetDTO userManagerGetDTO)
         {
             var serviceResponse = await _userService.GetAllAsync(userManagerGetDTO);
@@ -240,7 +240,7 @@ namespace KSH.Api.Controllers
 
         [HttpDelete]
         [Route("{userName}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RemoveByEmailAsync(string userName)
         {
             var serviceResponse = await _userService.RemoveByEmailAsync(userName);
@@ -254,7 +254,7 @@ namespace KSH.Api.Controllers
 
         [HttpPut]
         [Route("Restore/{userName}")]
-        // [Authorize(Roles = "manager")]
+        [Authorize(Roles = "manager")]
         public async Task<IActionResult> RestoreByEmailAsync(string userName)
         {
             var serviceResponse = await _userService.RestoreByEmailAsync(userName);

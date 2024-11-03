@@ -20,7 +20,6 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetAsync([FromQuery] ComponentGetDTO componentGetDTO)
         {
             var serviceResponse = await _componentService.GetAsync(componentGetDTO);
@@ -34,7 +33,6 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "manager")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _componentService.GetByIdAsync(id);
