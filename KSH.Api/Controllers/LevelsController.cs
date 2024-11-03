@@ -19,7 +19,6 @@ namespace KSH.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var serviceResponse = await _levelService.GetAllAsync();
@@ -33,7 +32,6 @@ namespace KSH.Api.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var serviceResponse = await _levelService.GetByIdAsync(id);
