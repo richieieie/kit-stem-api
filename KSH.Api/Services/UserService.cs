@@ -322,7 +322,8 @@ namespace KSH.Api.Services
                                     .Where(u => u.Email != null && u.Email.Contains(userManagerGetDTO.Email ?? "") &&
                                     (userManagerGetDTO.FirstName == null || (u.FirstName != null && u.FirstName.Contains(userManagerGetDTO.FirstName ?? ""))) &&
                                     (userManagerGetDTO.FirstName == null || (u.LastName != null && u.LastName.Contains(userManagerGetDTO.LastName ?? ""))) &&
-                                    (userManagerGetDTO.PhoneNumber == null || (u.PhoneNumber != null && u.PhoneNumber.Contains(userManagerGetDTO.PhoneNumber ?? "")))
+                                    (userManagerGetDTO.PhoneNumber == null || (u.PhoneNumber != null && u.PhoneNumber.Contains(userManagerGetDTO.PhoneNumber ?? ""))) &&
+                                    u.Status == userManagerGetDTO.Status
                                 );
             var totalUsers = usersInRole.Count();
             var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);

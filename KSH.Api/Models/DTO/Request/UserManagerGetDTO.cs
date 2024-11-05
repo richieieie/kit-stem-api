@@ -9,7 +9,7 @@ namespace KSH.Api.Models.DTO.Request
         public string? PhoneNumber { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public bool Status { get; set; }
+        public bool Status { get; set; } = true;
         [Required]
         public string? Role { get; set; }
     }
