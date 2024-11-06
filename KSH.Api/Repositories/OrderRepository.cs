@@ -32,15 +32,14 @@ namespace KSH.Api.Repositories
         public override async Task<UserOrders?> GetByIdAsync(Guid id)
         {
             return await _dbContext.UserOrders
-                            .Include(o => o.Payment)
-                                .ThenInclude(p => p!.Method)
+                            .Include(o => o.Payment!.Method)
                             .Include(o => o.ShippingFee)
-                            .Include(p => p.PackageOrders)
-                                .ThenInclude(p => p.Package)
+                            .Include(o => o.PackageOrders)
+                                .ThenInclude(po => po.Package)
                                     .ThenInclude(p => p.Kit)
                                         .ThenInclude(k => k.KitImages)
-                            .Include(p => p.PackageOrders)
-                                .ThenInclude(p => p.Package)
+                            .Include(o => o.PackageOrders)
+                                .ThenInclude(po => po.Package)
                                     .ThenInclude(p => p.PackageLabs)
                                         .ThenInclude(pl => pl.Lab)
                                             .ThenInclude(l => l.Level)
@@ -51,6 +50,7 @@ namespace KSH.Api.Repositories
                                 .ThenInclude(os => os.Lab)
                             .Include(o => o.OrderSupports)
                                 .ThenInclude(os => os.Package)
+                            .AsSplitQuery()
                             .FirstOrDefaultAsync(o => o.Id == id);
         }
 

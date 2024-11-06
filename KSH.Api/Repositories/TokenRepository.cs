@@ -14,7 +14,7 @@ namespace KSH.Api.Repositories
     public class TokenRepository : ITokenRepository
     {
         private readonly int refreshTokenExpirationTime = 60 * 60 * 24 * 7;
-        private readonly int accessTokenExpirationTime = 60 * 60 * 30;
+        private readonly int accessTokenExpirationTime = 60 * 5;
         private readonly IConfiguration _configuration;
         private readonly KitStemDbContext _dbContext;
         public TokenRepository(IConfiguration configuration, KitStemDbContext dbContext)
