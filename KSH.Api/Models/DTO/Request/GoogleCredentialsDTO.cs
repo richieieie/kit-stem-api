@@ -10,5 +10,7 @@ namespace KSH.Api.Models.DTO
         public string? PendingToken { get; set; }
         public string? IdToken { get; set; }
         public string? AccessToken { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
     }
 }

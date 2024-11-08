@@ -22,6 +22,8 @@ namespace KSH.Api.Services
                 };
 
                 var payload = await GoogleJsonWebSignature.ValidateAsync(googleCredentialsDTO.IdToken, settings);
+                payload.GivenName = googleCredentialsDTO.FirstName;
+                payload.FamilyName = googleCredentialsDTO.LastName;
                 return new ServiceResponse()
                         .SetSucceeded(true)
                         .AddDetail("message", "Đăng nhập thành công!")
