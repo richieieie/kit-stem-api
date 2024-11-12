@@ -3,6 +3,7 @@
     public class PackageTopSaleDTO
     {
         public int PackageId { get; set; }
+        public string? PackageName { get; set; }
         public decimal TotalPackagePrice { get; set; }
         public decimal TotalProfit { get; set; }
         public int KitId { get; set; }
