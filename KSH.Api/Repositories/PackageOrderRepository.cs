@@ -77,14 +77,16 @@ namespace KSH.Api.Repositories
                                         .GroupBy(po => new
                                         {
                                             po.PackageId,
+                                            PackageName = po.Package.Name,
                                             KitID = po.Package.KitId,
                                             KitName = po.Package.Kit.Name
                                         })
                                             .Select(g => new PackageTopSaleDTO
                                             {
                                                 PackageId = g.Key.PackageId,
+                                                PackageName = g.Key.PackageName,
                                                 TotalPackagePrice = g.Sum(po => po.Package.Price * po.PackageQuantity),
-                                                TotalProfit = g.Sum(po => po.Package.Price) - g.Sum(po => po.Package.Kit.PurchaseCost),
+                                                TotalProfit = g.Sum(po => po.Package.Price * po.PackageQuantity) - g.Sum(po => po.Package.Kit.PurchaseCost * po.PackageQuantity),
                                                 KitId = g.Key.KitID,
                                                 KitName = g.Key.KitName
                                             });
