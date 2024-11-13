@@ -282,6 +282,13 @@ namespace KST.Api.Services
                                     .AddError("Unavailable", "Không thể để lại đánh giá khi chưa hỗ trợ xong")
                                     .AddDetail("message", "Cập nhật đánh giá thất bại");
                 }
+                if (labSupport.Rating != 0)
+                {
+                    return new ServiceResponse()
+                                     .SetSucceeded(false)
+                                     .AddError("Unavailable", "Không thể để lại đánh giá lại")
+                                     .AddDetail("message", "Cập nhật đánh giá thất bại");
+                }
                 labSupport.Rating = DTO.Rating;
                 labSupport.FeedBack = DTO.FeedBack;
                 if (await _unitOfWork.LabSupportRepository.UpdateAsync(labSupport))
