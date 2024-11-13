@@ -266,7 +266,7 @@ namespace KSH.Api.Services
                 // Cập nhật điểm cho khách hàng
                 try
                 {
-                    var point = (double)(order.Payment.Amount / 100);
+                    var point = (double)(order.Payment.Amount / 1000);
                     order.User.Points += (int)Math.Floor(point);
                     if (!await _unitOfWork.UserRepository.UpdateAsync(order.User))
                     {
