@@ -40,8 +40,11 @@ namespace KSH.Api.Services
                             0);
                 }
 
-                // Try to create package
-                await _unitOfWork.PackageRepository.CreateAsync(package);
+                // Try to create package and update kit price
+                _unitOfWork.PackageRepository.PrepareCreate(package);
+                await UpdateKitPriceRange(package.Kit);
+                _unitOfWork.KitRepository.PrepareUpdate(package.Kit);
+                _unitOfWork._dbContext.SaveChanges();
 
 
                 return (serviceResponse
@@ -125,6 +128,7 @@ namespace KSH.Api.Services
                 }
 
                 package.Status = false;
+                await UpdateKitPriceRange(package.Kit);
                 await _unitOfWork.PackageRepository.UpdateAsync(package);
 
                 var packageDTO = _mapper.Map<PackageResponseDTO>(package);
@@ -156,6 +160,7 @@ namespace KSH.Api.Services
                 }
 
                 package.Status = true;
+                await UpdateKitPriceRange(package.Kit);
                 await _unitOfWork.PackageRepository.UpdateAsync(package);
 
                 return new ServiceResponse()
@@ -187,6 +192,7 @@ namespace KSH.Api.Services
                 package.Name = packageUpdateDTO.Name!;
                 package.LevelId = packageUpdateDTO.LevelId!;
                 package.Price = packageUpdateDTO.Price!;
+                await UpdateKitPriceRange(package.Kit);
                 await _unitOfWork.PackageRepository.UpdateAsync(package);
 
                 return new ServiceResponse()
@@ -237,22 +243,23 @@ namespace KSH.Api.Services
             var packageLabs = packageCreateDTO.LabIds.Select(labId => new PackageLab() { PackageId = package.Id, LabId = labId });
             package.PackageLabs = packageLabs.ToList();
 
-            // Adjust kit's price range based on the package price
-            UpdateKitPriceRange(kit, packageCreateDTO.Price);
-
             return package;
         }
-        private void UpdateKitPriceRange(Kit kit, long packagePrice)
+        private async Task UpdateKitPriceRange(Kit kit)
         {
-            if (kit.MinPackagePrice == 0 && kit.MaxPackagePrice == 0)
+            if (kit == null)
             {
-                kit.MinPackagePrice = kit.MaxPackagePrice = packagePrice;
+                return;
             }
-            else
+            var packages = (await _unitOfWork.KitRepository.GetPackagesByKitIdAsync(kit.Id))?.Where(p => p.Status == true);
+            if (packages == null || !packages.Any())
             {
-                kit.MinPackagePrice = Math.Min(kit.MinPackagePrice, packagePrice);
-                kit.MaxPackagePrice = Math.Max(kit.MaxPackagePrice, packagePrice);
+                kit.MinPackagePrice = 0;
+                kit.MaxPackagePrice = 0;
+                return;
             }
+            kit.MinPackagePrice = packages.Min(p => p.Price);
+            kit.MaxPackagePrice = packages.Max(p => p.Price);
         }
         #endregion
     }
