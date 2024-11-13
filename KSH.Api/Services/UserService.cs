@@ -166,7 +166,7 @@ namespace KSH.Api.Services
                 return new ServiceResponse()
                             .SetSucceeded(false)
                             .AddDetail("message", "Đăng nhập thất bại!")
-                            .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 0000000000 để được hỗ trợ!");
+                            .AddError("invalidCredentials", "Tài khoản của bạn đã bị vô hiệu hoá, vui lòng liện hệ của hàng qua số điện thoại 2873001866 để được hỗ trợ!");
             }
 
             var refreshToken = (await _tokenRepository.CreateOrUpdateRefreshTokenAsync(user)).Id;

@@ -17,11 +17,11 @@ namespace KSH.Api.Repositories
         {
             return await _dbContext.Packages
                             .Include(p => p.PackageLabs)
-                            .ThenInclude(pl => pl.Lab)
-                            .ThenInclude(pll => pll.Level)
+                                .ThenInclude(pl => pl.Lab)
+                                .ThenInclude(pll => pll.Level)
                             .Include(p => p.Level)
                             .Include(p => p.Kit)
-                            .ThenInclude(k => k.Category)
+                                .ThenInclude(k => k.Category)
                             .FirstOrDefaultAsync(p => p.Id == id);
         }
 

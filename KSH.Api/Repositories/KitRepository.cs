@@ -24,6 +24,16 @@ namespace KSH.Api.Repositories
             }
         }
 
+        public async Task<IEnumerable<Package>?> GetPackagesByKitIdAsync(int id)
+        {
+            var kit = await _dbContext.Kits.Include(k => k.Packages).FirstOrDefaultAsync(k => k.Id == id);
+            if (kit == null)
+            {
+                return null;
+            }
+            return kit.Packages;
+        }
+
         public async Task<int> GetMaxIdAsync()
         {
             var maxId = await _dbContext.Kits.MaxAsync(k => k.Id);
