@@ -18,6 +18,7 @@ namespace KST.Api.Controllers
             _labSupportService = labSupportService;
         }
         [HttpGet]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> GetAsync([FromQuery] LabSupportGetDTO getDTO)
         {
             var serviceResponse = await _labSupportService.GetAsync(getDTO);
