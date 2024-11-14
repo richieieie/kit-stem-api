@@ -101,7 +101,7 @@ namespace KSH.Api.Utils
                 .ForMember(dest => dest.Lab, opt => opt.MapFrom(src => src.OrderSupport.Lab))
                 .ForMember(dest => dest.Package, opt => opt.MapFrom(src => src.OrderSupport.Package))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-                .ForMember(dest => dest.CustomerPhoneNumber, opt => opt.MapFrom(src => src.OrderSupport.Order.PhoneNumber))
+                .ForMember(dest => dest.OrderPhoneNumber, opt => opt.MapFrom(src => src.OrderSupport.Order.PhoneNumber))
                 .ForPath(dest => dest.Package!.Kit, opt => opt.MapFrom(src => src.OrderSupport.Package.Kit))
                 .ForPath(dest => dest.Staff!.UserName, opt => opt.MapFrom(src => src.Staff.UserName))
                 .ForPath(dest => dest.Staff!.FirstName, opt => opt.MapFrom(src => src.Staff.FirstName))
